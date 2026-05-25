@@ -18,7 +18,7 @@ namespace GenKnowledge
 
         public override string SettingsCategory()
         {
-            return "Gen Knowledge";
+            return "RimTalkGenKnowledge.Settings.Category".Translate();
         }
 
         public override void DoSettingsWindowContents(Rect inRect)
@@ -29,23 +29,23 @@ namespace GenKnowledge
             var listing = new Listing_Standard();
             listing.Begin(inRect);
 
-            listing.CheckboxLabeled("Enable global error reporting", ref Settings.enableGlobalErrorReporting);
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting".Translate(), ref Settings.enableGlobalErrorReporting);
             listing.GapLine();
-            listing.Label("Generate knowledge only works in a loaded save.");
+            listing.Label("RimTalkGenKnowledge.Settings.OnlyLoadedSave".Translate());
             listing.Gap();
 
-            if (listing.ButtonText("Generate knowledge (current save)"))
+            if (listing.ButtonText("RimTalkGenKnowledge.Settings.GenerateCurrentSave".Translate()))
             {
                 RunGeneration();
             }
 
-            if (listing.ButtonText("Clear generated knowledge"))
+            if (listing.ButtonText("RimTalkGenKnowledge.Settings.ClearGeneratedKnowledge".Translate()))
             {
                 ClearGeneratedKnowledge();
             }
 
             listing.GapLine();
-            listing.Label("Processors");
+            listing.Label("RimTalkGenKnowledge.Settings.Processors".Translate());
 
             foreach (IProcessDef processor in processors)
             {
@@ -86,14 +86,14 @@ namespace GenKnowledge
         {
             if (Current.Game == null || Find.World == null)
             {
-                Messages.Message("Generation is only available in a loaded save.", MessageTypeDefOf.RejectInput, false);
+                Messages.Message("RimTalkGenKnowledge.Message.GenerationOnlyInLoadedSave".Translate(), MessageTypeDefOf.RejectInput, false);
                 return;
             }
 
             var comp = Current.Game.GetComponent<GenKnowledgeGameComponent>();
             if (comp == null)
             {
-                Messages.Message("Generation failed: game component missing.", MessageTypeDefOf.RejectInput, false);
+                Messages.Message("RimTalkGenKnowledge.Message.GenerationFailedMissingComponent".Translate(), MessageTypeDefOf.RejectInput, false);
                 Log.Error("[GenKnowledge] Game component is missing.");
                 return;
             }
@@ -107,14 +107,14 @@ namespace GenKnowledge
         {
             if (Current.Game == null || Find.World == null)
             {
-                Messages.Message("Clear is only available in a loaded save.", MessageTypeDefOf.RejectInput, false);
+                Messages.Message("RimTalkGenKnowledge.Message.ClearOnlyInLoadedSave".Translate(), MessageTypeDefOf.RejectInput, false);
                 return;
             }
 
             var comp = Current.Game.GetComponent<GenKnowledgeGameComponent>();
             if (comp == null)
             {
-                Messages.Message("Clear failed: game component missing.", MessageTypeDefOf.RejectInput, false);
+                Messages.Message("RimTalkGenKnowledge.Message.ClearFailedMissingComponent".Translate(), MessageTypeDefOf.RejectInput, false);
                 Log.Error("[GenKnowledge] Game component is missing.");
                 return;
             }
@@ -128,30 +128,30 @@ namespace GenKnowledge
         {
             if (Current.Game == null)
             {
-                listing.Label("No save loaded.");
+                listing.Label("RimTalkGenKnowledge.Report.NoSaveLoaded".Translate());
                 return;
             }
 
             var comp = Current.Game.GetComponent<GenKnowledgeGameComponent>();
             if (comp == null)
             {
-                listing.Label("No generation report available.");
+                listing.Label("RimTalkGenKnowledge.Report.NoGenerationReport".Translate());
                 return;
             }
 
             GenerationReport report = comp.LastReport;
             if (report == null)
             {
-                listing.Label("No generation report yet.");
+                listing.Label("RimTalkGenKnowledge.Report.NoGenerationReportYet".Translate());
                 return;
             }
 
-            listing.Label($"Last run tick: {report.FinishedAtTick}");
+            listing.Label("RimTalkGenKnowledge.Report.LastRunTick".Translate(report.FinishedAtTick));
             listing.Label(report.BuildSummaryLine());
 
             if (!string.IsNullOrWhiteSpace(report.LastError))
             {
-                listing.Label($"Last error: {report.LastError}");
+                listing.Label("RimTalkGenKnowledge.Report.LastError".Translate(report.LastError));
             }
         }
     }

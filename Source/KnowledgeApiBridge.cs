@@ -38,19 +38,19 @@ namespace GenKnowledge
                     .FirstOrDefault(a => a.GetName().Name == TargetAssemblyName);
                 if (targetAssembly == null)
                 {
-                    return FailInit("Assembly RimTalkMemoryPatch not found.");
+                    return FailInit("RimTalkGenKnowledge.Message.AssemblyNotFound".Translate(TargetAssemblyName));
                 }
 
                 apiType = targetAssembly.GetType(TargetTypeName);
                 if (apiType == null)
                 {
-                    return FailInit("Type RimTalk.Memory.CommonKnowledgeAPI not found.");
+                    return FailInit("RimTalkGenKnowledge.Message.TypeNotFound".Translate(TargetTypeName));
                 }
 
                 keywordMatchModeType = targetAssembly.GetType(MatchModeTypeName);
                 if (keywordMatchModeType == null || !keywordMatchModeType.IsEnum)
                 {
-                    return FailInit("Type RimTalk.Memory.KeywordMatchMode not found.");
+                    return FailInit("RimTalkGenKnowledge.Message.TypeNotFound".Translate(MatchModeTypeName));
                 }
 
                 addKnowledgeExMethod = apiType.GetMethod("AddKnowledgeEx", BindingFlags.Public | BindingFlags.Static);
@@ -60,13 +60,13 @@ namespace GenKnowledge
 
                 if (addKnowledgeExMethod == null || updateKnowledgeMethod == null || removeKnowledgeMethod == null || findKnowledgeByIdMethod == null)
                 {
-                    return FailInit("One or more required API methods are missing.");
+                    return FailInit("RimTalkGenKnowledge.Message.ApiMethodsMissing".Translate());
                 }
 
                 ParameterInfo[] addParams = addKnowledgeExMethod.GetParameters();
                 if (addParams.Length != 7)
                 {
-                    return FailInit("AddKnowledgeEx signature mismatch.");
+                    return FailInit("RimTalkGenKnowledge.Message.AddKnowledgeExSignatureMismatch".Translate());
                 }
 
                 IsReady = true;
@@ -75,7 +75,7 @@ namespace GenKnowledge
             }
             catch (Exception ex)
             {
-                return FailInit($"Initialization exception: {ex.Message}");
+                return FailInit("RimTalkGenKnowledge.Message.InitializationException".Translate(ex.Message));
             }
         }
 
@@ -103,7 +103,7 @@ namespace GenKnowledge
             }
             catch (Exception ex)
             {
-                ReportError($"AddKnowledgeEx failed: {ex.Message}", report);
+                ReportError("RimTalkGenKnowledge.Message.AddKnowledgeExFailed".Translate(ex.Message), report);
                 return null;
             }
         }
@@ -122,7 +122,7 @@ namespace GenKnowledge
             }
             catch (Exception ex)
             {
-                ReportError($"UpdateKnowledge failed: {ex.Message}", report);
+                ReportError("RimTalkGenKnowledge.Message.UpdateKnowledgeFailed".Translate(ex.Message), report);
                 return false;
             }
         }
@@ -141,7 +141,7 @@ namespace GenKnowledge
             }
             catch (Exception ex)
             {
-                ReportError($"RemoveKnowledge failed: {ex.Message}", report);
+                ReportError("RimTalkGenKnowledge.Message.RemoveKnowledgeFailed".Translate(ex.Message), report);
                 return false;
             }
         }
@@ -160,7 +160,7 @@ namespace GenKnowledge
             }
             catch (Exception ex)
             {
-                ReportError($"FindKnowledgeById failed: {ex.Message}", report);
+                ReportError("RimTalkGenKnowledge.Message.FindKnowledgeByIdFailed".Translate(ex.Message), report);
                 return false;
             }
         }
@@ -173,7 +173,7 @@ namespace GenKnowledge
             }
 
             string error = string.IsNullOrWhiteSpace(LastInitError)
-                ? "API bridge not initialized."
+                ? "RimTalkGenKnowledge.Message.ApiBridgeNotInitialized".Translate().ToString()
                 : LastInitError;
             ReportError(error, report);
             return false;
@@ -194,7 +194,7 @@ namespace GenKnowledge
 
             if (reportEachError)
             {
-                Messages.Message($"GenKnowledge error: {error}", MessageTypeDefOf.RejectInput, false);
+                Messages.Message("RimTalkGenKnowledge.Message.GenKnowledgeError".Translate(error), MessageTypeDefOf.RejectInput, false);
             }
         }
     }

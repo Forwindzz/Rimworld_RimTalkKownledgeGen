@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Verse;
 
 namespace GenKnowledge
 {
@@ -28,7 +29,13 @@ namespace GenKnowledge
 
         public string BuildSummaryLine()
         {
-            return $"GenKnowledge: input={InputCount}, created={CreatedCount}, updated={UpdatedCount}, deleted={DeletedCount}, skipped={SkippedCount}, failed={FailedCount}";
+            return "RimTalkGenKnowledge.Report.Summary".Translate(
+                InputCount,
+                CreatedCount,
+                UpdatedCount,
+                DeletedCount,
+                SkippedCount,
+                FailedCount);
         }
 
         public void AddError(string error)
@@ -44,4 +51,3 @@ namespace GenKnowledge
         }
     }
 }
-

@@ -10,29 +10,11 @@ namespace GenKnowledge.ProcessDefs
     {
         public const string ProcessorId = "XenotypeDefProcessor";
 
-        private static readonly List<PlaceholderDescriptor> PlaceholderDescriptors = new List<PlaceholderDescriptor>
-        {
-            new PlaceholderDescriptor
-            {
-                Key = "label",
-                Token = "{{label}}",
-                Description = "Xenotype label",
-                ExampleValue = "Baseliner"
-            },
-            new PlaceholderDescriptor
-            {
-                Key = "description",
-                Token = "{{description}}",
-                Description = "Xenotype description",
-                ExampleValue = "A baseline human xenotype."
-            }
-        };
-
         private string currentLabel;
         private string currentDescription;
 
         public string Id => ProcessorId;
-        public string DisplayName => "XenotypeDef";
+        public string DisplayName => "RimTalkGenKnowledge.Processor.Xenotype.DisplayName".Translate();
 
         public ProcessDefBaseConfig CreateDefaultConfig()
         {
@@ -61,14 +43,14 @@ namespace GenKnowledge.ProcessDefs
 
         public IEnumerable<PlaceholderDescriptor> GetPlaceholders()
         {
-            return PlaceholderDescriptors;
+            return BuildPlaceholderDescriptors();
         }
 
         public string ProcessTemplateString(string templateString, ProcessDefBaseConfig config)
         {
             return ProcessDefPlaceholderUtility.ProcessTemplateString(
                 templateString,
-                PlaceholderDescriptors,
+                BuildPlaceholderDescriptors(),
                 ResolveValueByKey);
         }
 
@@ -82,7 +64,7 @@ namespace GenKnowledge.ProcessDefs
             XenotypeProcessDefConfig typed = config as XenotypeProcessDefConfig;
             if (typed == null)
             {
-                Widgets.Label(rect, "Invalid Xenotype config type.");
+                Widgets.Label(rect, "RimTalkGenKnowledge.Message.InvalidXenotypeConfigType".Translate());
                 return;
             }
 
@@ -91,30 +73,30 @@ namespace GenKnowledge.ProcessDefs
             const float gap = 6f;
 
             Rect enabledRect = new Rect(rect.x, y, rect.width, lineHeight);
-            Widgets.CheckboxLabeled(enabledRect, "Enabled", ref typed.Enabled);
+            Widgets.CheckboxLabeled(enabledRect, "RimTalkGenKnowledge.Settings.Enabled".Translate(), ref typed.Enabled);
             y += lineHeight + gap;
 
-            y = DrawTemplateRow(new Rect(rect.x, y, rect.width, lineHeight), "Tag Template", typed.TagTemplate, value => typed.TagTemplate = value);
+            y = DrawTemplateRow(new Rect(rect.x, y, rect.width, lineHeight), "RimTalkGenKnowledge.Settings.TagTemplate".Translate(), typed.TagTemplate, value => typed.TagTemplate = value);
             y += gap;
-            y = DrawTemplateRow(new Rect(rect.x, y, rect.width, lineHeight), "Knowledge Template", typed.KnowledgeTemplate, value => typed.KnowledgeTemplate = value);
+            y = DrawTemplateRow(new Rect(rect.x, y, rect.width, lineHeight), "RimTalkGenKnowledge.Settings.KnowledgeTemplate".Translate(), typed.KnowledgeTemplate, value => typed.KnowledgeTemplate = value);
             y += gap;
 
             Rect resetRect = new Rect(rect.x, y, 120f, lineHeight);
-            if (Widgets.ButtonText(resetRect, "Reset"))
+            if (Widgets.ButtonText(resetRect, "RimTalkGenKnowledge.Settings.Reset".Translate()))
             {
                 ApplyDefaultConfig(typed);
             }
 
             y += lineHeight + gap;
             Rect importanceLabelRect = new Rect(rect.x, y, rect.width, lineHeight);
-            Widgets.Label(importanceLabelRect, $"Base Importance: {typed.BaseImportance:0.00}");
+            Widgets.Label(importanceLabelRect, "RimTalkGenKnowledge.Settings.BaseImportance".Translate(typed.BaseImportance.ToString("0.00")));
             y += lineHeight;
 
             Rect sliderRect = new Rect(rect.x, y, rect.width, lineHeight);
             typed.BaseImportance = Widgets.HorizontalSlider(sliderRect, typed.BaseImportance, 0f, 1f, false);
             y += lineHeight + gap;
 
-            string placeholderText = ProcessDefPlaceholderUtility.BuildPlaceholderHint(PlaceholderDescriptors);
+            string placeholderText = ProcessDefPlaceholderUtility.BuildPlaceholderHint(BuildPlaceholderDescriptors());
             Rect placeholderRect = new Rect(rect.x, y, rect.width, lineHeight);
             Widgets.Label(placeholderRect, placeholderText);
         }
@@ -208,10 +190,10 @@ namespace GenKnowledge.ProcessDefs
             }
 
             Rect insertRect = new Rect(textRect.xMax + gap, rowRect.y, buttonWidth, rowRect.height);
-            if (Widgets.ButtonText(insertRect, "Insert"))
+            if (Widgets.ButtonText(insertRect, "RimTalkGenKnowledge.Settings.Insert".Translate()))
             {
                 ProcessDefPlaceholderUtility.ShowInsertPlaceholderMenu(
-                    PlaceholderDescriptors,
+                    BuildPlaceholderDescriptors(),
                     setter,
                     nextValue ?? string.Empty);
             }
@@ -230,6 +212,27 @@ namespace GenKnowledge.ProcessDefs
                 default:
                     return string.Empty;
             }
+        }
+
+        private static List<PlaceholderDescriptor> BuildPlaceholderDescriptors()
+        {
+            return new List<PlaceholderDescriptor>
+            {
+                new PlaceholderDescriptor
+                {
+                    Key = "label",
+                    Token = "{{label}}",
+                    Description = "RimTalkGenKnowledge.Placeholder.Xenotype.Label".Translate(),
+                    ExampleValue = "Baseliner"
+                },
+                new PlaceholderDescriptor
+                {
+                    Key = "description",
+                    Token = "{{description}}",
+                    Description = "RimTalkGenKnowledge.Placeholder.Xenotype.Description".Translate(),
+                    ExampleValue = "A baseline human xenotype."
+                }
+            };
         }
 
     }

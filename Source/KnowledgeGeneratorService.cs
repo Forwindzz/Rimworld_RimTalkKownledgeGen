@@ -33,25 +33,25 @@ namespace GenKnowledge
 
             if (Current.Game == null || Find.World == null)
             {
-                AppendError(report, "Generation is only available in a loaded save.", reportEachError);
+                AppendError(report, "RimTalkGenKnowledge.Message.GenerationOnlyInLoadedSave".Translate(), reportEachError);
                 return report;
             }
 
             if (!ModsConfig.BiotechActive)
             {
-                AppendError(report, "Biotech is not active. XenotypeDef generation skipped.", reportEachError);
+                AppendError(report, "RimTalkGenKnowledge.Message.BiotechNotActive".Translate(), reportEachError);
                 return report;
             }
 
             if (!apiBridge.Initialize())
             {
-                AppendError(report, apiBridge.LastInitError ?? "API initialization failed.", reportEachError);
+                AppendError(report, apiBridge.LastInitError ?? "RimTalkGenKnowledge.Message.ApiInitializationFailed".Translate(), reportEachError);
                 return report;
             }
 
             if (logicalToKnowledgeId == null)
             {
-                AppendError(report, "Knowledge mapping dictionary is null.", reportEachError);
+                AppendError(report, "RimTalkGenKnowledge.Message.KnowledgeMappingNull".Translate(), reportEachError);
                 return report;
             }
 
@@ -81,7 +81,7 @@ namespace GenKnowledge
                 }
                 catch (Exception ex)
                 {
-                    AppendError(report, $"Processor {processor?.Id ?? processor?.GetType().Name} failed: {ex.Message}", reportEachError);
+                    AppendError(report, "RimTalkGenKnowledge.Message.ProcessorFailed".Translate(processor?.Id ?? processor?.GetType().Name, ex.Message), reportEachError);
                 }
             }
 
@@ -151,7 +151,7 @@ namespace GenKnowledge
                 }
                 catch (Exception ex)
                 {
-                    AppendError(report, $"Unhandled item failure ({item.LogicalKey}): {ex.Message}", reportEachError);
+                    AppendError(report, "RimTalkGenKnowledge.Message.UnhandledItemFailure".Translate(item.LogicalKey, ex.Message), reportEachError);
                 }
             }
 
@@ -167,19 +167,19 @@ namespace GenKnowledge
 
             if (Current.Game == null || Find.World == null)
             {
-                AppendError(report, "Clear is only available in a loaded save.", reportEachError);
+                AppendError(report, "RimTalkGenKnowledge.Message.ClearOnlyInLoadedSave".Translate(), reportEachError);
                 return report;
             }
 
             if (!apiBridge.Initialize())
             {
-                AppendError(report, apiBridge.LastInitError ?? "API initialization failed.", reportEachError);
+                AppendError(report, apiBridge.LastInitError ?? "RimTalkGenKnowledge.Message.ApiInitializationFailed".Translate(), reportEachError);
                 return report;
             }
 
             if (logicalToKnowledgeId == null)
             {
-                AppendError(report, "Knowledge mapping dictionary is null.", reportEachError);
+                AppendError(report, "RimTalkGenKnowledge.Message.KnowledgeMappingNull".Translate(), reportEachError);
                 return report;
             }
 
@@ -215,7 +215,7 @@ namespace GenKnowledge
             ProcessDefBaseConfig defaultConfig = processor.CreateDefaultConfig();
             if (defaultConfig == null)
             {
-                AppendError(report, $"Processor {processor.Id} returned null default config.", reportEachError);
+                AppendError(report, "RimTalkGenKnowledge.Message.ProcessorDefaultConfigNull".Translate(processor.Id), reportEachError);
                 return null;
             }
 
@@ -229,7 +229,7 @@ namespace GenKnowledge
             {
                 AppendError(
                     report,
-                    $"Processor {processor.Id} config type mismatch. Expected {expectedType.Name}, got {config.GetType().Name}.",
+                    "RimTalkGenKnowledge.Message.ProcessorConfigTypeMismatch".Translate(processor.Id, expectedType.Name, config.GetType().Name),
                     reportEachError);
                 return defaultConfig;
             }
@@ -266,7 +266,7 @@ namespace GenKnowledge
 
             if (reportEachError)
             {
-                Messages.Message($"GenKnowledge error: {error}", MessageTypeDefOf.RejectInput, false);
+                Messages.Message("RimTalkGenKnowledge.Message.GenKnowledgeError".Translate(error), MessageTypeDefOf.RejectInput, false);
             }
         }
     }
