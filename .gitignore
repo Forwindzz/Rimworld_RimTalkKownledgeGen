@@ -1,6 +1,11 @@
 /.vscode/obj
 /*.sln 
 /*/Assemblies/*.pdb
+/temp
+/build_obj
+/build_out
+/Doc
+/Build
 
 # /*/Assemblies
 # /.vscode
