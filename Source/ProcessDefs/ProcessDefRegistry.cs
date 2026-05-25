@@ -8,7 +8,16 @@ namespace GenKnowledge.ProcessDefs
         {
             return new List<IProcessDef>
             {
-                new XenotypeDefProcessor()
+                new XenotypeDefProcessor(),
+                new ThingDefProcessor(),
+                new PawnKindDefProcessor(),
+                new TraitDefProcessor(),
+                new ResearchProjectDefProcessor(),
+                new RecipeDefProcessor(),
+                new HediffDefProcessor(),
+                new GeneDefProcessor(),
+                new MemeDefProcessor(),
+                new FactionDefProcessor()
             };
         }
     }

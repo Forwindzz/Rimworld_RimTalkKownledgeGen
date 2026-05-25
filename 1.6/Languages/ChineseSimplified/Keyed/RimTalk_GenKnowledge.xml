@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <RimTalkGenKnowledge.Settings.Category>常识生成</RimTalkGenKnowledge.Settings.Category>
+  <RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>启用全局错误提示</RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>
+  <RimTalkGenKnowledge.Settings.OnlyLoadedSave>常识生成仅可在已加载存档中执行。</RimTalkGenKnowledge.Settings.OnlyLoadedSave>
+  <RimTalkGenKnowledge.Settings.GenerateCurrentSave>生成常识（当前存档）</RimTalkGenKnowledge.Settings.GenerateCurrentSave>
+  <RimTalkGenKnowledge.Settings.ClearGeneratedKnowledge>清理已生成常识</RimTalkGenKnowledge.Settings.ClearGeneratedKnowledge>
+  <RimTalkGenKnowledge.Settings.Processors>处理器</RimTalkGenKnowledge.Settings.Processors>
+  <RimTalkGenKnowledge.Settings.Enabled>启用</RimTalkGenKnowledge.Settings.Enabled>
+  <RimTalkGenKnowledge.Settings.TagTemplate>Tag 模板</RimTalkGenKnowledge.Settings.TagTemplate>
+  <RimTalkGenKnowledge.Settings.KnowledgeTemplate>知识模板</RimTalkGenKnowledge.Settings.KnowledgeTemplate>
+  <RimTalkGenKnowledge.Settings.Reset>重置</RimTalkGenKnowledge.Settings.Reset>
+  <RimTalkGenKnowledge.Settings.Insert>插入</RimTalkGenKnowledge.Settings.Insert>
+  <RimTalkGenKnowledge.Settings.BaseImportance>基础重要性：{0}</RimTalkGenKnowledge.Settings.BaseImportance>
+  <RimTalkGenKnowledge.Settings.IncludeModDefs>包含外来 Mod Def</RimTalkGenKnowledge.Settings.IncludeModDefs>
+  <RimTalkGenKnowledge.Settings.ImportanceMin>重要性下限</RimTalkGenKnowledge.Settings.ImportanceMin>
+  <RimTalkGenKnowledge.Settings.ImportanceMax>重要性上限</RimTalkGenKnowledge.Settings.ImportanceMax>
+  <RimTalkGenKnowledge.Settings.PlaceholdersNone>占位符：（无）</RimTalkGenKnowledge.Settings.PlaceholdersNone>
+  <RimTalkGenKnowledge.Settings.PlaceholdersHint>占位符：{0}</RimTalkGenKnowledge.Settings.PlaceholdersHint>
+
+  <RimTalkGenKnowledge.Settings.Thing.IncludeStatSummary>包含属性摘要</RimTalkGenKnowledge.Settings.Thing.IncludeStatSummary>
+  <RimTalkGenKnowledge.Settings.Thing.IncludeCategories>包含分类</RimTalkGenKnowledge.Settings.Thing.IncludeCategories>
+  <RimTalkGenKnowledge.Settings.Thing.ExcludeCategories>排除分类</RimTalkGenKnowledge.Settings.Thing.ExcludeCategories>
+  <RimTalkGenKnowledge.Settings.Thing.MaxDescriptionLength>描述最大长度</RimTalkGenKnowledge.Settings.Thing.MaxDescriptionLength>
+  <RimTalkGenKnowledge.Settings.Thing.WeightMarketValueLog10>市场价值 log10 权重</RimTalkGenKnowledge.Settings.Thing.WeightMarketValueLog10>
+  <RimTalkGenKnowledge.Settings.Thing.WeightMassLog10>质量 log10 权重</RimTalkGenKnowledge.Settings.Thing.WeightMassLog10>
+  <RimTalkGenKnowledge.Settings.Thing.WeightStackLimitIsOne>堆叠上限为1权重</RimTalkGenKnowledge.Settings.Thing.WeightStackLimitIsOne>
+  <RimTalkGenKnowledge.Settings.PawnKind.IncludeAnimals>包含动物</RimTalkGenKnowledge.Settings.PawnKind.IncludeAnimals>
+  <RimTalkGenKnowledge.Settings.PawnKind.IncludeMechanoids>包含机械体</RimTalkGenKnowledge.Settings.PawnKind.IncludeMechanoids>
+  <RimTalkGenKnowledge.Settings.PawnKind.WeightCombatPowerLog10>战力 log10 权重</RimTalkGenKnowledge.Settings.PawnKind.WeightCombatPowerLog10>
+  <RimTalkGenKnowledge.Settings.PawnKind.WeightTrader>商人权重</RimTalkGenKnowledge.Settings.PawnKind.WeightTrader>
+  <RimTalkGenKnowledge.Settings.Trait.IncludeDegreeDetails>包含 Degree 详情</RimTalkGenKnowledge.Settings.Trait.IncludeDegreeDetails>
+  <RimTalkGenKnowledge.Settings.Trait.WeightDegreeCount>Degree 数量权重</RimTalkGenKnowledge.Settings.Trait.WeightDegreeCount>
+  <RimTalkGenKnowledge.Settings.Trait.WeightCommonality>Commonality 权重</RimTalkGenKnowledge.Settings.Trait.WeightCommonality>
+  <RimTalkGenKnowledge.Settings.Trait.WeightCommonalityLog10>Commonality log10 权重</RimTalkGenKnowledge.Settings.Trait.WeightCommonalityLog10>
+  <RimTalkGenKnowledge.Settings.Research.IncludePrerequisites>包含前置科技</RimTalkGenKnowledge.Settings.Research.IncludePrerequisites>
+  <RimTalkGenKnowledge.Settings.Research.UseCostLog10Weight>使用 cost 的 log10 权重</RimTalkGenKnowledge.Settings.Research.UseCostLog10Weight>
+  <RimTalkGenKnowledge.Settings.Research.WeightCost>cost 权重</RimTalkGenKnowledge.Settings.Research.WeightCost>
+  <RimTalkGenKnowledge.Settings.Research.WeightPrereqCount>前置数量权重</RimTalkGenKnowledge.Settings.Research.WeightPrereqCount>
+  <RimTalkGenKnowledge.Settings.Recipe.IncludeIngredients>包含材料信息</RimTalkGenKnowledge.Settings.Recipe.IncludeIngredients>
+  <RimTalkGenKnowledge.Settings.Recipe.IncludeWorkbench>包含工作台信息</RimTalkGenKnowledge.Settings.Recipe.IncludeWorkbench>
+  <RimTalkGenKnowledge.Settings.Recipe.WeightWorkAmountLog10>工作量 log10 权重</RimTalkGenKnowledge.Settings.Recipe.WeightWorkAmountLog10>
+  <RimTalkGenKnowledge.Settings.Recipe.WeightIngredientCountLog10>材料总量 log10 权重</RimTalkGenKnowledge.Settings.Recipe.WeightIngredientCountLog10>
+  <RimTalkGenKnowledge.Settings.Hediff.IncludeGoodHediffs>包含正向 Hediff</RimTalkGenKnowledge.Settings.Hediff.IncludeGoodHediffs>
+  <RimTalkGenKnowledge.Settings.Hediff.IncludeImplants>包含植入体</RimTalkGenKnowledge.Settings.Hediff.IncludeImplants>
+  <RimTalkGenKnowledge.Settings.Hediff.WeightIsBad>isBad 权重</RimTalkGenKnowledge.Settings.Hediff.WeightIsBad>
+  <RimTalkGenKnowledge.Settings.Hediff.WeightIsChronic>isChronic 权重</RimTalkGenKnowledge.Settings.Hediff.WeightIsChronic>
+  <RimTalkGenKnowledge.Settings.Hediff.WeightTendable>tendable 权重</RimTalkGenKnowledge.Settings.Hediff.WeightTendable>
+  <RimTalkGenKnowledge.Settings.Hediff.WeightIsLethal>isLethal 权重</RimTalkGenKnowledge.Settings.Hediff.WeightIsLethal>
+  <RimTalkGenKnowledge.Settings.Gene.IncludeArchiteOnly>仅包含 Archite 基因</RimTalkGenKnowledge.Settings.Gene.IncludeArchiteOnly>
+  <RimTalkGenKnowledge.Settings.Gene.IncludeNegativeGenes>包含负面基因</RimTalkGenKnowledge.Settings.Gene.IncludeNegativeGenes>
+  <RimTalkGenKnowledge.Settings.Gene.WeightBiostatCpx>biostatCpx 权重</RimTalkGenKnowledge.Settings.Gene.WeightBiostatCpx>
+  <RimTalkGenKnowledge.Settings.Gene.WeightBiostatMet>biostatMet 权重</RimTalkGenKnowledge.Settings.Gene.WeightBiostatMet>
+  <RimTalkGenKnowledge.Settings.Gene.WeightBiostatArc>biostatArc 权重</RimTalkGenKnowledge.Settings.Gene.WeightBiostatArc>
+  <RimTalkGenKnowledge.Settings.Meme.IncludeStructureMemes>包含结构 Meme</RimTalkGenKnowledge.Settings.Meme.IncludeStructureMemes>
+  <RimTalkGenKnowledge.Settings.Meme.IncludeJokeMemes>包含 Joke Meme</RimTalkGenKnowledge.Settings.Meme.IncludeJokeMemes>
+  <RimTalkGenKnowledge.Settings.Meme.WeightImpact>impact 权重</RimTalkGenKnowledge.Settings.Meme.WeightImpact>
+  <RimTalkGenKnowledge.Settings.Meme.WeightCategory>分类权重</RimTalkGenKnowledge.Settings.Meme.WeightCategory>
+  <RimTalkGenKnowledge.Settings.Faction.IncludePlayerFaction>包含玩家阵营</RimTalkGenKnowledge.Settings.Faction.IncludePlayerFaction>
+  <RimTalkGenKnowledge.Settings.Faction.IncludeHiddenFactions>包含隐藏阵营</RimTalkGenKnowledge.Settings.Faction.IncludeHiddenFactions>
+  <RimTalkGenKnowledge.Settings.Faction.WeightTechLevel>科技等级权重</RimTalkGenKnowledge.Settings.Faction.WeightTechLevel>
+  <RimTalkGenKnowledge.Settings.Faction.WeightPermanentEnemy>永久敌对权重</RimTalkGenKnowledge.Settings.Faction.WeightPermanentEnemy>
+  <RimTalkGenKnowledge.Settings.Faction.WeightHumanlike>类人阵营权重</RimTalkGenKnowledge.Settings.Faction.WeightHumanlike>
+  <RimTalkGenKnowledge.Settings.Faction.TechLevelScoreMap>TechLevel 映射表</RimTalkGenKnowledge.Settings.Faction.TechLevelScoreMap>
+
+  <RimTalkGenKnowledge.Processor.Xenotype.DisplayName>XenotypeDef</RimTalkGenKnowledge.Processor.Xenotype.DisplayName>
+  <RimTalkGenKnowledge.Processor.Thing.DisplayName>ThingDef</RimTalkGenKnowledge.Processor.Thing.DisplayName>
+  <RimTalkGenKnowledge.Processor.PawnKind.DisplayName>PawnKindDef</RimTalkGenKnowledge.Processor.PawnKind.DisplayName>
+  <RimTalkGenKnowledge.Processor.Trait.DisplayName>TraitDef</RimTalkGenKnowledge.Processor.Trait.DisplayName>
+  <RimTalkGenKnowledge.Processor.Research.DisplayName>ResearchProjectDef</RimTalkGenKnowledge.Processor.Research.DisplayName>
+  <RimTalkGenKnowledge.Processor.Recipe.DisplayName>RecipeDef</RimTalkGenKnowledge.Processor.Recipe.DisplayName>
+  <RimTalkGenKnowledge.Processor.Hediff.DisplayName>HediffDef</RimTalkGenKnowledge.Processor.Hediff.DisplayName>
+  <RimTalkGenKnowledge.Processor.Gene.DisplayName>GeneDef</RimTalkGenKnowledge.Processor.Gene.DisplayName>
+  <RimTalkGenKnowledge.Processor.Meme.DisplayName>MemeDef</RimTalkGenKnowledge.Processor.Meme.DisplayName>
+  <RimTalkGenKnowledge.Processor.Faction.DisplayName>FactionDef</RimTalkGenKnowledge.Processor.Faction.DisplayName>
+
+  <RimTalkGenKnowledge.Placeholder.Xenotype.Label>异种体标签</RimTalkGenKnowledge.Placeholder.Xenotype.Label>
+  <RimTalkGenKnowledge.Placeholder.Xenotype.Description>异种体描述</RimTalkGenKnowledge.Placeholder.Xenotype.Description>
+
+  <RimTalkGenKnowledge.Message.GenerationOnlyInLoadedSave>仅可在已加载存档中生成常识。</RimTalkGenKnowledge.Message.GenerationOnlyInLoadedSave>
+  <RimTalkGenKnowledge.Message.GenerationFailedMissingComponent>生成失败：缺少游戏组件。</RimTalkGenKnowledge.Message.GenerationFailedMissingComponent>
+  <RimTalkGenKnowledge.Message.ClearOnlyInLoadedSave>仅可在已加载存档中清理常识。</RimTalkGenKnowledge.Message.ClearOnlyInLoadedSave>
+  <RimTalkGenKnowledge.Message.ClearFailedMissingComponent>清理失败：缺少游戏组件。</RimTalkGenKnowledge.Message.ClearFailedMissingComponent>
+  <RimTalkGenKnowledge.Message.BiotechNotActive>未启用 Biotech，已跳过 XenotypeDef 生成。</RimTalkGenKnowledge.Message.BiotechNotActive>
+  <RimTalkGenKnowledge.Message.ApiInitializationFailed>API 初始化失败。</RimTalkGenKnowledge.Message.ApiInitializationFailed>
+  <RimTalkGenKnowledge.Message.KnowledgeMappingNull>知识映射字典为空。</RimTalkGenKnowledge.Message.KnowledgeMappingNull>
+  <RimTalkGenKnowledge.Message.ProcessorFailed>处理器 {0} 失败：{1}</RimTalkGenKnowledge.Message.ProcessorFailed>
+  <RimTalkGenKnowledge.Message.UnhandledItemFailure>未处理条目失败（{0}）：{1}</RimTalkGenKnowledge.Message.UnhandledItemFailure>
+  <RimTalkGenKnowledge.Message.ProcessorDefaultConfigNull>处理器 {0} 返回了空的默认配置。</RimTalkGenKnowledge.Message.ProcessorDefaultConfigNull>
+  <RimTalkGenKnowledge.Message.ProcessorConfigTypeMismatch>处理器 {0} 配置类型不匹配。期望 {1}，实际 {2}。</RimTalkGenKnowledge.Message.ProcessorConfigTypeMismatch>
+  <RimTalkGenKnowledge.Message.GenKnowledgeError>GenKnowledge 错误：{0}</RimTalkGenKnowledge.Message.GenKnowledgeError>
+  <RimTalkGenKnowledge.Message.AssemblyNotFound>未找到程序集：{0}</RimTalkGenKnowledge.Message.AssemblyNotFound>
+  <RimTalkGenKnowledge.Message.TypeNotFound>未找到类型：{0}</RimTalkGenKnowledge.Message.TypeNotFound>
+  <RimTalkGenKnowledge.Message.ApiMethodsMissing>缺少一个或多个必需的 API 方法。</RimTalkGenKnowledge.Message.ApiMethodsMissing>
+  <RimTalkGenKnowledge.Message.AddKnowledgeExSignatureMismatch>AddKnowledgeEx 方法签名不匹配。</RimTalkGenKnowledge.Message.AddKnowledgeExSignatureMismatch>
+  <RimTalkGenKnowledge.Message.InitializationException>初始化异常：{0}</RimTalkGenKnowledge.Message.InitializationException>
+  <RimTalkGenKnowledge.Message.AddKnowledgeExFailed>AddKnowledgeEx 调用失败：{0}</RimTalkGenKnowledge.Message.AddKnowledgeExFailed>
+  <RimTalkGenKnowledge.Message.UpdateKnowledgeFailed>UpdateKnowledge 调用失败：{0}</RimTalkGenKnowledge.Message.UpdateKnowledgeFailed>
+  <RimTalkGenKnowledge.Message.RemoveKnowledgeFailed>RemoveKnowledge 调用失败：{0}</RimTalkGenKnowledge.Message.RemoveKnowledgeFailed>
+  <RimTalkGenKnowledge.Message.FindKnowledgeByIdFailed>FindKnowledgeById 调用失败：{0}</RimTalkGenKnowledge.Message.FindKnowledgeByIdFailed>
+  <RimTalkGenKnowledge.Message.ApiBridgeNotInitialized>API 桥接尚未初始化。</RimTalkGenKnowledge.Message.ApiBridgeNotInitialized>
+  <RimTalkGenKnowledge.Message.InvalidXenotypeConfigType>Xenotype 配置类型无效。</RimTalkGenKnowledge.Message.InvalidXenotypeConfigType>
+  <RimTalkGenKnowledge.Message.InvalidProcessorConfigType>处理器配置类型无效：{0}</RimTalkGenKnowledge.Message.InvalidProcessorConfigType>
+
+  <RimTalkGenKnowledge.Report.NoSaveLoaded>未加载存档。</RimTalkGenKnowledge.Report.NoSaveLoaded>
+  <RimTalkGenKnowledge.Report.NoGenerationReport>暂无生成报告。</RimTalkGenKnowledge.Report.NoGenerationReport>
+  <RimTalkGenKnowledge.Report.NoGenerationReportYet>尚未执行生成。</RimTalkGenKnowledge.Report.NoGenerationReportYet>
+  <RimTalkGenKnowledge.Report.LastRunTick>上次执行 Tick：{0}</RimTalkGenKnowledge.Report.LastRunTick>
+  <RimTalkGenKnowledge.Report.LastError>最近错误：{0}</RimTalkGenKnowledge.Report.LastError>
+  <RimTalkGenKnowledge.Report.Summary>GenKnowledge：输入={0}，新增={1}，更新={2}，删除={3}，跳过={4}，失败={5}</RimTalkGenKnowledge.Report.Summary>
+</LanguageData>

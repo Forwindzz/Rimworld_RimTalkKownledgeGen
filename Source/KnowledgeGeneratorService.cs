@@ -37,12 +37,6 @@ namespace GenKnowledge
                 return report;
             }
 
-            if (!ModsConfig.BiotechActive)
-            {
-                AppendError(report, "RimTalkGenKnowledge.Message.BiotechNotActive".Translate(), reportEachError);
-                return report;
-            }
-
             if (!apiBridge.Initialize())
             {
                 AppendError(report, apiBridge.LastInitError ?? "RimTalkGenKnowledge.Message.ApiInitializationFailed".Translate(), reportEachError);

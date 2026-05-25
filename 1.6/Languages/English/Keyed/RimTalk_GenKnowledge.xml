@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <RimTalkGenKnowledge.Settings.Category>Gen Knowledge</RimTalkGenKnowledge.Settings.Category>
+  <RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>Enable global error reporting</RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>
+  <RimTalkGenKnowledge.Settings.OnlyLoadedSave>Generate knowledge only works in a loaded save.</RimTalkGenKnowledge.Settings.OnlyLoadedSave>
+  <RimTalkGenKnowledge.Settings.GenerateCurrentSave>Generate knowledge (current save)</RimTalkGenKnowledge.Settings.GenerateCurrentSave>
+  <RimTalkGenKnowledge.Settings.ClearGeneratedKnowledge>Clear generated knowledge</RimTalkGenKnowledge.Settings.ClearGeneratedKnowledge>
+  <RimTalkGenKnowledge.Settings.Processors>Processors</RimTalkGenKnowledge.Settings.Processors>
+  <RimTalkGenKnowledge.Settings.Enabled>Enabled</RimTalkGenKnowledge.Settings.Enabled>
+  <RimTalkGenKnowledge.Settings.TagTemplate>Tag Template</RimTalkGenKnowledge.Settings.TagTemplate>
+  <RimTalkGenKnowledge.Settings.KnowledgeTemplate>Knowledge Template</RimTalkGenKnowledge.Settings.KnowledgeTemplate>
+  <RimTalkGenKnowledge.Settings.Reset>Reset</RimTalkGenKnowledge.Settings.Reset>
+  <RimTalkGenKnowledge.Settings.Insert>Insert</RimTalkGenKnowledge.Settings.Insert>
+  <RimTalkGenKnowledge.Settings.BaseImportance>Base Importance: {0}</RimTalkGenKnowledge.Settings.BaseImportance>
+  <RimTalkGenKnowledge.Settings.IncludeModDefs>Include external mod defs</RimTalkGenKnowledge.Settings.IncludeModDefs>
+  <RimTalkGenKnowledge.Settings.ImportanceMin>Importance Min</RimTalkGenKnowledge.Settings.ImportanceMin>
+  <RimTalkGenKnowledge.Settings.ImportanceMax>Importance Max</RimTalkGenKnowledge.Settings.ImportanceMax>
+  <RimTalkGenKnowledge.Settings.PlaceholdersNone>Placeholders: (none)</RimTalkGenKnowledge.Settings.PlaceholdersNone>
+  <RimTalkGenKnowledge.Settings.PlaceholdersHint>Placeholders: {0}</RimTalkGenKnowledge.Settings.PlaceholdersHint>
+
+  <RimTalkGenKnowledge.Settings.Thing.IncludeStatSummary>Include stat summary</RimTalkGenKnowledge.Settings.Thing.IncludeStatSummary>
+  <RimTalkGenKnowledge.Settings.Thing.IncludeCategories>Include categories</RimTalkGenKnowledge.Settings.Thing.IncludeCategories>
+  <RimTalkGenKnowledge.Settings.Thing.ExcludeCategories>Exclude categories</RimTalkGenKnowledge.Settings.Thing.ExcludeCategories>
+  <RimTalkGenKnowledge.Settings.Thing.MaxDescriptionLength>Max description length</RimTalkGenKnowledge.Settings.Thing.MaxDescriptionLength>
+  <RimTalkGenKnowledge.Settings.Thing.WeightMarketValueLog10>Weight marketValue log10</RimTalkGenKnowledge.Settings.Thing.WeightMarketValueLog10>
+  <RimTalkGenKnowledge.Settings.Thing.WeightMassLog10>Weight mass log10</RimTalkGenKnowledge.Settings.Thing.WeightMassLog10>
+  <RimTalkGenKnowledge.Settings.Thing.WeightStackLimitIsOne>Weight stackLimit==1</RimTalkGenKnowledge.Settings.Thing.WeightStackLimitIsOne>
+  <RimTalkGenKnowledge.Settings.PawnKind.IncludeAnimals>Include animals</RimTalkGenKnowledge.Settings.PawnKind.IncludeAnimals>
+  <RimTalkGenKnowledge.Settings.PawnKind.IncludeMechanoids>Include mechanoids</RimTalkGenKnowledge.Settings.PawnKind.IncludeMechanoids>
+  <RimTalkGenKnowledge.Settings.PawnKind.WeightCombatPowerLog10>Weight combatPower log10</RimTalkGenKnowledge.Settings.PawnKind.WeightCombatPowerLog10>
+  <RimTalkGenKnowledge.Settings.PawnKind.WeightTrader>Weight trader</RimTalkGenKnowledge.Settings.PawnKind.WeightTrader>
+  <RimTalkGenKnowledge.Settings.Trait.IncludeDegreeDetails>Include degree details</RimTalkGenKnowledge.Settings.Trait.IncludeDegreeDetails>
+  <RimTalkGenKnowledge.Settings.Trait.WeightDegreeCount>Weight degree count</RimTalkGenKnowledge.Settings.Trait.WeightDegreeCount>
+  <RimTalkGenKnowledge.Settings.Trait.WeightCommonality>Weight commonality</RimTalkGenKnowledge.Settings.Trait.WeightCommonality>
+  <RimTalkGenKnowledge.Settings.Trait.WeightCommonalityLog10>Weight commonality log10</RimTalkGenKnowledge.Settings.Trait.WeightCommonalityLog10>
+  <RimTalkGenKnowledge.Settings.Research.IncludePrerequisites>Include prerequisites</RimTalkGenKnowledge.Settings.Research.IncludePrerequisites>
+  <RimTalkGenKnowledge.Settings.Research.UseCostLog10Weight>Use cost log10 weight</RimTalkGenKnowledge.Settings.Research.UseCostLog10Weight>
+  <RimTalkGenKnowledge.Settings.Research.WeightCost>Weight cost</RimTalkGenKnowledge.Settings.Research.WeightCost>
+  <RimTalkGenKnowledge.Settings.Research.WeightPrereqCount>Weight prerequisite count</RimTalkGenKnowledge.Settings.Research.WeightPrereqCount>
+  <RimTalkGenKnowledge.Settings.Recipe.IncludeIngredients>Include ingredients</RimTalkGenKnowledge.Settings.Recipe.IncludeIngredients>
+  <RimTalkGenKnowledge.Settings.Recipe.IncludeWorkbench>Include workbench</RimTalkGenKnowledge.Settings.Recipe.IncludeWorkbench>
+  <RimTalkGenKnowledge.Settings.Recipe.WeightWorkAmountLog10>Weight workAmount log10</RimTalkGenKnowledge.Settings.Recipe.WeightWorkAmountLog10>
+  <RimTalkGenKnowledge.Settings.Recipe.WeightIngredientCountLog10>Weight ingredientCount log10</RimTalkGenKnowledge.Settings.Recipe.WeightIngredientCountLog10>
+  <RimTalkGenKnowledge.Settings.Hediff.IncludeGoodHediffs>Include good hediffs</RimTalkGenKnowledge.Settings.Hediff.IncludeGoodHediffs>
+  <RimTalkGenKnowledge.Settings.Hediff.IncludeImplants>Include implants</RimTalkGenKnowledge.Settings.Hediff.IncludeImplants>
+  <RimTalkGenKnowledge.Settings.Hediff.WeightIsBad>Weight isBad</RimTalkGenKnowledge.Settings.Hediff.WeightIsBad>
+  <RimTalkGenKnowledge.Settings.Hediff.WeightIsChronic>Weight isChronic</RimTalkGenKnowledge.Settings.Hediff.WeightIsChronic>
+  <RimTalkGenKnowledge.Settings.Hediff.WeightTendable>Weight tendable</RimTalkGenKnowledge.Settings.Hediff.WeightTendable>
+  <RimTalkGenKnowledge.Settings.Hediff.WeightIsLethal>Weight isLethal</RimTalkGenKnowledge.Settings.Hediff.WeightIsLethal>
+  <RimTalkGenKnowledge.Settings.Gene.IncludeArchiteOnly>Include archite genes only</RimTalkGenKnowledge.Settings.Gene.IncludeArchiteOnly>
+  <RimTalkGenKnowledge.Settings.Gene.IncludeNegativeGenes>Include negative genes</RimTalkGenKnowledge.Settings.Gene.IncludeNegativeGenes>
+  <RimTalkGenKnowledge.Settings.Gene.WeightBiostatCpx>Weight biostatCpx</RimTalkGenKnowledge.Settings.Gene.WeightBiostatCpx>
+  <RimTalkGenKnowledge.Settings.Gene.WeightBiostatMet>Weight biostatMet</RimTalkGenKnowledge.Settings.Gene.WeightBiostatMet>
+  <RimTalkGenKnowledge.Settings.Gene.WeightBiostatArc>Weight biostatArc</RimTalkGenKnowledge.Settings.Gene.WeightBiostatArc>
+  <RimTalkGenKnowledge.Settings.Meme.IncludeStructureMemes>Include structure memes</RimTalkGenKnowledge.Settings.Meme.IncludeStructureMemes>
+  <RimTalkGenKnowledge.Settings.Meme.IncludeJokeMemes>Include joke memes</RimTalkGenKnowledge.Settings.Meme.IncludeJokeMemes>
+  <RimTalkGenKnowledge.Settings.Meme.WeightImpact>Weight impact</RimTalkGenKnowledge.Settings.Meme.WeightImpact>
+  <RimTalkGenKnowledge.Settings.Meme.WeightCategory>Weight category</RimTalkGenKnowledge.Settings.Meme.WeightCategory>
+  <RimTalkGenKnowledge.Settings.Faction.IncludePlayerFaction>Include player faction</RimTalkGenKnowledge.Settings.Faction.IncludePlayerFaction>
+  <RimTalkGenKnowledge.Settings.Faction.IncludeHiddenFactions>Include hidden factions</RimTalkGenKnowledge.Settings.Faction.IncludeHiddenFactions>
+  <RimTalkGenKnowledge.Settings.Faction.WeightTechLevel>Weight techLevel</RimTalkGenKnowledge.Settings.Faction.WeightTechLevel>
+  <RimTalkGenKnowledge.Settings.Faction.WeightPermanentEnemy>Weight permanentEnemy</RimTalkGenKnowledge.Settings.Faction.WeightPermanentEnemy>
+  <RimTalkGenKnowledge.Settings.Faction.WeightHumanlike>Weight humanlike</RimTalkGenKnowledge.Settings.Faction.WeightHumanlike>
+  <RimTalkGenKnowledge.Settings.Faction.TechLevelScoreMap>TechLevel score map</RimTalkGenKnowledge.Settings.Faction.TechLevelScoreMap>
+
+  <RimTalkGenKnowledge.Processor.Xenotype.DisplayName>XenotypeDef</RimTalkGenKnowledge.Processor.Xenotype.DisplayName>
+  <RimTalkGenKnowledge.Processor.Thing.DisplayName>ThingDef</RimTalkGenKnowledge.Processor.Thing.DisplayName>
+  <RimTalkGenKnowledge.Processor.PawnKind.DisplayName>PawnKindDef</RimTalkGenKnowledge.Processor.PawnKind.DisplayName>
+  <RimTalkGenKnowledge.Processor.Trait.DisplayName>TraitDef</RimTalkGenKnowledge.Processor.Trait.DisplayName>
+  <RimTalkGenKnowledge.Processor.Research.DisplayName>ResearchProjectDef</RimTalkGenKnowledge.Processor.Research.DisplayName>
+  <RimTalkGenKnowledge.Processor.Recipe.DisplayName>RecipeDef</RimTalkGenKnowledge.Processor.Recipe.DisplayName>
+  <RimTalkGenKnowledge.Processor.Hediff.DisplayName>HediffDef</RimTalkGenKnowledge.Processor.Hediff.DisplayName>
+  <RimTalkGenKnowledge.Processor.Gene.DisplayName>GeneDef</RimTalkGenKnowledge.Processor.Gene.DisplayName>
+  <RimTalkGenKnowledge.Processor.Meme.DisplayName>MemeDef</RimTalkGenKnowledge.Processor.Meme.DisplayName>
+  <RimTalkGenKnowledge.Processor.Faction.DisplayName>FactionDef</RimTalkGenKnowledge.Processor.Faction.DisplayName>
+
+  <RimTalkGenKnowledge.Placeholder.Xenotype.Label>Xenotype label</RimTalkGenKnowledge.Placeholder.Xenotype.Label>
+  <RimTalkGenKnowledge.Placeholder.Xenotype.Description>Xenotype description</RimTalkGenKnowledge.Placeholder.Xenotype.Description>
+
+  <RimTalkGenKnowledge.Message.GenerationOnlyInLoadedSave>Generation is only available in a loaded save.</RimTalkGenKnowledge.Message.GenerationOnlyInLoadedSave>
+  <RimTalkGenKnowledge.Message.GenerationFailedMissingComponent>Generation failed: game component missing.</RimTalkGenKnowledge.Message.GenerationFailedMissingComponent>
+  <RimTalkGenKnowledge.Message.ClearOnlyInLoadedSave>Clear is only available in a loaded save.</RimTalkGenKnowledge.Message.ClearOnlyInLoadedSave>
+  <RimTalkGenKnowledge.Message.ClearFailedMissingComponent>Clear failed: game component missing.</RimTalkGenKnowledge.Message.ClearFailedMissingComponent>
+  <RimTalkGenKnowledge.Message.BiotechNotActive>Biotech is not active. XenotypeDef generation skipped.</RimTalkGenKnowledge.Message.BiotechNotActive>
+  <RimTalkGenKnowledge.Message.ApiInitializationFailed>API initialization failed.</RimTalkGenKnowledge.Message.ApiInitializationFailed>
+  <RimTalkGenKnowledge.Message.KnowledgeMappingNull>Knowledge mapping dictionary is null.</RimTalkGenKnowledge.Message.KnowledgeMappingNull>
+  <RimTalkGenKnowledge.Message.ProcessorFailed>Processor {0} failed: {1}</RimTalkGenKnowledge.Message.ProcessorFailed>
+  <RimTalkGenKnowledge.Message.UnhandledItemFailure>Unhandled item failure ({0}): {1}</RimTalkGenKnowledge.Message.UnhandledItemFailure>
+  <RimTalkGenKnowledge.Message.ProcessorDefaultConfigNull>Processor {0} returned null default config.</RimTalkGenKnowledge.Message.ProcessorDefaultConfigNull>
+  <RimTalkGenKnowledge.Message.ProcessorConfigTypeMismatch>Processor {0} config type mismatch. Expected {1}, got {2}.</RimTalkGenKnowledge.Message.ProcessorConfigTypeMismatch>
+  <RimTalkGenKnowledge.Message.GenKnowledgeError>GenKnowledge error: {0}</RimTalkGenKnowledge.Message.GenKnowledgeError>
+  <RimTalkGenKnowledge.Message.AssemblyNotFound>Assembly not found: {0}</RimTalkGenKnowledge.Message.AssemblyNotFound>
+  <RimTalkGenKnowledge.Message.TypeNotFound>Type not found: {0}</RimTalkGenKnowledge.Message.TypeNotFound>
+  <RimTalkGenKnowledge.Message.ApiMethodsMissing>One or more required API methods are missing.</RimTalkGenKnowledge.Message.ApiMethodsMissing>
+  <RimTalkGenKnowledge.Message.AddKnowledgeExSignatureMismatch>AddKnowledgeEx signature mismatch.</RimTalkGenKnowledge.Message.AddKnowledgeExSignatureMismatch>
+  <RimTalkGenKnowledge.Message.InitializationException>Initialization exception: {0}</RimTalkGenKnowledge.Message.InitializationException>
+  <RimTalkGenKnowledge.Message.AddKnowledgeExFailed>AddKnowledgeEx failed: {0}</RimTalkGenKnowledge.Message.AddKnowledgeExFailed>
+  <RimTalkGenKnowledge.Message.UpdateKnowledgeFailed>UpdateKnowledge failed: {0}</RimTalkGenKnowledge.Message.UpdateKnowledgeFailed>
+  <RimTalkGenKnowledge.Message.RemoveKnowledgeFailed>RemoveKnowledge failed: {0}</RimTalkGenKnowledge.Message.RemoveKnowledgeFailed>
+  <RimTalkGenKnowledge.Message.FindKnowledgeByIdFailed>FindKnowledgeById failed: {0}</RimTalkGenKnowledge.Message.FindKnowledgeByIdFailed>
+  <RimTalkGenKnowledge.Message.ApiBridgeNotInitialized>API bridge not initialized.</RimTalkGenKnowledge.Message.ApiBridgeNotInitialized>
+  <RimTalkGenKnowledge.Message.InvalidXenotypeConfigType>Invalid Xenotype config type.</RimTalkGenKnowledge.Message.InvalidXenotypeConfigType>
+  <RimTalkGenKnowledge.Message.InvalidProcessorConfigType>Invalid processor config type: {0}</RimTalkGenKnowledge.Message.InvalidProcessorConfigType>
+
+  <RimTalkGenKnowledge.Report.NoSaveLoaded>No save loaded.</RimTalkGenKnowledge.Report.NoSaveLoaded>
+  <RimTalkGenKnowledge.Report.NoGenerationReport>No generation report available.</RimTalkGenKnowledge.Report.NoGenerationReport>
+  <RimTalkGenKnowledge.Report.NoGenerationReportYet>No generation report yet.</RimTalkGenKnowledge.Report.NoGenerationReportYet>
+  <RimTalkGenKnowledge.Report.LastRunTick>Last run tick: {0}</RimTalkGenKnowledge.Report.LastRunTick>
+  <RimTalkGenKnowledge.Report.LastError>Last error: {0}</RimTalkGenKnowledge.Report.LastError>
+  <RimTalkGenKnowledge.Report.Summary>GenKnowledge: input={0}, created={1}, updated={2}, deleted={3}, skipped={4}, failed={5}</RimTalkGenKnowledge.Report.Summary>
+</LanguageData>

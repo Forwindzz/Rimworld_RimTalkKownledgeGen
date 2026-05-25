@@ -9,6 +9,7 @@ namespace GenKnowledge
     public class GenKnowledgeMod : Mod
     {
         public static GenKnowledgeSettings Settings;
+        private Vector2 settingsScrollPosition = Vector2.zero;
 
         public GenKnowledgeMod(ModContentPack content) : base(content)
         {
@@ -26,8 +27,28 @@ namespace GenKnowledge
             List<IProcessDef> processors = ProcessDefRegistry.CreateProcessors();
             Settings.EnsureDefaults(processors);
 
+            float estimatedHeight = 220f;
+            foreach (IProcessDef processor in processors)
+            {
+                if (processor == null)
+                {
+                    continue;
+                }
+
+                ProcessDefBaseConfig cfg = Settings.GetOrCreateConfig(processor);
+                if (cfg == null)
+                {
+                    continue;
+                }
+
+                estimatedHeight += processor.GetConfigHeight(cfg, inRect.width - 28f) + 48f;
+            }
+
+            Rect viewRect = new Rect(0f, 0f, inRect.width - 16f, Mathf.Max(inRect.height, estimatedHeight));
+            Widgets.BeginScrollView(inRect, ref settingsScrollPosition, viewRect);
+
             var listing = new Listing_Standard();
-            listing.Begin(inRect);
+            listing.Begin(viewRect);
 
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting".Translate(), ref Settings.enableGlobalErrorReporting);
             listing.GapLine();
@@ -61,7 +82,7 @@ namespace GenKnowledge
                 }
 
                 listing.Label(processor.DisplayName);
-                float configHeight = processor.GetConfigHeight(config, inRect.width);
+                float configHeight = processor.GetConfigHeight(config, viewRect.width);
                 Rect container = listing.GetRect(configHeight);
                 Widgets.DrawMenuSection(container);
                 Rect contentRect = container.ContractedBy(6f);
@@ -73,6 +94,7 @@ namespace GenKnowledge
             DrawLastReport(listing);
 
             listing.End();
+            Widgets.EndScrollView();
 
             if (GUI.changed)
             {
