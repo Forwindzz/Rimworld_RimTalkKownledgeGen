@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -9,6 +9,27 @@ namespace GenKnowledge.ProcessDefs
     public class XenotypeDefProcessor : IProcessDef
     {
         public const string ProcessorId = "XenotypeDefProcessor";
+
+        private static readonly List<PlaceholderDescriptor> PlaceholderDescriptors = new List<PlaceholderDescriptor>
+        {
+            new PlaceholderDescriptor
+            {
+                Key = "label",
+                Token = "{{label}}",
+                Description = "Xenotype label",
+                ExampleValue = "Baseliner"
+            },
+            new PlaceholderDescriptor
+            {
+                Key = "description",
+                Token = "{{description}}",
+                Description = "Xenotype description",
+                ExampleValue = "A baseline human xenotype."
+            }
+        };
+
+        private string currentLabel;
+        private string currentDescription;
 
         public string Id => ProcessorId;
         public string DisplayName => "XenotypeDef";
@@ -24,9 +45,36 @@ namespace GenKnowledge.ProcessDefs
             };
         }
 
+        public void ApplyDefaultConfig(ProcessDefBaseConfig config)
+        {
+            XenotypeProcessDefConfig typed = config as XenotypeProcessDefConfig;
+            if (typed == null)
+            {
+                return;
+            }
+
+            typed.Enabled = true;
+            typed.TagTemplate = "{{label}}";
+            typed.KnowledgeTemplate = "{{label}}: {{description}}";
+            typed.BaseImportance = 0.5f;
+        }
+
+        public IEnumerable<PlaceholderDescriptor> GetPlaceholders()
+        {
+            return PlaceholderDescriptors;
+        }
+
+        public string ProcessTemplateString(string templateString, ProcessDefBaseConfig config)
+        {
+            return ProcessDefPlaceholderUtility.ProcessTemplateString(
+                templateString,
+                PlaceholderDescriptors,
+                ResolveValueByKey);
+        }
+
         public float GetConfigHeight(ProcessDefBaseConfig config, float viewWidth)
         {
-            return 164f;
+            return 220f;
         }
 
         public void DrawConfig(Rect rect, ProcessDefBaseConfig config)
@@ -38,14 +86,37 @@ namespace GenKnowledge.ProcessDefs
                 return;
             }
 
-            var listing = new Listing_Standard();
-            listing.Begin(rect);
-            listing.CheckboxLabeled("Enabled", ref typed.Enabled);
-            typed.TagTemplate = listing.TextEntryLabeled("Tag Template", typed.TagTemplate ?? string.Empty);
-            typed.KnowledgeTemplate = listing.TextEntryLabeled("Knowledge Template", typed.KnowledgeTemplate ?? string.Empty);
-            listing.Label($"Base Importance: {typed.BaseImportance:0.00}");
-            typed.BaseImportance = listing.Slider(typed.BaseImportance, 0f, 1f);
-            listing.End();
+            float y = rect.y;
+            const float lineHeight = 24f;
+            const float gap = 6f;
+
+            Rect enabledRect = new Rect(rect.x, y, rect.width, lineHeight);
+            Widgets.CheckboxLabeled(enabledRect, "Enabled", ref typed.Enabled);
+            y += lineHeight + gap;
+
+            y = DrawTemplateRow(new Rect(rect.x, y, rect.width, lineHeight), "Tag Template", typed.TagTemplate, value => typed.TagTemplate = value);
+            y += gap;
+            y = DrawTemplateRow(new Rect(rect.x, y, rect.width, lineHeight), "Knowledge Template", typed.KnowledgeTemplate, value => typed.KnowledgeTemplate = value);
+            y += gap;
+
+            Rect resetRect = new Rect(rect.x, y, 120f, lineHeight);
+            if (Widgets.ButtonText(resetRect, "Reset"))
+            {
+                ApplyDefaultConfig(typed);
+            }
+
+            y += lineHeight + gap;
+            Rect importanceLabelRect = new Rect(rect.x, y, rect.width, lineHeight);
+            Widgets.Label(importanceLabelRect, $"Base Importance: {typed.BaseImportance:0.00}");
+            y += lineHeight;
+
+            Rect sliderRect = new Rect(rect.x, y, rect.width, lineHeight);
+            typed.BaseImportance = Widgets.HorizontalSlider(sliderRect, typed.BaseImportance, 0f, 1f, false);
+            y += lineHeight + gap;
+
+            string placeholderText = ProcessDefPlaceholderUtility.BuildPlaceholderHint(PlaceholderDescriptors);
+            Rect placeholderRect = new Rect(rect.x, y, rect.width, lineHeight);
+            Widgets.Label(placeholderRect, placeholderText);
         }
 
         public IEnumerable<GeneratedKnowledgeItem> ProcessDefs(ProcessDefContext context, ProcessDefBaseConfig config)
@@ -85,14 +156,17 @@ namespace GenKnowledge.ProcessDefs
                     continue;
                 }
 
-                string rawTag = ApplyTemplate(tagTemplate, label, description);
-                string tag = NormalizeTags(rawTag);
+                currentLabel = label;
+                currentDescription = description;
+
+                string rawTag = ProcessTemplateString(tagTemplate, typed);
+                string tag = ProcessDefPlaceholderUtility.NormalizeTags(rawTag);
                 if (string.IsNullOrWhiteSpace(tag))
                 {
                     continue;
                 }
 
-                string content = ApplyTemplate(knowledgeTemplate, label, description);
+                string content = ProcessTemplateString(knowledgeTemplate, typed);
                 if (string.IsNullOrWhiteSpace(content))
                 {
                     continue;
@@ -106,46 +180,57 @@ namespace GenKnowledge.ProcessDefs
                     Importance = importance
                 };
             }
+
+            currentLabel = null;
+            currentDescription = null;
         }
 
-        private static string ApplyTemplate(string template, string label, string description)
+        private float DrawTemplateRow(Rect rowRect, string label, string value, Action<string> setter)
         {
-            if (string.IsNullOrWhiteSpace(template))
+            const float labelWidth = 140f;
+            const float buttonWidth = 62f;
+            const float gap = 6f;
+
+            Rect labelRect = new Rect(rowRect.x, rowRect.y, labelWidth, rowRect.height);
+            Widgets.Label(labelRect, label);
+
+            float textWidth = rowRect.width - labelWidth - buttonWidth - gap;
+            if (textWidth < 40f)
             {
-                return null;
+                textWidth = 40f;
             }
 
-            return template
-                .Replace("{{label}}", label ?? string.Empty)
-                .Replace("{{description}}", description ?? string.Empty)
-                .Trim();
+            Rect textRect = new Rect(labelRect.xMax, rowRect.y, textWidth, rowRect.height);
+            string nextValue = Widgets.TextField(textRect, value ?? string.Empty);
+            if (!string.Equals(nextValue, value, StringComparison.Ordinal))
+            {
+                setter(nextValue);
+            }
+
+            Rect insertRect = new Rect(textRect.xMax + gap, rowRect.y, buttonWidth, rowRect.height);
+            if (Widgets.ButtonText(insertRect, "Insert"))
+            {
+                ProcessDefPlaceholderUtility.ShowInsertPlaceholderMenu(
+                    PlaceholderDescriptors,
+                    setter,
+                    nextValue ?? string.Empty);
+            }
+
+            return rowRect.yMax;
         }
 
-        private static string NormalizeTags(string rawTags)
+        private string ResolveValueByKey(string key)
         {
-            if (string.IsNullOrWhiteSpace(rawTags))
+            switch (key)
             {
-                return null;
+                case "label":
+                    return currentLabel ?? string.Empty;
+                case "description":
+                    return currentDescription ?? string.Empty;
+                default:
+                    return string.Empty;
             }
-
-            // Memory mod supports multi-tag format with English comma separators.
-            string normalized = rawTags
-                .Replace('，', ',')
-                .Replace('、', ',');
-
-            var tags = normalized
-                .Split(new[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries)
-                .Select(t => t.Trim())
-                .Where(t => !string.IsNullOrWhiteSpace(t))
-                .Distinct()
-                .ToArray();
-
-            if (tags.Length == 0)
-            {
-                return null;
-            }
-
-            return string.Join(",", tags);
         }
+
     }
 }
