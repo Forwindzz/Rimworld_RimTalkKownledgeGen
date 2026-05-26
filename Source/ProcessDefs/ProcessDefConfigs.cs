@@ -48,7 +48,7 @@ namespace GenKnowledge.ProcessDefs
         public float ImportanceWeightSpecialValueScore = 0.01f;
         public float ImportanceWeightNutrition = 0.05f;
         public float ImportanceWeightDescriptionLengthRatio = 0.02f;
-        public float ImportanceMultiplierCraftable = 0.85f;
+        public float ImportanceMultiplierCraftable = 0.95f;
 
         public bool EnableCategoryExtraText = true;
         public bool EnablePriceFeelingText = true;
@@ -84,7 +84,7 @@ namespace GenKnowledge.ProcessDefs
             Scribe_Values.Look(ref ImportanceWeightSpecialValueScore, "importanceWeightSpecialValueScore", 0.01f);
             Scribe_Values.Look(ref ImportanceWeightNutrition, "importanceWeightNutrition", 0.05f);
             Scribe_Values.Look(ref ImportanceWeightDescriptionLengthRatio, "importanceWeightDescriptionLengthRatio", 0.02f);
-            Scribe_Values.Look(ref ImportanceMultiplierCraftable, "importanceMultiplierCraftable", 0.85f);
+            Scribe_Values.Look(ref ImportanceMultiplierCraftable, "importanceMultiplierCraftable", 0.95f);
 
             Scribe_Values.Look(ref EnableCategoryExtraText, "enableCategoryExtraText", true);
             Scribe_Values.Look(ref EnablePriceFeelingText, "enablePriceFeelingText", true);
@@ -270,7 +270,9 @@ namespace GenKnowledge.ProcessDefs
         public bool IncludeNegativeGenes = true;
         public float ImportanceWeightBiostatCpx = 0.03f;
         public float ImportanceWeightBiostatMet = 0.04f;
-        public float ImportanceWeightBiostatArc = 0.15f;
+        public float ImportanceWeightBiostatArc = 0.09f;
+        public float ImportanceWeightDescriptionLengthLog10 = 0.04f;
+        public float ImportanceBonusHasAbilities = 0.15f;
 
         public override void ExposeData()
         {
@@ -279,7 +281,9 @@ namespace GenKnowledge.ProcessDefs
             Scribe_Values.Look(ref IncludeNegativeGenes, "includeNegativeGenes", true);
             Scribe_Values.Look(ref ImportanceWeightBiostatCpx, "importanceWeightBiostatCpx", 0.03f);
             Scribe_Values.Look(ref ImportanceWeightBiostatMet, "importanceWeightBiostatMet", 0.04f);
-            Scribe_Values.Look(ref ImportanceWeightBiostatArc, "importanceWeightBiostatArc", 0.15f);
+            Scribe_Values.Look(ref ImportanceWeightBiostatArc, "importanceWeightBiostatArc", 0.09f);
+            Scribe_Values.Look(ref ImportanceWeightDescriptionLengthLog10, "importanceWeightDescriptionLengthLog10", 0.04f);
+            Scribe_Values.Look(ref ImportanceBonusHasAbilities, "importanceBonusHasAbilities", 0.15f);
         }
     }
 

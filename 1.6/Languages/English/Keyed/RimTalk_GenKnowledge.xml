@@ -137,6 +137,8 @@
   <RimTalkGenKnowledge.Settings.Gene.WeightBiostatCpx>Weight biostatCpx</RimTalkGenKnowledge.Settings.Gene.WeightBiostatCpx>
   <RimTalkGenKnowledge.Settings.Gene.WeightBiostatMet>Weight biostatMet</RimTalkGenKnowledge.Settings.Gene.WeightBiostatMet>
   <RimTalkGenKnowledge.Settings.Gene.WeightBiostatArc>Weight biostatArc</RimTalkGenKnowledge.Settings.Gene.WeightBiostatArc>
+  <RimTalkGenKnowledge.Settings.Gene.WeightDescriptionLengthLog10>Weight description length log10</RimTalkGenKnowledge.Settings.Gene.WeightDescriptionLengthLog10>
+  <RimTalkGenKnowledge.Settings.Gene.BonusHasAbilities>Importance bonus when has abilities</RimTalkGenKnowledge.Settings.Gene.BonusHasAbilities>
   <RimTalkGenKnowledge.Settings.Meme.IncludeStructureMemes>Include structure memes</RimTalkGenKnowledge.Settings.Meme.IncludeStructureMemes>
   <RimTalkGenKnowledge.Settings.Meme.IncludeJokeMemes>Include joke memes</RimTalkGenKnowledge.Settings.Meme.IncludeJokeMemes>
   <RimTalkGenKnowledge.Settings.Meme.WeightImpact>Weight impact</RimTalkGenKnowledge.Settings.Meme.WeightImpact>

@@ -29,7 +29,9 @@ namespace GenKnowledge.ProcessDefs
                 IncludeNegativeGenes = true,
                 ImportanceWeightBiostatCpx = 0.03f,
                 ImportanceWeightBiostatMet = 0.04f,
-                ImportanceWeightBiostatArc = 0.15f
+                ImportanceWeightBiostatArc = 0.09f,
+                ImportanceWeightDescriptionLengthLog10 = 0.04f,
+                ImportanceBonusHasAbilities = 0.15f
             };
         }
 
@@ -48,6 +50,8 @@ namespace GenKnowledge.ProcessDefs
             typed.ImportanceWeightBiostatCpx = defaults.ImportanceWeightBiostatCpx;
             typed.ImportanceWeightBiostatMet = defaults.ImportanceWeightBiostatMet;
             typed.ImportanceWeightBiostatArc = defaults.ImportanceWeightBiostatArc;
+            typed.ImportanceWeightDescriptionLengthLog10 = defaults.ImportanceWeightDescriptionLengthLog10;
+            typed.ImportanceBonusHasAbilities = defaults.ImportanceBonusHasAbilities;
         }
 
         public override IEnumerable<PlaceholderDescriptor> GetPlaceholders()
@@ -90,6 +94,10 @@ namespace GenKnowledge.ProcessDefs
             y += gap;
             y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "RimTalkGenKnowledge.Settings.Gene.WeightBiostatArc".Translate(), config.ImportanceWeightBiostatArc, v => config.ImportanceWeightBiostatArc = v);
             y += gap;
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "RimTalkGenKnowledge.Settings.Gene.WeightDescriptionLengthLog10".Translate(), config.ImportanceWeightDescriptionLengthLog10, v => config.ImportanceWeightDescriptionLengthLog10 = v);
+            y += gap;
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "RimTalkGenKnowledge.Settings.Gene.BonusHasAbilities".Translate(), config.ImportanceBonusHasAbilities, v => config.ImportanceBonusHasAbilities = v);
+            y += gap;
 
             return y;
         }
@@ -125,6 +133,7 @@ namespace GenKnowledge.ProcessDefs
                 int cpx = def.biostatCpx;
                 int met = def.biostatMet;
                 int arc = def.biostatArc;
+                bool hasAbilities = def.abilities != null && def.abilities.Count > 0;
 
                 if (typed.IncludeArchiteOnly && arc <= 0)
                 {
@@ -170,7 +179,9 @@ namespace GenKnowledge.ProcessDefs
                 float raw = typed.BaseImportance
                     + Math.Abs(cpx) * typed.ImportanceWeightBiostatCpx
                     + Math.Abs(met) * typed.ImportanceWeightBiostatMet
-                    + Math.Abs(arc) * typed.ImportanceWeightBiostatArc;
+                    + Math.Abs(arc) * typed.ImportanceWeightBiostatArc
+                    + ProcessDefUtility.SafeLog10((description ?? string.Empty).Length + 1f) * typed.ImportanceWeightDescriptionLengthLog10
+                    + (hasAbilities ? typed.ImportanceBonusHasAbilities : 0f);
 
                 yield return new GeneratedKnowledgeItem
                 {

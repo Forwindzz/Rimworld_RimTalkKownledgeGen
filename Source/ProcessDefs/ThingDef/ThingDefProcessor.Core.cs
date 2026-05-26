@@ -56,7 +56,7 @@ namespace GenKnowledge.ProcessDefs
                 ImportanceWeightSpecialValueScore = 0.01f,
                 ImportanceWeightNutrition = 0.05f,
                 ImportanceWeightDescriptionLengthRatio = 0.02f,
-                ImportanceMultiplierCraftable = 0.85f,
+                ImportanceMultiplierCraftable = 0.95f,
                 EnableCategoryExtraText = true,
                 EnablePriceFeelingText = true,
                 EnableHitPointsFeelingText = true,

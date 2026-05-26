@@ -443,4 +443,6 @@
   <RimTalkGenKnowledge.Text.Trait.PawnPossessive>此人的</RimTalkGenKnowledge.Text.Trait.PawnPossessive>
   <RimTalkGenKnowledge.Text.Trait.PawnRef>此人</RimTalkGenKnowledge.Text.Trait.PawnRef>
   <RimTalkGenKnowledge.Text.Unit.DaySuffix>天</RimTalkGenKnowledge.Text.Unit.DaySuffix>
+  <RimTalkGenKnowledge.Settings.Gene.WeightDescriptionLengthLog10>Weight description length log10</RimTalkGenKnowledge.Settings.Gene.WeightDescriptionLengthLog10>
+  <RimTalkGenKnowledge.Settings.Gene.BonusHasAbilities>Importance bonus when has abilities</RimTalkGenKnowledge.Settings.Gene.BonusHasAbilities>
 </LanguageData>

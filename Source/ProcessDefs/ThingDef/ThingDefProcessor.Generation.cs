@@ -181,14 +181,16 @@ namespace GenKnowledge.ProcessDefs
                 float stackMetric = stackLimit == 1 ? 1f : 0f;
                 float nutritionMetric = Mathf.Max(0f, ResolveNutrition(def));
                 float descriptionLengthRatio = label.Length > 0 ? (float)description.Length / label.Length : 0f;
+                float descriptionLengthMetric = Mathf.Log10(Mathf.Max(0f, descriptionLengthRatio) + 1f);
+                float specialValueMetric = Mathf.Log(Mathf.Max(0f, specialValueScore) + 1f, 2f);
                 float raw = typed.BaseImportance
                     + marketMetric * typed.ImportanceWeightMarketValueLog10
                     + Math.Abs(massMetric) * typed.ImportanceWeightMassLog10
                     + hpMetric * typed.ImportanceWeightHitPointsLog10
                     + Math.Abs(stackMetric) * typed.ImportanceWeightStackLimitIsOne
-                    + specialValueScore * typed.ImportanceWeightSpecialValueScore
+                    + specialValueMetric * typed.ImportanceWeightSpecialValueScore
                     + nutritionMetric * typed.ImportanceWeightNutrition
-                    + descriptionLengthRatio * typed.ImportanceWeightDescriptionLengthRatio;
+                    + descriptionLengthMetric * typed.ImportanceWeightDescriptionLengthRatio;
                 if (IsCraftableThingDef(def))
                 {
                     raw *= Mathf.Max(0f, typed.ImportanceMultiplierCraftable);

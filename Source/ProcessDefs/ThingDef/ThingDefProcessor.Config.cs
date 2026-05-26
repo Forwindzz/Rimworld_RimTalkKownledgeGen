@@ -152,6 +152,12 @@ namespace GenKnowledge.ProcessDefs
             EnsureProperty(config, "sharp_damage_pct", T("RimTalkGenKnowledge.Text.Thing.Prop.sharp_damage_pct.Display"), 50f, 100f, true, true, T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.High"));
             EnsureProperty(config, "blunt_damage_pct", T("RimTalkGenKnowledge.Text.Thing.Prop.blunt_damage_pct.Display"), 50f, 100f, true, true, T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.High"));
             EnsureProperty(config, "stuff_max_hit_points_pct", T("RimTalkGenKnowledge.Text.Thing.Prop.stuff_max_hit_points_pct.Display"), 50f, 150f, true, true, T("RimTalkGenKnowledge.Text.Thing.Stage.NegLight"), T("RimTalkGenKnowledge.Text.Thing.Stage.PosLight"), 1f, false);
+
+            if (Math.Abs(config.ImportanceMultiplierCraftable - 0.85f) < 0.0001f)
+            {
+                // Migrate previous default to new default while preserving user-customized values.
+                config.ImportanceMultiplierCraftable = 0.95f;
+            }
         }
 
         private static void EnsureCategoryRule(ThingProcessDefConfig config, string key, string propertyKeys, int maxLines)
