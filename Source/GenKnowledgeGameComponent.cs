@@ -29,7 +29,8 @@ namespace GenKnowledge
                 new KnowledgeApiBridge(reportEachError),
                 processors,
                 GenKnowledgeMod.Settings?.processConfigs,
-                GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.15f);
+                GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.21f,
+                GenKnowledgeMod.Settings?.debugIncludeInternalKeys ?? false);
 
             lastReport = service.Run(logicalToKnowledgeId, reportEachError);
             return lastReport;
@@ -46,7 +47,8 @@ namespace GenKnowledge
                 new KnowledgeApiBridge(reportEachError),
                 ProcessDefRegistry.CreateProcessors(),
                 GenKnowledgeMod.Settings?.processConfigs,
-                GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.15f);
+                GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.21f,
+                GenKnowledgeMod.Settings?.debugIncludeInternalKeys ?? false);
 
             lastReport = service.Clear(logicalToKnowledgeId, reportEachError);
             return lastReport;

@@ -20,7 +20,7 @@ namespace GenKnowledge.ProcessDefs
                 Enabled = true,
                 IncludeModDefs = true,
                 TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: {{description}}\n效果：{{badLabel}}{{chronicLine}}{{tendableLine}}",
+                KnowledgeTemplate = "{{label}}: {{description}}\n{{effectLinePrefix}}{{badLabel}}{{chronicLine}}{{tendableLine}}",
                 BaseImportance = 0.6f,
                 ImportanceMin = 0.1f,
                 ImportanceMax = 0.88f,
@@ -66,6 +66,7 @@ namespace GenKnowledge.ProcessDefs
                 new PlaceholderDescriptor { Key = "isBad", Token = "{{isBad}}", Description = "Whether this is harmful" },
                 new PlaceholderDescriptor { Key = "isChronic", Token = "{{isChronic}}", Description = "Whether this is chronic" },
                 new PlaceholderDescriptor { Key = "tendable", Token = "{{tendable}}", Description = "Whether this can be tended" },
+                new PlaceholderDescriptor { Key = "effectLinePrefix", Token = "{{effectLinePrefix}}", Description = "Effect line prefix" },
                 new PlaceholderDescriptor { Key = "badLabel", Token = "{{badLabel}}", Description = "Positive/negative effect label" },
                 new PlaceholderDescriptor { Key = "chronicLine", Token = "{{chronicLine}}", Description = "Shown only when chronic=true" },
                 new PlaceholderDescriptor { Key = "tendableLine", Token = "{{tendableLine}}", Description = "Shown only when tendable=true" },
@@ -138,9 +139,11 @@ namespace GenKnowledge.ProcessDefs
                 bool tendable = def.tendable;
                 bool isLethal = def.lethalSeverity > 0f;
                 bool isImplant = IsImplant(def);
-                string badLabel = isBad ? "负面效果" : "正面效果";
-                string chronicLine = isChronic ? "\n长期状态" : string.Empty;
-                string tendableLine = tendable ? "\n可处理" : string.Empty;
+                string badLabel = isBad
+                    ? "RimTalkGenKnowledge.Text.Hediff.BadLabel.Negative".Translate()
+                    : "RimTalkGenKnowledge.Text.Hediff.BadLabel.Positive".Translate();
+                string chronicLine = isChronic ? ("\n" + "RimTalkGenKnowledge.Text.Hediff.ChronicLine".Translate().ToString()) : string.Empty;
+                string tendableLine = tendable ? ("\n" + "RimTalkGenKnowledge.Text.Hediff.TendableLine".Translate().ToString()) : string.Empty;
 
                 if (!typed.IncludeGoodHediffs && !isBad)
                 {
@@ -159,6 +162,7 @@ namespace GenKnowledge.ProcessDefs
                     ["isBad"] = isBad ? "true" : "false",
                     ["isChronic"] = isChronic ? "true" : "false",
                     ["tendable"] = tendable ? "true" : "false",
+                    ["effectLinePrefix"] = "RimTalkGenKnowledge.Text.Hediff.EffectPrefix".Translate(),
                     ["badLabel"] = badLabel,
                     ["chronicLine"] = chronicLine,
                     ["tendableLine"] = tendableLine,

@@ -146,7 +146,7 @@ namespace GenKnowledge.ProcessDefs
                 string costDifficulty = GetCostDifficultyLabel(cost);
                 string costDifficultyLine = string.IsNullOrWhiteSpace(costDifficulty)
                     ? string.Empty
-                    : "\n研究难度：" + costDifficulty;
+                    : "\n" + string.Format("RimTalkGenKnowledge.Text.Research.CostDifficultyLine".Translate(), costDifficulty);
                 SetTemplateValues(new Dictionary<string, string>
                 {
                     ["label"] = label,
@@ -225,12 +225,12 @@ namespace GenKnowledge.ProcessDefs
         {
             if (cost < 1000f)
             {
-                return "简单";
+                return "RimTalkGenKnowledge.Text.Research.CostDifficulty.Easy".Translate();
             }
 
             if (cost > 10000f)
             {
-                return "困难";
+                return "RimTalkGenKnowledge.Text.Research.CostDifficulty.Hard".Translate();
             }
 
             return string.Empty;

@@ -2,7 +2,7 @@
 <ModMetaData>
 	<packageId>RimTalk_GenKnowledge</packageId>
 	<name>RimTalk_GenKnowledge</name>
-	<author>username</author>
+	<author>f⑨</author>
 	<!-- <modIconPath>path/to/icon</modIconPath> -->
 	<supportedVersions>
 		<li>1.6</li>
@@ -34,5 +34,5 @@
 		<li>cj.rimtalk.expandmemory</li>
 	</loadAfter>
 
-	<description>Template</description>
+	<description>Automatically generate knowledge from definitions in the game</description>
 </ModMetaData>

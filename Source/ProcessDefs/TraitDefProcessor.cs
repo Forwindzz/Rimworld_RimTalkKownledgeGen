@@ -219,8 +219,14 @@ namespace GenKnowledge.ProcessDefs
             }
 
             return text
-                .Replace("PAWN_nameDef", "此人")
-                .Replace("PAWN_pronoun", "此人");
+                .Replace("PAWN_nameDef", "RimTalkGenKnowledge.Text.Trait.PawnRef".Translate())
+                .Replace("PAWN_pronoun", "RimTalkGenKnowledge.Text.Trait.PawnRef".Translate())
+                .Replace("PAWN_objective", "RimTalkGenKnowledge.Text.Trait.PawnObjective".Translate())
+                .Replace("PAWN_possessive", "RimTalkGenKnowledge.Text.Trait.PawnPossessive".Translate())
+                .Replace("{PAWN_objective}", "RimTalkGenKnowledge.Text.Trait.PawnObjective".Translate())
+                .Replace("{PAWN_possessive}", "RimTalkGenKnowledge.Text.Trait.PawnPossessive".Translate())
+                .Replace("[PAWN_objective]", "RimTalkGenKnowledge.Text.Trait.PawnObjective".Translate())
+                .Replace("[PAWN_possessive]", "RimTalkGenKnowledge.Text.Trait.PawnPossessive".Translate());
         }
     }
 }

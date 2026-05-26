@@ -9,7 +9,8 @@ namespace GenKnowledge
     public class GenKnowledgeSettings : ModSettings
     {
         public bool enableGlobalErrorReporting = false;
-        public float minKnowledgeImportance = 0.15f;
+        public bool debugIncludeInternalKeys = false;
+        public float minKnowledgeImportance = 0.21f;
 
         public Dictionary<string, ProcessDefBaseConfig> processConfigs = new Dictionary<string, ProcessDefBaseConfig>();
 
@@ -19,7 +20,8 @@ namespace GenKnowledge
         public override void ExposeData()
         {
             Scribe_Values.Look(ref enableGlobalErrorReporting, "enableGlobalErrorReporting", false);
-            Scribe_Values.Look(ref minKnowledgeImportance, "minKnowledgeImportance", 0.15f);
+            Scribe_Values.Look(ref debugIncludeInternalKeys, "debugIncludeInternalKeys", false);
+            Scribe_Values.Look(ref minKnowledgeImportance, "minKnowledgeImportance", 0.21f);
             Scribe_Collections.Look(
                 ref processConfigs,
                 "processConfigs",

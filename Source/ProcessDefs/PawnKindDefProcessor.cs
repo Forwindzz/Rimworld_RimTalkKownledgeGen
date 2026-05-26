@@ -20,7 +20,7 @@ namespace GenKnowledge.ProcessDefs
                 Enabled = true,
                 IncludeModDefs = true,
                 TagTemplate = "{{label}}",
-                KnowledgeTemplate = "种族：{{race}}，战斗力：{{combatPower}}{{combatPowerLevelSuffix}}，来自派系{{faction}}{{descriptionLine}}",
+                KnowledgeTemplate = "{{racePrefix}}{{race}}{{combatPowerPrefix}}{{combatPower}}{{combatPowerLevelSuffix}}{{factionPrefix}}{{faction}}{{descriptionLine}}",
                 BaseImportance = 0.5f,
                 ImportanceMin = 0.05f,
                 ImportanceMax = 0.85f,
@@ -135,10 +135,14 @@ namespace GenKnowledge.ProcessDefs
 
                 float combatPower = def.combatPower;
                 string combatPowerLevel = ResolveCombatPowerLevel(combatPower);
-                string combatPowerLevelSuffix = string.IsNullOrWhiteSpace(combatPowerLevel) ? string.Empty : $"（{combatPowerLevel}）";
+                string combatPowerLevelSuffix = string.IsNullOrWhiteSpace(combatPowerLevel)
+                    ? string.Empty
+                    : string.Format("RimTalkGenKnowledge.Text.PawnKind.CombatPowerSuffix".Translate(), combatPowerLevel);
                 bool isTrader = def.trader;
                 string factionLabel = ResolveFactionLabel(def);
-                string descriptionLine = string.IsNullOrWhiteSpace(description) ? string.Empty : "\n描述：" + description;
+                string descriptionLine = string.IsNullOrWhiteSpace(description)
+                    ? string.Empty
+                    : ("\n" + string.Format("RimTalkGenKnowledge.Text.PawnKind.DescriptionLine".Translate(), description));
 
                 SetTemplateValues(new Dictionary<string, string>
                 {
@@ -150,6 +154,9 @@ namespace GenKnowledge.ProcessDefs
                     ["faction"] = factionLabel,
                     ["description"] = description,
                     ["descriptionLine"] = descriptionLine,
+                    ["racePrefix"] = "RimTalkGenKnowledge.Text.PawnKind.RacePrefix".Translate(),
+                    ["combatPowerPrefix"] = "RimTalkGenKnowledge.Text.PawnKind.CombatPowerPrefix".Translate(),
+                    ["factionPrefix"] = "RimTalkGenKnowledge.Text.PawnKind.FactionPrefix".Translate(),
                     ["isTrader"] = isTrader ? "true" : "false",
                     ["defName"] = def.defName
                 });
@@ -205,12 +212,12 @@ namespace GenKnowledge.ProcessDefs
         {
             if (combatPower < 90f)
             {
-                return "低";
+                return "RimTalkGenKnowledge.Text.PawnKind.CombatPowerLevel.Low".Translate();
             }
 
             if (combatPower > 300f)
             {
-                return "高";
+                return "RimTalkGenKnowledge.Text.PawnKind.CombatPowerLevel.High".Translate();
             }
 
             return string.Empty;

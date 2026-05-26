@@ -51,6 +51,7 @@ namespace GenKnowledge
             listing.Begin(viewRect);
 
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting".Translate(), ref Settings.enableGlobalErrorReporting);
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys".Translate(), ref Settings.debugIncludeInternalKeys);
             listing.Label("RimTalkGenKnowledge.Settings.MinKnowledgeImportance".Translate(Settings.minKnowledgeImportance.ToString("0.00")));
             Settings.minKnowledgeImportance = Mathf.Clamp01(listing.Slider(Settings.minKnowledgeImportance, 0f, 1f));
             listing.GapLine();

@@ -14,17 +14,20 @@ namespace GenKnowledge
         private readonly List<IProcessDef> processors;
         private readonly Dictionary<string, ProcessDefBaseConfig> processConfigs;
         private readonly float minKnowledgeImportance;
+        private readonly bool debugIncludeInternalKeys;
 
         public KnowledgeGeneratorService(
             KnowledgeApiBridge apiBridge,
             List<IProcessDef> processors,
             Dictionary<string, ProcessDefBaseConfig> processConfigs,
-            float minKnowledgeImportance)
+            float minKnowledgeImportance,
+            bool debugIncludeInternalKeys)
         {
             this.apiBridge = apiBridge;
             this.processors = processors ?? new List<IProcessDef>();
             this.processConfigs = processConfigs;
             this.minKnowledgeImportance = Mathf.Clamp01(minKnowledgeImportance);
+            this.debugIncludeInternalKeys = debugIncludeInternalKeys;
         }
 
         public GenerationReport Run(Dictionary<string, string> logicalToKnowledgeId, bool reportEachError)
@@ -83,6 +86,7 @@ namespace GenKnowledge
             }
 
             var validItems = generated
+                .Select(NormalizeItemForStorage)
                 .Where(item => IsValidItem(item, minKnowledgeImportance))
                 .GroupBy(i => i.LogicalKey)
                 .Select(g => g.Last())
@@ -117,6 +121,10 @@ namespace GenKnowledge
                 try
                 {
                     item.Importance = Mathf.Clamp01(item.Importance);
+                    if (debugIncludeInternalKeys)
+                    {
+                        item.Content = AttachDebugInternalKeyInfo(item);
+                    }
 
                     if (logicalToKnowledgeId.TryGetValue(item.LogicalKey, out string existingId) &&
                         !string.IsNullOrWhiteSpace(existingId) &&
@@ -261,6 +269,40 @@ namespace GenKnowledge
             return true;
         }
 
+        private static GeneratedKnowledgeItem NormalizeItemForStorage(GeneratedKnowledgeItem item)
+        {
+            if (item == null)
+            {
+                return null;
+            }
+
+            item.Tag = NormalizeInlineText(item.Tag);
+            item.Content = NormalizeInlineText(item.Content);
+            return item;
+        }
+
+        private static string NormalizeInlineText(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return string.Empty;
+            }
+
+            string normalized = text.Replace("\r\n", "\n").Replace('\r', '\n');
+            if (normalized.IndexOf('\n') < 0)
+            {
+                return normalized.Trim();
+            }
+
+            string[] parts = normalized.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < parts.Length; i++)
+            {
+                parts[i] = parts[i].Trim();
+            }
+
+            return string.Join("；", parts.Where(p => !string.IsNullOrWhiteSpace(p)));
+        }
+
         private static void AppendError(GenerationReport report, string error, bool reportEachError)
         {
             report.AddError(error);
@@ -270,6 +312,144 @@ namespace GenKnowledge
             {
                 Messages.Message("RimTalkGenKnowledge.Message.GenKnowledgeError".Translate(error), MessageTypeDefOf.RejectInput, false);
             }
+        }
+
+        private static string AttachDebugInternalKeyInfo(GeneratedKnowledgeItem item)
+        {
+            if (item == null)
+            {
+                return string.Empty;
+            }
+
+            string logicalKey = item.LogicalKey ?? string.Empty;
+            ParseLogicalKey(logicalKey, out string keyPrefix, out string defName);
+            string processorId = ResolveProcessorId(keyPrefix);
+            string modPackageId = ResolveModPackageId(keyPrefix, defName);
+            string debugPrefix = $"[debug|processorId={processorId}|logicalKey={logicalKey}|defName={defName}|modPackageId={modPackageId}]";
+
+            string content = item.Content ?? string.Empty;
+            if (content.StartsWith("[debug|", StringComparison.Ordinal))
+            {
+                int closing = content.IndexOf(']');
+                if (closing >= 0 && closing + 1 < content.Length)
+                {
+                    content = content.Substring(closing + 1);
+                }
+                else
+                {
+                    content = string.Empty;
+                }
+            }
+
+            return debugPrefix + content;
+        }
+
+        private static void ParseLogicalKey(string logicalKey, out string keyPrefix, out string defName)
+        {
+            keyPrefix = string.Empty;
+            defName = string.Empty;
+            if (string.IsNullOrWhiteSpace(logicalKey))
+            {
+                return;
+            }
+
+            int firstSep = logicalKey.IndexOf(':');
+            if (firstSep <= 0)
+            {
+                keyPrefix = logicalKey;
+                return;
+            }
+
+            keyPrefix = logicalKey.Substring(0, firstSep);
+            string rest = firstSep + 1 < logicalKey.Length ? logicalKey.Substring(firstSep + 1) : string.Empty;
+            if (string.Equals(keyPrefix, "trait", StringComparison.OrdinalIgnoreCase))
+            {
+                int secondSep = rest.IndexOf(':');
+                defName = secondSep > 0 ? rest.Substring(0, secondSep) : rest;
+                return;
+            }
+
+            defName = rest;
+        }
+
+        private static string ResolveProcessorId(string keyPrefix)
+        {
+            if (string.IsNullOrWhiteSpace(keyPrefix))
+            {
+                return "UnknownProcessor";
+            }
+
+            if (string.Equals(keyPrefix, "xenotype", StringComparison.OrdinalIgnoreCase)) return XenotypeDefProcessor.ProcessorId;
+            if (string.Equals(keyPrefix, "thing", StringComparison.OrdinalIgnoreCase)) return ThingDefProcessor.ProcessorId;
+            if (string.Equals(keyPrefix, "pawnkind", StringComparison.OrdinalIgnoreCase)) return PawnKindDefProcessor.ProcessorId;
+            if (string.Equals(keyPrefix, "trait", StringComparison.OrdinalIgnoreCase)) return TraitDefProcessor.ProcessorId;
+            if (string.Equals(keyPrefix, "research", StringComparison.OrdinalIgnoreCase)) return ResearchProjectDefProcessor.ProcessorId;
+            if (string.Equals(keyPrefix, "recipe", StringComparison.OrdinalIgnoreCase)) return RecipeDefProcessor.ProcessorId;
+            if (string.Equals(keyPrefix, "hediff", StringComparison.OrdinalIgnoreCase)) return HediffDefProcessor.ProcessorId;
+            if (string.Equals(keyPrefix, "gene", StringComparison.OrdinalIgnoreCase)) return GeneDefProcessor.ProcessorId;
+            if (string.Equals(keyPrefix, "meme", StringComparison.OrdinalIgnoreCase)) return MemeDefProcessor.ProcessorId;
+            if (string.Equals(keyPrefix, "faction", StringComparison.OrdinalIgnoreCase)) return FactionDefProcessor.ProcessorId;
+
+            return keyPrefix;
+        }
+
+        private static string ResolveModPackageId(string keyPrefix, string defName)
+        {
+            if (string.IsNullOrWhiteSpace(keyPrefix) || string.IsNullOrWhiteSpace(defName))
+            {
+                return "unknown";
+            }
+
+            Def def = null;
+
+            if (string.Equals(keyPrefix, "xenotype", StringComparison.OrdinalIgnoreCase))
+            {
+                def = DefDatabase<XenotypeDef>.GetNamedSilentFail(defName);
+            }
+            else if (string.Equals(keyPrefix, "thing", StringComparison.OrdinalIgnoreCase))
+            {
+                def = DefDatabase<ThingDef>.GetNamedSilentFail(defName);
+            }
+            else if (string.Equals(keyPrefix, "pawnkind", StringComparison.OrdinalIgnoreCase))
+            {
+                def = DefDatabase<PawnKindDef>.GetNamedSilentFail(defName);
+            }
+            else if (string.Equals(keyPrefix, "trait", StringComparison.OrdinalIgnoreCase))
+            {
+                def = DefDatabase<TraitDef>.GetNamedSilentFail(defName);
+            }
+            else if (string.Equals(keyPrefix, "research", StringComparison.OrdinalIgnoreCase))
+            {
+                def = DefDatabase<ResearchProjectDef>.GetNamedSilentFail(defName);
+            }
+            else if (string.Equals(keyPrefix, "recipe", StringComparison.OrdinalIgnoreCase))
+            {
+                def = DefDatabase<RecipeDef>.GetNamedSilentFail(defName);
+            }
+            else if (string.Equals(keyPrefix, "hediff", StringComparison.OrdinalIgnoreCase))
+            {
+                def = DefDatabase<HediffDef>.GetNamedSilentFail(defName);
+            }
+            else if (string.Equals(keyPrefix, "gene", StringComparison.OrdinalIgnoreCase))
+            {
+                def = DefDatabase<GeneDef>.GetNamedSilentFail(defName);
+            }
+            else if (string.Equals(keyPrefix, "meme", StringComparison.OrdinalIgnoreCase))
+            {
+                def = DefDatabase<MemeDef>.GetNamedSilentFail(defName);
+            }
+            else if (string.Equals(keyPrefix, "faction", StringComparison.OrdinalIgnoreCase))
+            {
+                def = DefDatabase<FactionDef>.GetNamedSilentFail(defName);
+            }
+
+            if (def == null || def.modContentPack == null)
+            {
+                return "unknown";
+            }
+
+            string packageId = ProcessDefUtility.ReadPackageId(def.modContentPack);
+            return string.IsNullOrWhiteSpace(packageId) ? "unknown" : packageId;
         }
     }
 }

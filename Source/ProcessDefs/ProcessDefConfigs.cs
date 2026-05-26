@@ -41,7 +41,7 @@ namespace GenKnowledge.ProcessDefs
         public bool FilterDescriptionShorterThanLabel = true;
         public float DescriptionMinLabelLengthMultiplier = 3f;
         public bool FilterFertilizedEggVariants = true;
-        public string FertilizedEggVariantTokens = "已受精,未受精,fert.,unfert.,fertilized,unfertilized";
+        public string FertilizedEggVariantTokens = "fert.,unfert.,fertilized,unfertilized";
         public bool IncludeStatSummary = false; // legacy
 
         public float ImportanceWeightMarketValueLog10 = 0.05f;
@@ -58,7 +58,7 @@ namespace GenKnowledge.ProcessDefs
         public bool EnableHitPointsFeelingText = true;
         public bool DebugForceShowDeviation = false;
         public bool FilterIntermediateBuildStates = true;
-        public string IntermediateBuildStateTokens = "建造中,蓝图,框架,blueprint,frame";
+        public string IntermediateBuildStateTokens = "blueprint,frame";
 
         public int MaxSemanticLinesGlobal = 8;
         public int SpecialValueTopN = 3;
@@ -83,7 +83,7 @@ namespace GenKnowledge.ProcessDefs
             Scribe_Values.Look(ref FilterDescriptionShorterThanLabel, "filterDescriptionShorterThanLabel", true);
             Scribe_Values.Look(ref DescriptionMinLabelLengthMultiplier, "descriptionMinLabelLengthMultiplier", 3f);
             Scribe_Values.Look(ref FilterFertilizedEggVariants, "filterFertilizedEggVariants", true);
-            Scribe_Values.Look(ref FertilizedEggVariantTokens, "fertilizedEggVariantTokens", "已受精,未受精,fert.,unfert.,fertilized,unfertilized");
+            Scribe_Values.Look(ref FertilizedEggVariantTokens, "fertilizedEggVariantTokens", "fert.,unfert.,fertilized,unfertilized");
             Scribe_Values.Look(ref IncludeStatSummary, "includeStatSummary", false);
 
             Scribe_Values.Look(ref ImportanceWeightMarketValueLog10, "importanceWeightMarketValueLog10", 0.05f);
@@ -100,7 +100,7 @@ namespace GenKnowledge.ProcessDefs
             Scribe_Values.Look(ref EnableHitPointsFeelingText, "enableHitPointsFeelingText", true);
             Scribe_Values.Look(ref DebugForceShowDeviation, "debugForceShowDeviation", false);
             Scribe_Values.Look(ref FilterIntermediateBuildStates, "filterIntermediateBuildStates", true);
-            Scribe_Values.Look(ref IntermediateBuildStateTokens, "intermediateBuildStateTokens", "建造中,蓝图,框架,blueprint,frame");
+            Scribe_Values.Look(ref IntermediateBuildStateTokens, "intermediateBuildStateTokens", "blueprint,frame");
 
             Scribe_Values.Look(ref MaxSemanticLinesGlobal, "maxSemanticLinesGlobal", 8);
             Scribe_Values.Look(ref SpecialValueTopN, "specialValueTopN", 3);

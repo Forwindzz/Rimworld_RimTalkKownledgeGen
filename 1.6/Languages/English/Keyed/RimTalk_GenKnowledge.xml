@@ -1,7 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <RimTalkGenKnowledge.Settings.Category>Gen Knowledge</RimTalkGenKnowledge.Settings.Category>
   <RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>Enable global error reporting</RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>
+  <RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>Debug: prepend internal key info (processorId/logicalKey/defName/modPackageId)</RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>
   <RimTalkGenKnowledge.Settings.MinKnowledgeImportance>Global minimum importance (items below are dropped): {0}</RimTalkGenKnowledge.Settings.MinKnowledgeImportance>
   <RimTalkGenKnowledge.Settings.OnlyLoadedSave>Generate knowledge only works in a loaded save.</RimTalkGenKnowledge.Settings.OnlyLoadedSave>
   <RimTalkGenKnowledge.Settings.GenerateCurrentSave>Generate knowledge (current save)</RimTalkGenKnowledge.Settings.GenerateCurrentSave>
@@ -19,7 +20,6 @@
   <RimTalkGenKnowledge.Settings.ImportanceMax>Importance Max</RimTalkGenKnowledge.Settings.ImportanceMax>
   <RimTalkGenKnowledge.Settings.PlaceholdersNone>Placeholders: (none)</RimTalkGenKnowledge.Settings.PlaceholdersNone>
   <RimTalkGenKnowledge.Settings.PlaceholdersHint>Placeholders: {0}</RimTalkGenKnowledge.Settings.PlaceholdersHint>
-
   <RimTalkGenKnowledge.Settings.Thing.IncludeStatSummary>Include stat summary</RimTalkGenKnowledge.Settings.Thing.IncludeStatSummary>
   <RimTalkGenKnowledge.Settings.Thing.IncludeCategories>Include categories</RimTalkGenKnowledge.Settings.Thing.IncludeCategories>
   <RimTalkGenKnowledge.Settings.Thing.ExcludeCategories>Exclude categories</RimTalkGenKnowledge.Settings.Thing.ExcludeCategories>
@@ -66,7 +66,6 @@
   <RimTalkGenKnowledge.Settings.Faction.WeightPermanentEnemy>Weight permanentEnemy</RimTalkGenKnowledge.Settings.Faction.WeightPermanentEnemy>
   <RimTalkGenKnowledge.Settings.Faction.WeightHumanlike>Weight humanlike</RimTalkGenKnowledge.Settings.Faction.WeightHumanlike>
   <RimTalkGenKnowledge.Settings.Faction.TechLevelScoreMap>TechLevel score map</RimTalkGenKnowledge.Settings.Faction.TechLevelScoreMap>
-
   <RimTalkGenKnowledge.Processor.Xenotype.DisplayName>XenotypeDef</RimTalkGenKnowledge.Processor.Xenotype.DisplayName>
   <RimTalkGenKnowledge.Processor.Thing.DisplayName>ThingDef</RimTalkGenKnowledge.Processor.Thing.DisplayName>
   <RimTalkGenKnowledge.Processor.PawnKind.DisplayName>PawnKindDef</RimTalkGenKnowledge.Processor.PawnKind.DisplayName>
@@ -77,10 +76,8 @@
   <RimTalkGenKnowledge.Processor.Gene.DisplayName>GeneDef</RimTalkGenKnowledge.Processor.Gene.DisplayName>
   <RimTalkGenKnowledge.Processor.Meme.DisplayName>MemeDef</RimTalkGenKnowledge.Processor.Meme.DisplayName>
   <RimTalkGenKnowledge.Processor.Faction.DisplayName>FactionDef</RimTalkGenKnowledge.Processor.Faction.DisplayName>
-
   <RimTalkGenKnowledge.Placeholder.Xenotype.Label>Xenotype label</RimTalkGenKnowledge.Placeholder.Xenotype.Label>
   <RimTalkGenKnowledge.Placeholder.Xenotype.Description>Xenotype description</RimTalkGenKnowledge.Placeholder.Xenotype.Description>
-
   <RimTalkGenKnowledge.Message.GenerationOnlyInLoadedSave>Generation is only available in a loaded save.</RimTalkGenKnowledge.Message.GenerationOnlyInLoadedSave>
   <RimTalkGenKnowledge.Message.GenerationFailedMissingComponent>Generation failed: game component missing.</RimTalkGenKnowledge.Message.GenerationFailedMissingComponent>
   <RimTalkGenKnowledge.Message.ClearOnlyInLoadedSave>Clear is only available in a loaded save.</RimTalkGenKnowledge.Message.ClearOnlyInLoadedSave>
@@ -106,11 +103,214 @@
   <RimTalkGenKnowledge.Message.InvalidXenotypeConfigType>Invalid Xenotype config type.</RimTalkGenKnowledge.Message.InvalidXenotypeConfigType>
   <RimTalkGenKnowledge.Message.InvalidProcessorConfigType>Invalid processor config type: {0}</RimTalkGenKnowledge.Message.InvalidProcessorConfigType>
   <RimTalkGenKnowledge.Message.ResetAllProcessConfigsDone>All processor configs have been reset to defaults.</RimTalkGenKnowledge.Message.ResetAllProcessConfigsDone>
-
   <RimTalkGenKnowledge.Report.NoSaveLoaded>No save loaded.</RimTalkGenKnowledge.Report.NoSaveLoaded>
   <RimTalkGenKnowledge.Report.NoGenerationReport>No generation report available.</RimTalkGenKnowledge.Report.NoGenerationReport>
   <RimTalkGenKnowledge.Report.NoGenerationReportYet>No generation report yet.</RimTalkGenKnowledge.Report.NoGenerationReportYet>
   <RimTalkGenKnowledge.Report.LastRunTick>Last run tick: {0}</RimTalkGenKnowledge.Report.LastRunTick>
   <RimTalkGenKnowledge.Report.LastError>Last error: {0}</RimTalkGenKnowledge.Report.LastError>
   <RimTalkGenKnowledge.Report.Summary>GenKnowledge: input={0}, created={1}, updated={2}, deleted={3}, skipped={4}, failed={5}</RimTalkGenKnowledge.Report.Summary>
+  <RimTalkGenKnowledge.Text.Boolean.False>false</RimTalkGenKnowledge.Text.Boolean.False>
+  <RimTalkGenKnowledge.Text.Boolean.No>no</RimTalkGenKnowledge.Text.Boolean.No>
+  <RimTalkGenKnowledge.Text.Boolean.True>true</RimTalkGenKnowledge.Text.Boolean.True>
+  <RimTalkGenKnowledge.Text.Boolean.Yes>yes</RimTalkGenKnowledge.Text.Boolean.Yes>
+  <RimTalkGenKnowledge.Text.Faction.Fallback.HumanlikePrefix>; humanlike=</RimTalkGenKnowledge.Text.Faction.Fallback.HumanlikePrefix>
+  <RimTalkGenKnowledge.Text.Faction.Fallback.PermanentEnemyPrefix>; permanent enemy=</RimTalkGenKnowledge.Text.Faction.Fallback.PermanentEnemyPrefix>
+  <RimTalkGenKnowledge.Text.Faction.Fallback.TechLevelPrefix>Tech level=</RimTalkGenKnowledge.Text.Faction.Fallback.TechLevelPrefix>
+  <RimTalkGenKnowledge.Text.Faction.HumanlikePrefix>Humanlike: </RimTalkGenKnowledge.Text.Faction.HumanlikePrefix>
+  <RimTalkGenKnowledge.Text.Faction.LabelDescDelimiter>: </RimTalkGenKnowledge.Text.Faction.LabelDescDelimiter>
+  <RimTalkGenKnowledge.Text.Faction.PermanentEnemyPrefix>Permanent enemy: </RimTalkGenKnowledge.Text.Faction.PermanentEnemyPrefix>
+  <RimTalkGenKnowledge.Text.Faction.TechLevelPrefix>Tech level: </RimTalkGenKnowledge.Text.Faction.TechLevelPrefix>
+  <RimTalkGenKnowledge.Text.Gene.Archites.Line>Requires {0} archite capsules</RimTalkGenKnowledge.Text.Gene.Archites.Line>
+  <RimTalkGenKnowledge.Text.Gene.Complexity.High>high complexity</RimTalkGenKnowledge.Text.Gene.Complexity.High>
+  <RimTalkGenKnowledge.Text.Gene.Complexity.Line>Complexity {0}: {1}</RimTalkGenKnowledge.Text.Gene.Complexity.Line>
+  <RimTalkGenKnowledge.Text.Gene.Complexity.Low>low complexity</RimTalkGenKnowledge.Text.Gene.Complexity.Low>
+  <RimTalkGenKnowledge.Text.Gene.Complexity.Mid>medium complexity</RimTalkGenKnowledge.Text.Gene.Complexity.Mid>
+  <RimTalkGenKnowledge.Text.Gene.Metabolism.Costly>more metabolism-costly</RimTalkGenKnowledge.Text.Gene.Metabolism.Costly>
+  <RimTalkGenKnowledge.Text.Gene.Metabolism.LessCost>reduced metabolism cost</RimTalkGenKnowledge.Text.Gene.Metabolism.LessCost>
+  <RimTalkGenKnowledge.Text.Gene.Metabolism.LineRaw>Metabolism {0}</RimTalkGenKnowledge.Text.Gene.Metabolism.LineRaw>
+  <RimTalkGenKnowledge.Text.Gene.Metabolism.LineWithSummary>Metabolism {0}: {1}</RimTalkGenKnowledge.Text.Gene.Metabolism.LineWithSummary>
+  <RimTalkGenKnowledge.Text.Gene.Metabolism.MuchLessCost>greatly reduced metabolism cost</RimTalkGenKnowledge.Text.Gene.Metabolism.MuchLessCost>
+  <RimTalkGenKnowledge.Text.Gene.Metabolism.VeryCostly>extremely metabolism-costly</RimTalkGenKnowledge.Text.Gene.Metabolism.VeryCostly>
+  <RimTalkGenKnowledge.Text.Gene.StatsSeparator>; </RimTalkGenKnowledge.Text.Gene.StatsSeparator>
+  <RimTalkGenKnowledge.Text.Hediff.BadLabel.Negative>negative effect</RimTalkGenKnowledge.Text.Hediff.BadLabel.Negative>
+  <RimTalkGenKnowledge.Text.Hediff.BadLabel.Positive>positive effect</RimTalkGenKnowledge.Text.Hediff.BadLabel.Positive>
+  <RimTalkGenKnowledge.Text.Hediff.ChronicLine>Long-term condition</RimTalkGenKnowledge.Text.Hediff.ChronicLine>
+  <RimTalkGenKnowledge.Text.Hediff.EffectPrefix>Effect: </RimTalkGenKnowledge.Text.Hediff.EffectPrefix>
+  <RimTalkGenKnowledge.Text.Hediff.TendableLine>Can be tended</RimTalkGenKnowledge.Text.Hediff.TendableLine>
+  <RimTalkGenKnowledge.Text.Meme.CategoryPrefix>Category: </RimTalkGenKnowledge.Text.Meme.CategoryPrefix>
+  <RimTalkGenKnowledge.Text.Meme.Impact.High>high impact</RimTalkGenKnowledge.Text.Meme.Impact.High>
+  <RimTalkGenKnowledge.Text.Meme.Impact.Low>low impact</RimTalkGenKnowledge.Text.Meme.Impact.Low>
+  <RimTalkGenKnowledge.Text.Meme.Impact.Mid>medium impact</RimTalkGenKnowledge.Text.Meme.Impact.Mid>
+  <RimTalkGenKnowledge.Text.Meme.ImpactPrefix>Impact: </RimTalkGenKnowledge.Text.Meme.ImpactPrefix>
+  <RimTalkGenKnowledge.Text.PawnKind.CombatPowerLevel.High>high</RimTalkGenKnowledge.Text.PawnKind.CombatPowerLevel.High>
+  <RimTalkGenKnowledge.Text.PawnKind.CombatPowerLevel.Low>low</RimTalkGenKnowledge.Text.PawnKind.CombatPowerLevel.Low>
+  <RimTalkGenKnowledge.Text.PawnKind.CombatPowerPrefix>combat power: </RimTalkGenKnowledge.Text.PawnKind.CombatPowerPrefix>
+  <RimTalkGenKnowledge.Text.PawnKind.CombatPowerSuffix> ({0})</RimTalkGenKnowledge.Text.PawnKind.CombatPowerSuffix>
+  <RimTalkGenKnowledge.Text.PawnKind.DescriptionLine>Description: {0}</RimTalkGenKnowledge.Text.PawnKind.DescriptionLine>
+  <RimTalkGenKnowledge.Text.PawnKind.FactionPrefix>, from faction </RimTalkGenKnowledge.Text.PawnKind.FactionPrefix>
+  <RimTalkGenKnowledge.Text.PawnKind.RacePrefix>Race: </RimTalkGenKnowledge.Text.PawnKind.RacePrefix>
+  <RimTalkGenKnowledge.Text.Research.CostDifficulty.Easy>easy</RimTalkGenKnowledge.Text.Research.CostDifficulty.Easy>
+  <RimTalkGenKnowledge.Text.Research.CostDifficulty.Hard>hard</RimTalkGenKnowledge.Text.Research.CostDifficulty.Hard>
+  <RimTalkGenKnowledge.Text.Research.CostDifficultyLine>Research difficulty: {0}</RimTalkGenKnowledge.Text.Research.CostDifficultyLine>
+  <RimTalkGenKnowledge.Text.Thing.Filter.FertilizedEggTokens>fertilized,unfertilized</RimTalkGenKnowledge.Text.Thing.Filter.FertilizedEggTokens>
+  <RimTalkGenKnowledge.Text.Thing.Filter.IntermediateStateTokens>unfinished,building under construction,under construction</RimTalkGenKnowledge.Text.Thing.Filter.IntermediateStateTokens>
+  <RimTalkGenKnowledge.Text.Thing.Line.ApparelBodyParts>Covered body parts: {0}</RimTalkGenKnowledge.Text.Thing.Line.ApparelBodyParts>
+  <RimTalkGenKnowledge.Text.Thing.Line.ApparelLayers>Apparel layers: {0}</RimTalkGenKnowledge.Text.Thing.Line.ApparelLayers>
+  <RimTalkGenKnowledge.Text.Thing.Line.BuildCost>Build cost: {0}</RimTalkGenKnowledge.Text.Thing.Line.BuildCost>
+  <RimTalkGenKnowledge.Text.Thing.Line.ConstructionSkill>Construction skill required: {0}</RimTalkGenKnowledge.Text.Thing.Line.ConstructionSkill>
+  <RimTalkGenKnowledge.Text.Thing.Line.EggIntervalPrefix>Egg interval: </RimTalkGenKnowledge.Text.Thing.Line.EggIntervalPrefix>
+  <RimTalkGenKnowledge.Text.Thing.Line.FertilityMin>Min fertility required: {0}%</RimTalkGenKnowledge.Text.Thing.Line.FertilityMin>
+  <RimTalkGenKnowledge.Text.Thing.Line.GestationDays>Gestation: {0}{1}</RimTalkGenKnowledge.Text.Thing.Line.GestationDays>
+  <RimTalkGenKnowledge.Text.Thing.Line.GrowDays>Grow time: {0}{1}</RimTalkGenKnowledge.Text.Thing.Line.GrowDays>
+  <RimTalkGenKnowledge.Text.Thing.Line.HitPoints>Durability: {0}</RimTalkGenKnowledge.Text.Thing.Line.HitPoints>
+  <RimTalkGenKnowledge.Text.Thing.Line.LifeExpectancy>Life expectancy: {0}</RimTalkGenKnowledge.Text.Thing.Line.LifeExpectancy>
+  <RimTalkGenKnowledge.Text.Thing.Line.LabelDelimiter>: </RimTalkGenKnowledge.Text.Thing.Line.LabelDelimiter>
+  <RimTalkGenKnowledge.Text.Thing.Line.MarketValue>Value: {0}</RimTalkGenKnowledge.Text.Thing.Line.MarketValue>
+  <RimTalkGenKnowledge.Text.Thing.Line.MilkAmountPrefix>Milk amount: </RimTalkGenKnowledge.Text.Thing.Line.MilkAmountPrefix>
+  <RimTalkGenKnowledge.Text.Thing.Line.MilkIntervalPrefix>Milk interval: </RimTalkGenKnowledge.Text.Thing.Line.MilkIntervalPrefix>
+  <RimTalkGenKnowledge.Text.Thing.Line.ModSourceConcept>Concept from {0}</RimTalkGenKnowledge.Text.Thing.Line.ModSourceConcept>
+  <RimTalkGenKnowledge.Text.Thing.Line.CategoryPrefix>Category: </RimTalkGenKnowledge.Text.Thing.Line.CategoryPrefix>
+  <RimTalkGenKnowledge.Text.Thing.Line.Paintable>Paintable</RimTalkGenKnowledge.Text.Thing.Line.Paintable>
+  <RimTalkGenKnowledge.Text.Thing.Line.ShearIntervalPrefix>Shear interval: </RimTalkGenKnowledge.Text.Thing.Line.ShearIntervalPrefix>
+  <RimTalkGenKnowledge.Text.Thing.Line.Sittable>Can be used for sitting</RimTalkGenKnowledge.Text.Thing.Line.Sittable>
+  <RimTalkGenKnowledge.Text.Thing.Line.TechLevel>Tech level: {0}</RimTalkGenKnowledge.Text.Thing.Line.TechLevel>
+  <RimTalkGenKnowledge.Text.Thing.Line.TerrainAffordance.Heavy>Requires solid foundation (heavy)</RimTalkGenKnowledge.Text.Thing.Line.TerrainAffordance.Heavy>
+  <RimTalkGenKnowledge.Text.Thing.Line.TerrainAffordance.Medium>Requires solid foundation (medium)</RimTalkGenKnowledge.Text.Thing.Line.TerrainAffordance.Medium>
+  <RimTalkGenKnowledge.Text.Thing.Line.TradeTags>Trade tags: {0}</RimTalkGenKnowledge.Text.Thing.Line.TradeTags>
+  <RimTalkGenKnowledge.Text.Thing.Line.WeaponTags>Weapon tags: {0}</RimTalkGenKnowledge.Text.Thing.Line.WeaponTags>
+  <RimTalkGenKnowledge.Text.Thing.Line.WoolAmountPrefix>Wool amount: </RimTalkGenKnowledge.Text.Thing.Line.WoolAmountPrefix>
+  <RimTalkGenKnowledge.Text.Thing.Prop.armor.High>high armor</RimTalkGenKnowledge.Text.Thing.Prop.armor.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.armor.Low>low armor</RimTalkGenKnowledge.Text.Thing.Prop.armor.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.armor_blunt_pct.Display>Blunt armor</RimTalkGenKnowledge.Text.Thing.Prop.armor_blunt_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.armor_heat_pct.Display>Heat armor</RimTalkGenKnowledge.Text.Thing.Prop.armor_heat_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.armor_penetration_pct.Display>Armor penetration</RimTalkGenKnowledge.Text.Thing.Prop.armor_penetration_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.armor_penetration_pct.High>High Armor penetration</RimTalkGenKnowledge.Text.Thing.Prop.armor_penetration_pct.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.armor_penetration_pct.Low>Low Armor penetration</RimTalkGenKnowledge.Text.Thing.Prop.armor_penetration_pct.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.armor_sharp_pct.Display>Sharp armor</RimTalkGenKnowledge.Text.Thing.Prop.armor_sharp_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.beauty.Display>Beauty</RimTalkGenKnowledge.Text.Thing.Prop.beauty.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.beauty.High>High Beauty</RimTalkGenKnowledge.Text.Thing.Prop.beauty.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.beauty.Low>Low Beauty</RimTalkGenKnowledge.Text.Thing.Prop.beauty.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.blunt_damage_pct.Display>Blunt damage factor</RimTalkGenKnowledge.Text.Thing.Prop.blunt_damage_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.comfort.Display>Comfort</RimTalkGenKnowledge.Text.Thing.Prop.comfort.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.construction_skill_prerequisite.Display>Construction skill requirement</RimTalkGenKnowledge.Text.Thing.Prop.construction_skill_prerequisite.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.construction_skill_prerequisite.High>High Construction skill requirement</RimTalkGenKnowledge.Text.Thing.Prop.construction_skill_prerequisite.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.construction_skill_prerequisite.Low>Low Construction skill requirement</RimTalkGenKnowledge.Text.Thing.Prop.construction_skill_prerequisite.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.cover_effectiveness.Display>Cover effectiveness</RimTalkGenKnowledge.Text.Thing.Prop.cover_effectiveness.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.cover_effectiveness.High>High Cover effectiveness</RimTalkGenKnowledge.Text.Thing.Prop.cover_effectiveness.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.cover_effectiveness.Low>Low Cover effectiveness</RimTalkGenKnowledge.Text.Thing.Prop.cover_effectiveness.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.damagePct.High>high effectiveness</RimTalkGenKnowledge.Text.Thing.Prop.damagePct.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.damagePct.Low>low effectiveness</RimTalkGenKnowledge.Text.Thing.Prop.damagePct.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.egg_count_avg.Display>Egg count average</RimTalkGenKnowledge.Text.Thing.Prop.egg_count_avg.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.egg_count_avg.High>High Egg count average</RimTalkGenKnowledge.Text.Thing.Prop.egg_count_avg.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.egg_count_avg.Low>Low Egg count average</RimTalkGenKnowledge.Text.Thing.Prop.egg_count_avg.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.egg_interval_days.Display>Egg interval</RimTalkGenKnowledge.Text.Thing.Prop.egg_interval_days.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.fertility_min_pct.Display>Min fertility</RimTalkGenKnowledge.Text.Thing.Prop.fertility_min_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.fertility_min_pct.High>High Min fertility</RimTalkGenKnowledge.Text.Thing.Prop.fertility_min_pct.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.fertility_min_pct.Low>Low Min fertility</RimTalkGenKnowledge.Text.Thing.Prop.fertility_min_pct.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.flammability.Display>Flammability</RimTalkGenKnowledge.Text.Thing.Prop.flammability.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.flammability.High>High Flammability</RimTalkGenKnowledge.Text.Thing.Prop.flammability.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.flammability.Low>Low Flammability</RimTalkGenKnowledge.Text.Thing.Prop.flammability.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.gestation_days.Display>Gestation days</RimTalkGenKnowledge.Text.Thing.Prop.gestation_days.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.gestation_days.High>High Gestation days</RimTalkGenKnowledge.Text.Thing.Prop.gestation_days.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.gestation_days.Low>Low Gestation days</RimTalkGenKnowledge.Text.Thing.Prop.gestation_days.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.grow_days.Display>Grow days</RimTalkGenKnowledge.Text.Thing.Prop.grow_days.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.grow_days.High>High Grow days</RimTalkGenKnowledge.Text.Thing.Prop.grow_days.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.grow_days.Low>Low Grow days</RimTalkGenKnowledge.Text.Thing.Prop.grow_days.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.insulation_cold_c.Display>Cold insulation</RimTalkGenKnowledge.Text.Thing.Prop.insulation_cold_c.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.insulation_cold_c.High>High Cold insulation</RimTalkGenKnowledge.Text.Thing.Prop.insulation_cold_c.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.insulation_cold_c.Low>Low Cold insulation</RimTalkGenKnowledge.Text.Thing.Prop.insulation_cold_c.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.insulation_heat_c.Display>Heat insulation</RimTalkGenKnowledge.Text.Thing.Prop.insulation_heat_c.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.insulation_heat_c.High>High Heat insulation</RimTalkGenKnowledge.Text.Thing.Prop.insulation_heat_c.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.insulation_heat_c.Low>Low Heat insulation</RimTalkGenKnowledge.Text.Thing.Prop.insulation_heat_c.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.interval.High>long interval</RimTalkGenKnowledge.Text.Thing.Prop.interval.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.interval.Low>short interval</RimTalkGenKnowledge.Text.Thing.Prop.interval.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.life_expectancy.Display>Life expectancy</RimTalkGenKnowledge.Text.Thing.Prop.life_expectancy.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.life_expectancy.High>High Life expectancy</RimTalkGenKnowledge.Text.Thing.Prop.life_expectancy.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.life_expectancy.Low>Low Life expectancy</RimTalkGenKnowledge.Text.Thing.Prop.life_expectancy.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.market_value.Display>Market value</RimTalkGenKnowledge.Text.Thing.Prop.market_value.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.market_value.High>High Market value</RimTalkGenKnowledge.Text.Thing.Prop.market_value.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.market_value.Low>Low Market value</RimTalkGenKnowledge.Text.Thing.Prop.market_value.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.mass.Display>Mass</RimTalkGenKnowledge.Text.Thing.Prop.mass.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.mass.High>High Mass</RimTalkGenKnowledge.Text.Thing.Prop.mass.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.mass.Low>Low Mass</RimTalkGenKnowledge.Text.Thing.Prop.mass.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.Display>Hit points</RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.High>High Hit points</RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.Low>Low Hit points</RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.medical_potency_pct.Display>Medical potency</RimTalkGenKnowledge.Text.Thing.Prop.medical_potency_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.medical_potency_pct.High>High Medical potency</RimTalkGenKnowledge.Text.Thing.Prop.medical_potency_pct.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.medical_potency_pct.Low>Low Medical potency</RimTalkGenKnowledge.Text.Thing.Prop.medical_potency_pct.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.milk_amount.Display>Milk amount</RimTalkGenKnowledge.Text.Thing.Prop.milk_amount.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.milk_amount.High>High Milk amount</RimTalkGenKnowledge.Text.Thing.Prop.milk_amount.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.milk_amount.Low>Low Milk amount</RimTalkGenKnowledge.Text.Thing.Prop.milk_amount.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.milk_interval_days.Display>Milk interval</RimTalkGenKnowledge.Text.Thing.Prop.milk_interval_days.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.move_speed_factor.Display>Move speed factor</RimTalkGenKnowledge.Text.Thing.Prop.move_speed_factor.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.move_speed_factor.High>High Move speed factor</RimTalkGenKnowledge.Text.Thing.Prop.move_speed_factor.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.move_speed_factor.Low>Low Move speed factor</RimTalkGenKnowledge.Text.Thing.Prop.move_speed_factor.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.nutrition.Display>Nutrition</RimTalkGenKnowledge.Text.Thing.Prop.nutrition.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.nutrition.High>High Nutrition</RimTalkGenKnowledge.Text.Thing.Prop.nutrition.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.nutrition.Low>Low Nutrition</RimTalkGenKnowledge.Text.Thing.Prop.nutrition.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.power_w.Display>Power consumption</RimTalkGenKnowledge.Text.Thing.Prop.power_w.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.power_w.High>High Power consumption</RimTalkGenKnowledge.Text.Thing.Prop.power_w.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.power_w.Low>Low Power consumption</RimTalkGenKnowledge.Text.Thing.Prop.power_w.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.sharp_damage_pct.Display>Sharp damage factor</RimTalkGenKnowledge.Text.Thing.Prop.sharp_damage_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.shear_interval_days.Display>Shear interval</RimTalkGenKnowledge.Text.Thing.Prop.shear_interval_days.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.size_cells.Display>Size (cells)</RimTalkGenKnowledge.Text.Thing.Prop.size_cells.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.size_cells.High>High Size (cells)</RimTalkGenKnowledge.Text.Thing.Prop.size_cells.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.size_cells.Low>Low Size (cells)</RimTalkGenKnowledge.Text.Thing.Prop.size_cells.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.stuff_max_hit_points_pct.Display>Material HP factor</RimTalkGenKnowledge.Text.Thing.Prop.stuff_max_hit_points_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.tend_quality_pct.Display>Max tend quality</RimTalkGenKnowledge.Text.Thing.Prop.tend_quality_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.tend_quality_pct.High>High Max tend quality</RimTalkGenKnowledge.Text.Thing.Prop.tend_quality_pct.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.tend_quality_pct.Low>Low Max tend quality</RimTalkGenKnowledge.Text.Thing.Prop.tend_quality_pct.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.turret_burst_count.Display>Turret burst count</RimTalkGenKnowledge.Text.Thing.Prop.turret_burst_count.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.turret_cooldown.Display>Turret cooldown</RimTalkGenKnowledge.Text.Thing.Prop.turret_cooldown.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.turret_cooldown.High>High Turret cooldown</RimTalkGenKnowledge.Text.Thing.Prop.turret_cooldown.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.turret_cooldown.Low>Low Turret cooldown</RimTalkGenKnowledge.Text.Thing.Prop.turret_cooldown.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.turret_warmup.Display>Turret warmup</RimTalkGenKnowledge.Text.Thing.Prop.turret_warmup.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.turret_warmup.High>High Turret warmup</RimTalkGenKnowledge.Text.Thing.Prop.turret_warmup.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.turret_warmup.Low>Low Turret warmup</RimTalkGenKnowledge.Text.Thing.Prop.turret_warmup.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_long_pct.Display>Weapon accuracy (long)</RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_long_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_medium_pct.Display>Weapon accuracy (medium)</RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_medium_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_pct.Display>Weapon accuracy</RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_pct.High>High Weapon accuracy</RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_pct.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_pct.Low>Low Weapon accuracy</RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_pct.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_short_pct.Display>Weapon accuracy (short)</RimTalkGenKnowledge.Text.Thing.Prop.weapon_accuracy_short_pct.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_burst_count.Display>Burst count</RimTalkGenKnowledge.Text.Thing.Prop.weapon_burst_count.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_burst_count.High>High Burst count</RimTalkGenKnowledge.Text.Thing.Prop.weapon_burst_count.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_burst_count.Low>Low Burst count</RimTalkGenKnowledge.Text.Thing.Prop.weapon_burst_count.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_burst_interval_s.Display>Burst interval</RimTalkGenKnowledge.Text.Thing.Prop.weapon_burst_interval_s.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_cooldown_s.Display>Cooldown time</RimTalkGenKnowledge.Text.Thing.Prop.weapon_cooldown_s.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_cooldown_s.High>High Cooldown time</RimTalkGenKnowledge.Text.Thing.Prop.weapon_cooldown_s.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_cooldown_s.Low>Low Cooldown time</RimTalkGenKnowledge.Text.Thing.Prop.weapon_cooldown_s.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_damage.Display>Weapon damage</RimTalkGenKnowledge.Text.Thing.Prop.weapon_damage.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_damage.High>High Weapon damage</RimTalkGenKnowledge.Text.Thing.Prop.weapon_damage.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_damage.Low>Low Weapon damage</RimTalkGenKnowledge.Text.Thing.Prop.weapon_damage.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_range.Display>Weapon range</RimTalkGenKnowledge.Text.Thing.Prop.weapon_range.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_range.High>High Weapon range</RimTalkGenKnowledge.Text.Thing.Prop.weapon_range.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_range.Low>Low Weapon range</RimTalkGenKnowledge.Text.Thing.Prop.weapon_range.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_suppression.Display>Suppression</RimTalkGenKnowledge.Text.Thing.Prop.weapon_suppression.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_suppression.High>High Suppression</RimTalkGenKnowledge.Text.Thing.Prop.weapon_suppression.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_suppression.Low>Low Suppression</RimTalkGenKnowledge.Text.Thing.Prop.weapon_suppression.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_warmup_s.Display>Warmup time</RimTalkGenKnowledge.Text.Thing.Prop.weapon_warmup_s.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_warmup_s.High>High Warmup time</RimTalkGenKnowledge.Text.Thing.Prop.weapon_warmup_s.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.weapon_warmup_s.Low>Low Warmup time</RimTalkGenKnowledge.Text.Thing.Prop.weapon_warmup_s.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.wool_amount.Display>Wool amount</RimTalkGenKnowledge.Text.Thing.Prop.wool_amount.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.wool_amount.High>High Wool amount</RimTalkGenKnowledge.Text.Thing.Prop.wool_amount.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.wool_amount.Low>Low Wool amount</RimTalkGenKnowledge.Text.Thing.Prop.wool_amount.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.work_to_build.Display>Build work</RimTalkGenKnowledge.Text.Thing.Prop.work_to_build.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.work_to_build.High>High Build work</RimTalkGenKnowledge.Text.Thing.Prop.work_to_build.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.work_to_build.Low>Low Build work</RimTalkGenKnowledge.Text.Thing.Prop.work_to_build.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.Display>Make work</RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.High>High Make work</RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.Low>Low Make work</RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.Low>
+  <RimTalkGenKnowledge.Text.Thing.Separator.Semicolon>; </RimTalkGenKnowledge.Text.Thing.Separator.Semicolon>
+  <RimTalkGenKnowledge.Text.Thing.Stage.NegLight>low</RimTalkGenKnowledge.Text.Thing.Stage.NegLight>
+  <RimTalkGenKnowledge.Text.Thing.Stage.NegStrong>very low</RimTalkGenKnowledge.Text.Thing.Stage.NegStrong>
+  <RimTalkGenKnowledge.Text.Thing.Stage.PosLight>high</RimTalkGenKnowledge.Text.Thing.Stage.PosLight>
+  <RimTalkGenKnowledge.Text.Thing.Stage.PosStrong>very high</RimTalkGenKnowledge.Text.Thing.Stage.PosStrong>
+  <RimTalkGenKnowledge.Text.Thing.Tendency.Default>biased</RimTalkGenKnowledge.Text.Thing.Tendency.Default>
+  <RimTalkGenKnowledge.Text.Thing.Tendency.WithinRange>within normal range</RimTalkGenKnowledge.Text.Thing.Tendency.WithinRange>
+  <RimTalkGenKnowledge.Text.Trait.PawnObjective>this person</RimTalkGenKnowledge.Text.Trait.PawnObjective>
+  <RimTalkGenKnowledge.Text.Trait.PawnPossessive>this person's</RimTalkGenKnowledge.Text.Trait.PawnPossessive>
+  <RimTalkGenKnowledge.Text.Trait.PawnRef>this person</RimTalkGenKnowledge.Text.Trait.PawnRef>
+  <RimTalkGenKnowledge.Text.Unit.DaySuffix>d</RimTalkGenKnowledge.Text.Unit.DaySuffix>
 </LanguageData>

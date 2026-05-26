@@ -145,7 +145,8 @@ namespace GenKnowledge.ProcessDefs
                 string complexityLine = BuildComplexityLine(cpx);
                 string metabolismLine = BuildMetabolismLine(met);
                 string architesLine = BuildArchitesLine(arc);
-                string geneStats = string.Join("；", new[] { complexityLine, metabolismLine, architesLine }.Where(s => !string.IsNullOrWhiteSpace(s)));
+                string separator = "RimTalkGenKnowledge.Text.Gene.StatsSeparator".Translate();
+                string geneStats = string.Join(separator, new[] { complexityLine, metabolismLine, architesLine }.Where(s => !string.IsNullOrWhiteSpace(s)));
                 string geneStatsLine = string.IsNullOrWhiteSpace(geneStats) ? string.Empty : ("\n" + geneStats);
 
                 SetTemplateValues(new Dictionary<string, string>
@@ -196,18 +197,18 @@ namespace GenKnowledge.ProcessDefs
             string level;
             if (cpx >= 1 && cpx <= 3)
             {
-                level = "低复杂度";
+                level = "RimTalkGenKnowledge.Text.Gene.Complexity.Low".Translate();
             }
             else if (cpx >= 4 && cpx <= 10)
             {
-                level = "中复杂度";
+                level = "RimTalkGenKnowledge.Text.Gene.Complexity.Mid".Translate();
             }
             else
             {
-                level = "高复杂度";
+                level = "RimTalkGenKnowledge.Text.Gene.Complexity.High".Translate();
             }
 
-            return "复杂度：" + cpx + "（" + level + "）";
+            return string.Format("RimTalkGenKnowledge.Text.Gene.Complexity.Line".Translate(), cpx, level);
         }
 
         private static string BuildMetabolismLine(int met)
@@ -220,27 +221,27 @@ namespace GenKnowledge.ProcessDefs
             string summary = string.Empty;
             if (met < -2)
             {
-                summary = "消耗极多";
+                summary = "RimTalkGenKnowledge.Text.Gene.Metabolism.VeryCostly".Translate();
             }
             else if (met >= -2 && met <= -1)
             {
-                summary = "消耗更多";
+                summary = "RimTalkGenKnowledge.Text.Gene.Metabolism.Costly".Translate();
             }
             else if (met >= 1 && met <= 2)
             {
-                summary = "减少消耗";
+                summary = "RimTalkGenKnowledge.Text.Gene.Metabolism.LessCost".Translate();
             }
             else if (met >= 3)
             {
-                summary = "大幅减少消耗";
+                summary = "RimTalkGenKnowledge.Text.Gene.Metabolism.MuchLessCost".Translate();
             }
 
             if (string.IsNullOrWhiteSpace(summary))
             {
-                return "代谢率：" + met;
+                return string.Format("RimTalkGenKnowledge.Text.Gene.Metabolism.LineRaw".Translate(), met);
             }
 
-            return "代谢率：" + met + "（" + summary + "）";
+            return string.Format("RimTalkGenKnowledge.Text.Gene.Metabolism.LineWithSummary".Translate(), met, summary);
         }
 
         private static string BuildArchitesLine(int arc)
@@ -250,7 +251,7 @@ namespace GenKnowledge.ProcessDefs
                 return string.Empty;
             }
 
-            return "需要" + arc + "超凡胶囊";
+            return string.Format("RimTalkGenKnowledge.Text.Gene.Archites.Line".Translate(), arc);
         }
     }
 }

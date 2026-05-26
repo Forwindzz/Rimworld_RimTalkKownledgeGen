@@ -32,7 +32,7 @@ namespace GenKnowledge.ProcessDefs
                 Enabled = true,
                 IncludeModDefs = true,
                 TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}：{{description}}\n技术水平：{{techLevel}}\n是否永久敌对：{{permanentEnemy}}\n是否类人：{{humanlike}}",
+                KnowledgeTemplate = "{{label}}{{labelDescDelimiter}}{{description}}\n{{techLevelPrefix}}{{techLevel}}\n{{permanentEnemyPrefix}}{{permanentEnemy}}\n{{humanlikePrefix}}{{humanlike}}",
                 BaseImportance = 0.5f,
                 ImportanceMin = 0.2f,
                 ImportanceMax = 0.9f,
@@ -157,9 +157,14 @@ namespace GenKnowledge.ProcessDefs
                 string description = ProcessDefUtility.TrimOrNull(def.description);
                 if (string.IsNullOrWhiteSpace(description))
                 {
-                    description = "技术水平：" + techLevel
-                        + "，永久敌对：" + (permanentEnemy ? "是" : "否")
-                        + "，类人派系：" + (humanlike ? "是" : "否");
+                    description = string.Format(
+                        "{0}{1}{2}{3}{4}{5}",
+                        "RimTalkGenKnowledge.Text.Faction.Fallback.TechLevelPrefix".Translate(),
+                        techLevel,
+                        "RimTalkGenKnowledge.Text.Faction.Fallback.PermanentEnemyPrefix".Translate(),
+                        permanentEnemy ? "RimTalkGenKnowledge.Text.Boolean.Yes".Translate() : "RimTalkGenKnowledge.Text.Boolean.No".Translate(),
+                        "RimTalkGenKnowledge.Text.Faction.Fallback.HumanlikePrefix".Translate(),
+                        humanlike ? "RimTalkGenKnowledge.Text.Boolean.Yes".Translate() : "RimTalkGenKnowledge.Text.Boolean.No".Translate());
                 }
 
                 SetTemplateValues(new Dictionary<string, string>
@@ -167,10 +172,14 @@ namespace GenKnowledge.ProcessDefs
                     ["label"] = label,
                     ["description"] = description,
                     ["techLevel"] = techLevel,
-                    ["humanlike"] = humanlike ? "true" : "false",
-                    ["permanentEnemy"] = permanentEnemy ? "true" : "false",
+                    ["humanlike"] = humanlike ? "RimTalkGenKnowledge.Text.Boolean.True".Translate() : "RimTalkGenKnowledge.Text.Boolean.False".Translate(),
+                    ["permanentEnemy"] = permanentEnemy ? "RimTalkGenKnowledge.Text.Boolean.True".Translate() : "RimTalkGenKnowledge.Text.Boolean.False".Translate(),
                     ["isPlayer"] = isPlayer ? "true" : "false",
-                    ["defName"] = def.defName
+                    ["defName"] = def.defName,
+                    ["labelDescDelimiter"] = "RimTalkGenKnowledge.Text.Faction.LabelDescDelimiter".Translate(),
+                    ["techLevelPrefix"] = "RimTalkGenKnowledge.Text.Faction.TechLevelPrefix".Translate(),
+                    ["permanentEnemyPrefix"] = "RimTalkGenKnowledge.Text.Faction.PermanentEnemyPrefix".Translate(),
+                    ["humanlikePrefix"] = "RimTalkGenKnowledge.Text.Faction.HumanlikePrefix".Translate()
                 });
 
                 string tag = RenderTag(typed);
