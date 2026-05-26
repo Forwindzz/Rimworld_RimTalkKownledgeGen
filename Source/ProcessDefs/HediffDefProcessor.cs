@@ -42,13 +42,7 @@ namespace GenKnowledge.ProcessDefs
             }
 
             HediffProcessDefConfig defaults = (HediffProcessDefConfig)CreateDefaultConfig();
-            typed.Enabled = defaults.Enabled;
-            typed.IncludeModDefs = defaults.IncludeModDefs;
-            typed.TagTemplate = defaults.TagTemplate;
-            typed.KnowledgeTemplate = defaults.KnowledgeTemplate;
-            typed.BaseImportance = defaults.BaseImportance;
-            typed.ImportanceMin = defaults.ImportanceMin;
-            typed.ImportanceMax = defaults.ImportanceMax;
+            CopyBaseConfigFields(defaults, typed);
             typed.IncludeGoodHediffs = defaults.IncludeGoodHediffs;
             typed.IncludeImplants = defaults.IncludeImplants;
             typed.ImportanceWeightIsBad = defaults.ImportanceWeightIsBad;
@@ -129,7 +123,7 @@ namespace GenKnowledge.ProcessDefs
                     continue;
                 }
 
-                if (string.IsNullOrWhiteSpace(description) || description.Length < label.Length * 3)
+                if (!ProcessDefUtility.MeetsDescriptionLengthThreshold(label, description, 3f))
                 {
                     continue;
                 }

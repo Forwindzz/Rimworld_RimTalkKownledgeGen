@@ -35,14 +35,11 @@ namespace GenKnowledge.ProcessDefs
 
     public class ThingProcessDefConfig : ProcessDefBaseConfig
     {
-        public string IncludeCategories = "Weapon,Apparel,Medicine,Food,Building";
-        public string ExcludeCategories = string.Empty;
         public int MaxDescriptionLength = 300;
         public bool FilterDescriptionShorterThanLabel = true;
         public float DescriptionMinLabelLengthMultiplier = 3f;
         public bool FilterFertilizedEggVariants = true;
         public string FertilizedEggVariantTokens = "fert.,unfert.,fertilized,unfertilized";
-        public bool IncludeStatSummary = false; // legacy
 
         public float ImportanceWeightMarketValueLog10 = 0.05f;
         public float ImportanceWeightMassLog10 = 0.001f;
@@ -62,9 +59,6 @@ namespace GenKnowledge.ProcessDefs
 
         public int MaxSemanticLinesGlobal = 8;
         public int SpecialValueTopN = 3;
-        public bool EnableFallbackAttributeOutput = false;
-        public int FallbackAttributeMaxLines = 6;
-        public string FallbackAttributeExcludeKeys = "graphicData,uiIconPath,drawerType,altitudeLayer";
 
         public Dictionary<string, ThingCategoryRuleConfig> CategoryRules = new Dictionary<string, ThingCategoryRuleConfig>();
         public Dictionary<string, ThingPropertyDeviationConfig> PropertyDeviationConfigs = new Dictionary<string, ThingPropertyDeviationConfig>();
@@ -77,14 +71,11 @@ namespace GenKnowledge.ProcessDefs
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.Look(ref IncludeCategories, "includeCategories", "Weapon,Apparel,Medicine,Food,Building");
-            Scribe_Values.Look(ref ExcludeCategories, "excludeCategories", string.Empty);
             Scribe_Values.Look(ref MaxDescriptionLength, "maxDescriptionLength", 300);
             Scribe_Values.Look(ref FilterDescriptionShorterThanLabel, "filterDescriptionShorterThanLabel", true);
             Scribe_Values.Look(ref DescriptionMinLabelLengthMultiplier, "descriptionMinLabelLengthMultiplier", 3f);
             Scribe_Values.Look(ref FilterFertilizedEggVariants, "filterFertilizedEggVariants", true);
             Scribe_Values.Look(ref FertilizedEggVariantTokens, "fertilizedEggVariantTokens", "fert.,unfert.,fertilized,unfertilized");
-            Scribe_Values.Look(ref IncludeStatSummary, "includeStatSummary", false);
 
             Scribe_Values.Look(ref ImportanceWeightMarketValueLog10, "importanceWeightMarketValueLog10", 0.05f);
             Scribe_Values.Look(ref ImportanceWeightMassLog10, "importanceWeightMassLog10", 0.001f);
@@ -104,9 +95,6 @@ namespace GenKnowledge.ProcessDefs
 
             Scribe_Values.Look(ref MaxSemanticLinesGlobal, "maxSemanticLinesGlobal", 8);
             Scribe_Values.Look(ref SpecialValueTopN, "specialValueTopN", 3);
-            Scribe_Values.Look(ref EnableFallbackAttributeOutput, "enableFallbackAttributeOutput", false);
-            Scribe_Values.Look(ref FallbackAttributeMaxLines, "fallbackAttributeMaxLines", 6);
-            Scribe_Values.Look(ref FallbackAttributeExcludeKeys, "fallbackAttributeExcludeKeys", "graphicData,uiIconPath,drawerType,altitudeLayer");
 
             Scribe_Collections.Look(
                 ref CategoryRules,
@@ -162,12 +150,6 @@ namespace GenKnowledge.ProcessDefs
         public bool NonNegativeOnly = false;
         public bool IsPercent = false;
         public string DisplayName = string.Empty;
-        public string LowLabel = string.Empty;
-        public string HighLabel = string.Empty;
-        public string BiasTextNegStrong = string.Empty;
-        public string BiasTextNegLight = string.Empty;
-        public string BiasTextPosLight = string.Empty;
-        public string BiasTextPosStrong = string.Empty;
         public string StageTextNegStrong = string.Empty;
         public string StageTextNegLight = string.Empty;
         public string StageTextPosLight = string.Empty;
@@ -182,12 +164,6 @@ namespace GenKnowledge.ProcessDefs
             Scribe_Values.Look(ref NonNegativeOnly, "nonNegativeOnly", false);
             Scribe_Values.Look(ref IsPercent, "isPercent", false);
             Scribe_Values.Look(ref DisplayName, "displayName", string.Empty);
-            Scribe_Values.Look(ref LowLabel, "lowLabel", string.Empty);
-            Scribe_Values.Look(ref HighLabel, "highLabel", string.Empty);
-            Scribe_Values.Look(ref BiasTextNegStrong, "biasTextNegStrong", string.Empty);
-            Scribe_Values.Look(ref BiasTextNegLight, "biasTextNegLight", string.Empty);
-            Scribe_Values.Look(ref BiasTextPosLight, "biasTextPosLight", string.Empty);
-            Scribe_Values.Look(ref BiasTextPosStrong, "biasTextPosStrong", string.Empty);
             Scribe_Values.Look(ref StageTextNegStrong, "stageTextNegStrong", string.Empty);
             Scribe_Values.Look(ref StageTextNegLight, "stageTextNegLight", string.Empty);
             Scribe_Values.Look(ref StageTextPosLight, "stageTextPosLight", string.Empty);

@@ -11,6 +11,7 @@ namespace GenKnowledge
         public bool enableGlobalErrorReporting = false;
         public bool debugIncludeInternalKeys = false;
         public bool showNumericValues = false;
+        public bool enableMemoryUiPatch = true;
         public bool enableRealWorldSkipList = true;
         public bool enableHighRedundancySkipList = false;
         public float minKnowledgeImportance = 0.21f;
@@ -25,6 +26,7 @@ namespace GenKnowledge
             Scribe_Values.Look(ref enableGlobalErrorReporting, "enableGlobalErrorReporting", false);
             Scribe_Values.Look(ref debugIncludeInternalKeys, "debugIncludeInternalKeys", false);
             Scribe_Values.Look(ref showNumericValues, "showNumericValues", false);
+            Scribe_Values.Look(ref enableMemoryUiPatch, "enableMemoryUiPatch", true);
             Scribe_Values.Look(ref enableRealWorldSkipList, "enableRealWorldSkipList", true);
             Scribe_Values.Look(ref enableHighRedundancySkipList, "enableHighRedundancySkipList", false);
             Scribe_Values.Look(ref minKnowledgeImportance, "minKnowledgeImportance", 0.21f);
@@ -73,9 +75,17 @@ namespace GenKnowledge
                     continue;
                 }
 
-                if (!processConfigs.TryGetValue(processor.Id, out ProcessDefBaseConfig config) || config == null)
+                ProcessDefBaseConfig defaultConfig = processor.CreateDefaultConfig();
+                if (defaultConfig == null)
                 {
-                    processConfigs[processor.Id] = processor.CreateDefaultConfig();
+                    continue;
+                }
+
+                if (!processConfigs.TryGetValue(processor.Id, out ProcessDefBaseConfig config)
+                    || config == null
+                    || !defaultConfig.GetType().IsInstanceOfType(config))
+                {
+                    processConfigs[processor.Id] = defaultConfig;
                 }
             }
         }
@@ -92,9 +102,17 @@ namespace GenKnowledge
                 processConfigs = new Dictionary<string, ProcessDefBaseConfig>();
             }
 
-            if (!processConfigs.TryGetValue(processor.Id, out ProcessDefBaseConfig config) || config == null)
+            ProcessDefBaseConfig defaultConfig = processor.CreateDefaultConfig();
+            if (defaultConfig == null)
             {
-                config = processor.CreateDefaultConfig();
+                return null;
+            }
+
+            if (!processConfigs.TryGetValue(processor.Id, out ProcessDefBaseConfig config)
+                || config == null
+                || !defaultConfig.GetType().IsInstanceOfType(config))
+            {
+                config = defaultConfig;
                 processConfigs[processor.Id] = config;
             }
 

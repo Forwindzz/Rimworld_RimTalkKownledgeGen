@@ -70,6 +70,7 @@ namespace GenKnowledge.ProcessDefs
                 float mass = def.BaseMass;
                 int stackLimit = def.stackLimit;
                 float maxHitPoints = ResolveMaxHitPoints(def);
+                bool hasTechLevel = def.techLevel != TechLevel.Undefined;
                 string techLevel = LocalizeTechLevel(def.techLevel.ToString());
                 string thingCategories = JoinThingCategoryLabels(def);
                 string tradeTags = JoinStrings(def.tradeTags, true);
@@ -126,7 +127,7 @@ namespace GenKnowledge.ProcessDefs
                 string hpText = typed.EnableHitPointsFeelingText
                     ? BuildValueWithTendency(maxHitPoints, selected, "max_hit_points", showNumericValues)
                     : maxHitPoints.ToString("0.##", CultureInfo.InvariantCulture);
-                string techLevelLine = string.Equals(techLevel, "Undefined", StringComparison.OrdinalIgnoreCase) ? string.Empty : Tr("RimTalkGenKnowledge.Text.Thing.Line.TechLevel").Formatted(techLevel).ToString();
+                string techLevelLine = hasTechLevel ? Tr("RimTalkGenKnowledge.Text.Thing.Line.TechLevel").Formatted(techLevel).ToString() : string.Empty;
                 string modSourceLine = string.Equals(modSource, "Core", StringComparison.OrdinalIgnoreCase) ? string.Empty : Tr("RimTalkGenKnowledge.Text.Thing.Line.ModSourceConcept").Formatted(modSource).ToString();
                 string marketValueLine = showMarketLine ? Tr("RimTalkGenKnowledge.Text.Thing.Line.MarketValue").Formatted(marketValueText).ToString() : string.Empty;
                 string hpLine = showHpLine ? Tr("RimTalkGenKnowledge.Text.Thing.Line.HitPoints").Formatted(hpText).ToString() : string.Empty;
@@ -452,19 +453,7 @@ namespace GenKnowledge.ProcessDefs
 
         private static string NormalizeMultilineContent(string content)
         {
-            if (string.IsNullOrWhiteSpace(content))
-            {
-                return content;
-            }
-
-            string[] lines = content
-                .Replace("\r\n", "\n")
-                .Split(new[] { '\n' }, StringSplitOptions.None)
-                .Select(l => (l ?? string.Empty).Trim())
-                .Where(l => !string.IsNullOrWhiteSpace(l))
-                .ToArray();
-
-            return string.Join("\n", lines);
+            return TextNormalizeUtility.NormalizeMultiline(content, "\n");
         }
 
         private static bool ContainsDigit(string text)
@@ -855,12 +844,7 @@ namespace GenKnowledge.ProcessDefs
             }
 
             string key = "RimTalkGenKnowledge.Text.Thing.Tag." + token;
-            if (!Translator.CanTranslate(key))
-            {
-                return token;
-            }
-
-            return key.Translate().ToString();
+            return ProcessDefUtility.TranslateKeyOrFallback(key, token);
         }
 
         private static string LocalizeThingCategory(string category)
@@ -871,28 +855,12 @@ namespace GenKnowledge.ProcessDefs
             }
 
             string key = "RimTalkGenKnowledge.Text.Thing.Category." + category;
-            if (!Translator.CanTranslate(key))
-            {
-                return category;
-            }
-
-            return key.Translate().ToString();
+            return ProcessDefUtility.TranslateKeyOrFallback(key, category);
         }
 
         private static string LocalizeTechLevel(string techLevel)
         {
-            if (string.IsNullOrWhiteSpace(techLevel))
-            {
-                return string.Empty;
-            }
-
-            string key = "RimTalkGenKnowledge.Text.TechLevel." + techLevel;
-            if (!Translator.CanTranslate(key))
-            {
-                return techLevel;
-            }
-
-            return key.Translate().ToString();
+            return ProcessDefUtility.LocalizeTechLevel(techLevel);
         }
 
         private static string ResolveModSource(ThingDef def)

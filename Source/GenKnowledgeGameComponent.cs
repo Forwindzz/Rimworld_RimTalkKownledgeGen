@@ -22,7 +22,7 @@ namespace GenKnowledge
                 logicalToKnowledgeId = new Dictionary<string, string>();
             }
 
-            var processors = ProcessDefRegistry.CreateProcessors();
+            var processors = ProcessDefRegistry.GetProcessors();
             GenKnowledgeMod.Settings?.EnsureDefaults(processors);
 
             var service = new KnowledgeGeneratorService(
@@ -48,7 +48,7 @@ namespace GenKnowledge
 
             var service = new KnowledgeGeneratorService(
                 new KnowledgeApiBridge(reportEachError),
-                ProcessDefRegistry.CreateProcessors(),
+                ProcessDefRegistry.GetProcessors(),
                 GenKnowledgeMod.Settings?.processConfigs,
                 GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.21f,
                 GenKnowledgeMod.Settings?.debugIncludeInternalKeys ?? false,

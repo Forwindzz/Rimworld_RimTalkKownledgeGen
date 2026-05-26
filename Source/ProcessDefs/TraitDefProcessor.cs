@@ -40,13 +40,7 @@ namespace GenKnowledge.ProcessDefs
             }
 
             TraitProcessDefConfig defaults = (TraitProcessDefConfig)CreateDefaultConfig();
-            typed.Enabled = defaults.Enabled;
-            typed.IncludeModDefs = defaults.IncludeModDefs;
-            typed.TagTemplate = defaults.TagTemplate;
-            typed.KnowledgeTemplate = defaults.KnowledgeTemplate;
-            typed.BaseImportance = defaults.BaseImportance;
-            typed.ImportanceMin = defaults.ImportanceMin;
-            typed.ImportanceMax = defaults.ImportanceMax;
+            CopyBaseConfigFields(defaults, typed);
             typed.IncludeDegreeDetails = defaults.IncludeDegreeDetails;
             typed.ImportanceWeightDegreeCount = defaults.ImportanceWeightDegreeCount;
             typed.ImportanceWeightCommonality = defaults.ImportanceWeightCommonality;

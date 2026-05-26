@@ -20,7 +20,7 @@ namespace GenKnowledge
         {
             ModRootDir = content?.RootDir?.ToString();
             Settings = GetSettings<GenKnowledgeSettings>();
-            Settings.EnsureDefaults(ProcessDefRegistry.CreateProcessors());
+            Settings.EnsureDefaults(ProcessDefRegistry.GetProcessors());
 
             var harmony = new Harmony("RimTalk.GenKnowledge");
             harmony.PatchAll();
@@ -34,7 +34,7 @@ namespace GenKnowledge
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            List<IProcessDef> processors = ProcessDefRegistry.CreateProcessors();
+            IReadOnlyList<IProcessDef> processors = ProcessDefRegistry.GetProcessors();
             Settings.EnsureDefaults(processors);
 
             float estimatedHeight = 220f;
@@ -67,6 +67,7 @@ namespace GenKnowledge
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting".Translate(), ref Settings.enableGlobalErrorReporting);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys".Translate(), ref Settings.debugIncludeInternalKeys);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal".Translate(), ref Settings.showNumericValues);
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.EnableMemoryUiPatch".Translate(), ref Settings.enableMemoryUiPatch);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.SkipList.RealWorld".Translate(), ref Settings.enableRealWorldSkipList);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.SkipList.HighRedundancy".Translate(), ref Settings.enableHighRedundancySkipList);
             listing.Label("RimTalkGenKnowledge.Settings.MinKnowledgeImportance".Translate(Settings.minKnowledgeImportance.ToString("0.00")));
@@ -108,7 +109,7 @@ namespace GenKnowledge
 
                 bool expanded = IsProcessorExpanded(processor.Id);
                 Rect foldoutRect = listing.GetRect(30f);
-                string foldoutText = (expanded ? "▼ " : "▶ ") + processor.DisplayName;
+                string foldoutText = (expanded ? "[-] " : "[+] ") + processor.DisplayName;
                 if (Widgets.ButtonText(foldoutRect, foldoutText))
                 {
                     expanded = !expanded;
@@ -213,7 +214,7 @@ namespace GenKnowledge
             }
         }
 
-        private static void ResetAllProcessConfigs(List<IProcessDef> processors)
+        private static void ResetAllProcessConfigs(IEnumerable<IProcessDef> processors)
         {
             if (Settings == null)
             {
@@ -275,3 +276,4 @@ namespace GenKnowledge
         }
     }
 }
+

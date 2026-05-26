@@ -10,8 +10,36 @@ namespace GenKnowledge
 {
     public class KnowledgeGeneratorService
     {
+        private static readonly Dictionary<string, string> ProcessorIdByPrefix = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["xenotype"] = XenotypeDefProcessor.ProcessorId,
+            ["thing"] = ThingDefProcessor.ProcessorId,
+            ["pawnkind"] = PawnKindDefProcessor.ProcessorId,
+            ["trait"] = TraitDefProcessor.ProcessorId,
+            ["research"] = ResearchProjectDefProcessor.ProcessorId,
+            ["recipe"] = RecipeDefProcessor.ProcessorId,
+            ["hediff"] = HediffDefProcessor.ProcessorId,
+            ["gene"] = GeneDefProcessor.ProcessorId,
+            ["meme"] = MemeDefProcessor.ProcessorId,
+            ["faction"] = FactionDefProcessor.ProcessorId
+        };
+
+        private static readonly Dictionary<string, Func<string, Def>> DefResolverByPrefix = new Dictionary<string, Func<string, Def>>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["xenotype"] = name => DefDatabase<XenotypeDef>.GetNamedSilentFail(name),
+            ["thing"] = name => DefDatabase<ThingDef>.GetNamedSilentFail(name),
+            ["pawnkind"] = name => DefDatabase<PawnKindDef>.GetNamedSilentFail(name),
+            ["trait"] = name => DefDatabase<TraitDef>.GetNamedSilentFail(name),
+            ["research"] = name => DefDatabase<ResearchProjectDef>.GetNamedSilentFail(name),
+            ["recipe"] = name => DefDatabase<RecipeDef>.GetNamedSilentFail(name),
+            ["hediff"] = name => DefDatabase<HediffDef>.GetNamedSilentFail(name),
+            ["gene"] = name => DefDatabase<GeneDef>.GetNamedSilentFail(name),
+            ["meme"] = name => DefDatabase<MemeDef>.GetNamedSilentFail(name),
+            ["faction"] = name => DefDatabase<FactionDef>.GetNamedSilentFail(name)
+        };
+
         private readonly KnowledgeApiBridge apiBridge;
-        private readonly List<IProcessDef> processors;
+        private readonly IReadOnlyList<IProcessDef> processors;
         private readonly Dictionary<string, ProcessDefBaseConfig> processConfigs;
         private readonly float minKnowledgeImportance;
         private readonly bool debugIncludeInternalKeys;
@@ -21,7 +49,7 @@ namespace GenKnowledge
 
         public KnowledgeGeneratorService(
             KnowledgeApiBridge apiBridge,
-            List<IProcessDef> processors,
+            IReadOnlyList<IProcessDef> processors,
             Dictionary<string, ProcessDefBaseConfig> processConfigs,
             float minKnowledgeImportance,
             bool debugIncludeInternalKeys,
@@ -30,7 +58,7 @@ namespace GenKnowledge
             bool enableHighRedundancySkipList)
         {
             this.apiBridge = apiBridge;
-            this.processors = processors ?? new List<IProcessDef>();
+            this.processors = processors ?? Array.Empty<IProcessDef>();
             this.processConfigs = processConfigs;
             this.minKnowledgeImportance = Mathf.Clamp01(minKnowledgeImportance);
             this.debugIncludeInternalKeys = debugIncludeInternalKeys;
@@ -338,31 +366,9 @@ namespace GenKnowledge
                 return null;
             }
 
-            item.Tag = NormalizeInlineText(item.Tag);
-            item.Content = NormalizeInlineText(item.Content);
+            item.Tag = TextNormalizeUtility.NormalizeMultiline(item.Tag, "；");
+            item.Content = TextNormalizeUtility.NormalizeMultiline(item.Content, "；");
             return item;
-        }
-
-        private static string NormalizeInlineText(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                return string.Empty;
-            }
-
-            string normalized = text.Replace("\r\n", "\n").Replace('\r', '\n');
-            if (normalized.IndexOf('\n') < 0)
-            {
-                return normalized.Trim();
-            }
-
-            string[] parts = normalized.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < parts.Length; i++)
-            {
-                parts[i] = parts[i].Trim();
-            }
-
-            return string.Join("；", parts.Where(p => !string.IsNullOrWhiteSpace(p)));
         }
 
         private static void AppendError(GenerationReport report, string error, bool reportEachError)
@@ -441,18 +447,7 @@ namespace GenKnowledge
                 return "UnknownProcessor";
             }
 
-            if (string.Equals(keyPrefix, "xenotype", StringComparison.OrdinalIgnoreCase)) return XenotypeDefProcessor.ProcessorId;
-            if (string.Equals(keyPrefix, "thing", StringComparison.OrdinalIgnoreCase)) return ThingDefProcessor.ProcessorId;
-            if (string.Equals(keyPrefix, "pawnkind", StringComparison.OrdinalIgnoreCase)) return PawnKindDefProcessor.ProcessorId;
-            if (string.Equals(keyPrefix, "trait", StringComparison.OrdinalIgnoreCase)) return TraitDefProcessor.ProcessorId;
-            if (string.Equals(keyPrefix, "research", StringComparison.OrdinalIgnoreCase)) return ResearchProjectDefProcessor.ProcessorId;
-            if (string.Equals(keyPrefix, "recipe", StringComparison.OrdinalIgnoreCase)) return RecipeDefProcessor.ProcessorId;
-            if (string.Equals(keyPrefix, "hediff", StringComparison.OrdinalIgnoreCase)) return HediffDefProcessor.ProcessorId;
-            if (string.Equals(keyPrefix, "gene", StringComparison.OrdinalIgnoreCase)) return GeneDefProcessor.ProcessorId;
-            if (string.Equals(keyPrefix, "meme", StringComparison.OrdinalIgnoreCase)) return MemeDefProcessor.ProcessorId;
-            if (string.Equals(keyPrefix, "faction", StringComparison.OrdinalIgnoreCase)) return FactionDefProcessor.ProcessorId;
-
-            return keyPrefix;
+            return ProcessorIdByPrefix.TryGetValue(keyPrefix, out string processorId) ? processorId : keyPrefix;
         }
 
         private static string ResolveModPackageId(string keyPrefix, string defName)
@@ -462,49 +457,12 @@ namespace GenKnowledge
                 return "unknown";
             }
 
-            Def def = null;
-
-            if (string.Equals(keyPrefix, "xenotype", StringComparison.OrdinalIgnoreCase))
+            if (!DefResolverByPrefix.TryGetValue(keyPrefix, out Func<string, Def> resolver))
             {
-                def = DefDatabase<XenotypeDef>.GetNamedSilentFail(defName);
-            }
-            else if (string.Equals(keyPrefix, "thing", StringComparison.OrdinalIgnoreCase))
-            {
-                def = DefDatabase<ThingDef>.GetNamedSilentFail(defName);
-            }
-            else if (string.Equals(keyPrefix, "pawnkind", StringComparison.OrdinalIgnoreCase))
-            {
-                def = DefDatabase<PawnKindDef>.GetNamedSilentFail(defName);
-            }
-            else if (string.Equals(keyPrefix, "trait", StringComparison.OrdinalIgnoreCase))
-            {
-                def = DefDatabase<TraitDef>.GetNamedSilentFail(defName);
-            }
-            else if (string.Equals(keyPrefix, "research", StringComparison.OrdinalIgnoreCase))
-            {
-                def = DefDatabase<ResearchProjectDef>.GetNamedSilentFail(defName);
-            }
-            else if (string.Equals(keyPrefix, "recipe", StringComparison.OrdinalIgnoreCase))
-            {
-                def = DefDatabase<RecipeDef>.GetNamedSilentFail(defName);
-            }
-            else if (string.Equals(keyPrefix, "hediff", StringComparison.OrdinalIgnoreCase))
-            {
-                def = DefDatabase<HediffDef>.GetNamedSilentFail(defName);
-            }
-            else if (string.Equals(keyPrefix, "gene", StringComparison.OrdinalIgnoreCase))
-            {
-                def = DefDatabase<GeneDef>.GetNamedSilentFail(defName);
-            }
-            else if (string.Equals(keyPrefix, "meme", StringComparison.OrdinalIgnoreCase))
-            {
-                def = DefDatabase<MemeDef>.GetNamedSilentFail(defName);
-            }
-            else if (string.Equals(keyPrefix, "faction", StringComparison.OrdinalIgnoreCase))
-            {
-                def = DefDatabase<FactionDef>.GetNamedSilentFail(defName);
+                return "unknown";
             }
 
+            Def def = resolver(defName);
             if (def == null || def.modContentPack == null)
             {
                 return "unknown";

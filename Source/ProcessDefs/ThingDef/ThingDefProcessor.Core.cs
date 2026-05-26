@@ -44,8 +44,6 @@ namespace GenKnowledge.ProcessDefs
                 BaseImportance = 0.1f,
                 ImportanceMin = 0f,
                 ImportanceMax = 0.8f,
-                IncludeCategories = "Weapon,Apparel,Medicine,Food,Building",
-                ExcludeCategories = string.Empty,
                 MaxDescriptionLength = 300,
                 FilterDescriptionShorterThanLabel = true,
                 DescriptionMinLabelLengthMultiplier = 3f,
@@ -66,10 +64,7 @@ namespace GenKnowledge.ProcessDefs
                 FilterIntermediateBuildStates = true,
                 IntermediateBuildStateTokens = "RimTalkGenKnowledge.Text.Thing.Filter.IntermediateStateTokens".Translate(),
                 MaxSemanticLinesGlobal = 8,
-                SpecialValueTopN = 3,
-                EnableFallbackAttributeOutput = false,
-                FallbackAttributeMaxLines = 6,
-                FallbackAttributeExcludeKeys = "graphicData,uiIconPath,drawerType,altitudeLayer"
+                SpecialValueTopN = 3
             };
             EnsureDefaults(config);
             return config;
@@ -84,15 +79,7 @@ namespace GenKnowledge.ProcessDefs
             }
 
             ThingProcessDefConfig defaults = (ThingProcessDefConfig)CreateDefaultConfig();
-            typed.Enabled = defaults.Enabled;
-            typed.IncludeModDefs = defaults.IncludeModDefs;
-            typed.TagTemplate = defaults.TagTemplate;
-            typed.KnowledgeTemplate = defaults.KnowledgeTemplate;
-            typed.BaseImportance = defaults.BaseImportance;
-            typed.ImportanceMin = defaults.ImportanceMin;
-            typed.ImportanceMax = defaults.ImportanceMax;
-            typed.IncludeCategories = defaults.IncludeCategories;
-            typed.ExcludeCategories = defaults.ExcludeCategories;
+            CopyBaseConfigFields(defaults, typed);
             typed.MaxDescriptionLength = defaults.MaxDescriptionLength;
             typed.FilterDescriptionShorterThanLabel = defaults.FilterDescriptionShorterThanLabel;
             typed.DescriptionMinLabelLengthMultiplier = defaults.DescriptionMinLabelLengthMultiplier;
@@ -114,9 +101,6 @@ namespace GenKnowledge.ProcessDefs
             typed.IntermediateBuildStateTokens = defaults.IntermediateBuildStateTokens;
             typed.MaxSemanticLinesGlobal = defaults.MaxSemanticLinesGlobal;
             typed.SpecialValueTopN = defaults.SpecialValueTopN;
-            typed.EnableFallbackAttributeOutput = defaults.EnableFallbackAttributeOutput;
-            typed.FallbackAttributeMaxLines = defaults.FallbackAttributeMaxLines;
-            typed.FallbackAttributeExcludeKeys = defaults.FallbackAttributeExcludeKeys;
             typed.CategoryRules = CloneCategoryRules(defaults.CategoryRules);
             typed.PropertyDeviationConfigs = ClonePropertyConfigs(defaults.PropertyDeviationConfigs);
         }

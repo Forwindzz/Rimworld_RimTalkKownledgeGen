@@ -55,13 +55,7 @@ namespace GenKnowledge.ProcessDefs
             }
 
             FactionProcessDefConfig defaults = (FactionProcessDefConfig)CreateDefaultConfig();
-            typed.Enabled = defaults.Enabled;
-            typed.IncludeModDefs = defaults.IncludeModDefs;
-            typed.TagTemplate = defaults.TagTemplate;
-            typed.KnowledgeTemplate = defaults.KnowledgeTemplate;
-            typed.BaseImportance = defaults.BaseImportance;
-            typed.ImportanceMin = defaults.ImportanceMin;
-            typed.ImportanceMax = defaults.ImportanceMax;
+            CopyBaseConfigFields(defaults, typed);
             typed.IncludePlayerFaction = defaults.IncludePlayerFaction;
             typed.IncludeHiddenFactions = defaults.IncludeHiddenFactions;
             typed.ImportanceWeightTechLevel = defaults.ImportanceWeightTechLevel;

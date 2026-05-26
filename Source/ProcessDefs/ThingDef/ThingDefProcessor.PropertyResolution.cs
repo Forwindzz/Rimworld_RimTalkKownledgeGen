@@ -255,26 +255,6 @@ namespace GenKnowledge.ProcessDefs
                     valueText = value.ToString("0.#", CultureInfo.InvariantCulture);
                     nonNegativeOnly = true;
                     return true;
-                case "uninstall_work":
-                    if (!TryResolveBuildingFloat(def, "uninstallWork", out value))
-                    {
-                        return false;
-                    }
-                    value = Mathf.Max(0f, value);
-                    baseValueIsZero = Mathf.Approximately(value, 0f);
-                    valueText = value.ToString("0.##", CultureInfo.InvariantCulture);
-                    nonNegativeOnly = true;
-                    return true;
-                case "cost_total_count":
-                    if (!TryResolveCostTotalCount(def, out value))
-                    {
-                        return false;
-                    }
-                    value = Mathf.Max(0f, value);
-                    baseValueIsZero = Mathf.Approximately(value, 0f);
-                    valueText = value.ToString("0.#", CultureInfo.InvariantCulture);
-                    nonNegativeOnly = true;
-                    return true;
                 case "weapon_accuracy_short_pct":
                     if (!TryResolveVerbPercent(def, "accuracyShort", out value))
                     {
@@ -925,43 +905,6 @@ namespace GenKnowledge.ProcessDefs
             }
 
             return TryResolveFloatMember(recipeMaker, "workAmount", out value);
-        }
-
-        private static bool TryResolveCostTotalCount(ThingDef def, out float value)
-        {
-            value = 0f;
-            if (def == null)
-            {
-                return false;
-            }
-
-            bool any = false;
-            if (ProcessDefUtility.TryGetMemberValue(def, "costList", out object costListObj) && costListObj is System.Collections.IList costList)
-            {
-                for (int i = 0; i < costList.Count; i++)
-                {
-                    object entry = costList[i];
-                    if (entry == null)
-                    {
-                        continue;
-                    }
-
-                    if (TryResolveFloatMember(entry, "count", out float count))
-                    {
-                        value += Mathf.Max(0f, count);
-                        any = true;
-                    }
-                }
-            }
-
-            float stuffCount = ProcessDefUtility.GetFloatMemberOrDefault(def, "costStuffCount", 0f);
-            if (!Mathf.Approximately(stuffCount, 0f))
-            {
-                value += Mathf.Max(0f, stuffCount);
-                any = true;
-            }
-
-            return any;
         }
 
         private static bool TryResolveVerbPercent(ThingDef def, string memberName, out float value)

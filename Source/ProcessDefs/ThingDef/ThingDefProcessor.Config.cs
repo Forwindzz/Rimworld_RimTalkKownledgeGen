@@ -60,12 +60,6 @@ namespace GenKnowledge.ProcessDefs
                     NonNegativeOnly = item.NonNegativeOnly,
                     IsPercent = item.IsPercent,
                     DisplayName = item.DisplayName,
-                    LowLabel = item.LowLabel,
-                    HighLabel = item.HighLabel,
-                    BiasTextNegStrong = item.BiasTextNegStrong,
-                    BiasTextNegLight = item.BiasTextNegLight,
-                    BiasTextPosLight = item.BiasTextPosLight,
-                    BiasTextPosStrong = item.BiasTextPosStrong,
                     StageTextNegStrong = item.StageTextNegStrong,
                     StageTextNegLight = item.StageTextNegLight,
                     StageTextPosLight = item.StageTextPosLight,
@@ -158,8 +152,6 @@ namespace GenKnowledge.ProcessDefs
             EnsureProperty(config, "sharp_damage_pct", T("RimTalkGenKnowledge.Text.Thing.Prop.sharp_damage_pct.Display"), 50f, 100f, true, true, T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.High"));
             EnsureProperty(config, "blunt_damage_pct", T("RimTalkGenKnowledge.Text.Thing.Prop.blunt_damage_pct.Display"), 50f, 100f, true, true, T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.High"));
             EnsureProperty(config, "stuff_max_hit_points_pct", T("RimTalkGenKnowledge.Text.Thing.Prop.stuff_max_hit_points_pct.Display"), 50f, 150f, true, true, T("RimTalkGenKnowledge.Text.Thing.Stage.NegLight"), T("RimTalkGenKnowledge.Text.Thing.Stage.PosLight"), 1f, false);
-            RemoveProperty(config, "uninstall_work");
-            RemoveProperty(config, "cost_total_count");
         }
 
         private static void EnsureCategoryRule(ThingProcessDefConfig config, string key, string propertyKeys, int maxLines)
@@ -183,12 +175,6 @@ namespace GenKnowledge.ProcessDefs
                     Scale = scale,
                     NonNegativeOnly = nonNegativeOnly,
                     IsPercent = isPercent,
-                    LowLabel = lowLabel,
-                    HighLabel = highLabel,
-                    BiasTextNegStrong = string.Empty,
-                    BiasTextNegLight = string.Empty,
-                    BiasTextPosLight = string.Empty,
-                    BiasTextPosStrong = string.Empty,
                     StageTextNegStrong = T("RimTalkGenKnowledge.Text.Thing.Stage.NegStrong"),
                     StageTextNegLight = T("RimTalkGenKnowledge.Text.Thing.Stage.NegLight"),
                     StageTextPosLight = T("RimTalkGenKnowledge.Text.Thing.Stage.PosLight"),
@@ -223,16 +209,6 @@ namespace GenKnowledge.ProcessDefs
         private static string T(string key)
         {
             return key.Translate();
-        }
-
-        private static void RemoveProperty(ThingProcessDefConfig config, string key)
-        {
-            if (config?.PropertyDeviationConfigs == null || string.IsNullOrWhiteSpace(key))
-            {
-                return;
-            }
-
-            config.PropertyDeviationConfigs.Remove(key);
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -7,7 +8,10 @@ namespace GenKnowledge.ProcessDefs
 {
     public abstract class ProcessDefProcessorBase<TConfig> : IProcessDef where TConfig : ProcessDefBaseConfig
     {
+        public const float BaseConfigSectionHeight = 360f;
+
         private Dictionary<string, string> currentValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private PlaceholderDescriptor[] cachedPlaceholders;
 
         public abstract string Id { get; }
         public abstract string DisplayName { get; }
@@ -23,7 +27,7 @@ namespace GenKnowledge.ProcessDefs
 
         public virtual string ProcessTemplateString(string templateString, ProcessDefBaseConfig config)
         {
-            string rendered = ProcessDefPlaceholderUtility.ProcessTemplateString(templateString, GetPlaceholders(), ResolveValueByKey);
+            string rendered = ProcessDefPlaceholderUtility.ProcessTemplateString(templateString, GetCachedPlaceholders(), ResolveValueByKey);
             return RenderFallbackTemplateKeys(rendered);
         }
 
@@ -39,7 +43,7 @@ namespace GenKnowledge.ProcessDefs
             float y = rect.y;
             const float line = 24f;
             const float gap = 6f;
-            string placeholderHint = ProcessDefPlaceholderUtility.BuildPlaceholderHint(GetPlaceholders());
+            string placeholderHint = ProcessDefPlaceholderUtility.BuildPlaceholderHint(GetCachedPlaceholders());
 
             Rect enabledRect = new Rect(rect.x, y, rect.width, line);
             Widgets.CheckboxLabeled(enabledRect, "RimTalkGenKnowledge.Settings.Enabled".Translate(), ref typed.Enabled);
@@ -126,6 +130,22 @@ namespace GenKnowledge.ProcessDefs
             return ProcessDefUtility.ClampImportance(raw, config);
         }
 
+        protected static void CopyBaseConfigFields(ProcessDefBaseConfig source, ProcessDefBaseConfig target)
+        {
+            if (source == null || target == null)
+            {
+                return;
+            }
+
+            target.Enabled = source.Enabled;
+            target.IncludeModDefs = source.IncludeModDefs;
+            target.TagTemplate = source.TagTemplate;
+            target.KnowledgeTemplate = source.KnowledgeTemplate;
+            target.BaseImportance = source.BaseImportance;
+            target.ImportanceMin = source.ImportanceMin;
+            target.ImportanceMax = source.ImportanceMax;
+        }
+
         private string ResolveValueByKey(string key)
         {
             if (currentValues == null || string.IsNullOrWhiteSpace(key))
@@ -183,10 +203,23 @@ namespace GenKnowledge.ProcessDefs
             Rect insertRect = new Rect(textRect.xMax + gap, y, buttonWidth, lineHeight);
             if (Widgets.ButtonText(insertRect, "RimTalkGenKnowledge.Settings.Insert".Translate()))
             {
-                ProcessDefPlaceholderUtility.ShowInsertPlaceholderMenu(GetPlaceholders(), setter, nextValue ?? string.Empty);
+                ProcessDefPlaceholderUtility.ShowInsertPlaceholderMenu(GetCachedPlaceholders(), setter, nextValue ?? string.Empty);
             }
 
             return y + lineHeight;
+        }
+
+        private PlaceholderDescriptor[] GetCachedPlaceholders()
+        {
+            if (cachedPlaceholders != null)
+            {
+                return cachedPlaceholders;
+            }
+
+            cachedPlaceholders = (GetPlaceholders() ?? Enumerable.Empty<PlaceholderDescriptor>())
+                .Where(p => p != null)
+                .ToArray();
+            return cachedPlaceholders;
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <RimTalkGenKnowledge.Settings.Category>Gen Knowledge</RimTalkGenKnowledge.Settings.Category>
   <RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>Enable global error reporting</RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>
   <RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>Debug: prepend internal key info (processorId/logicalKey/defName/modPackageId)</RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>
-  <RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>Show numeric values globally (off = tendency-only descriptions)</RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>
-  <RimTalkGenKnowledge.Settings.SkipList.RealWorld>Skip list: real-world common concepts (1.6/Data/KnowledgeSkipList.txt)</RimTalkGenKnowledge.Settings.SkipList.RealWorld>
+  
+  <RimTalkGenKnowledge.Settings.EnableMemoryUiPatch>Enable knowledge-panel UI patch (Memory sidebar buttons)</RimTalkGenKnowledge.Settings.EnableMemoryUiPatch>
+<RimTalkGenKnowledge.Settings.SkipList.RealWorld>Skip list: real-world common concepts (1.6/Data/KnowledgeSkipList.txt)</RimTalkGenKnowledge.Settings.SkipList.RealWorld>
   <RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>Skip list: high-redundancy concepts (1.6/Data/KnowledgeSkipList.HighRedundancy.txt)</RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>
   <RimTalkGenKnowledge.Memory.Button.GenerateFromDefs>Generate from Defs</RimTalkGenKnowledge.Memory.Button.GenerateFromDefs>
   <RimTalkGenKnowledge.Memory.Button.OpenDefsPanel>Defs Config Panel</RimTalkGenKnowledge.Memory.Button.OpenDefsPanel>
@@ -429,3 +430,4 @@
   <RimTalkGenKnowledge.Text.Trait.PawnRef>this person</RimTalkGenKnowledge.Text.Trait.PawnRef>
   <RimTalkGenKnowledge.Text.Unit.DaySuffix>d</RimTalkGenKnowledge.Text.Unit.DaySuffix>
 </LanguageData>
+

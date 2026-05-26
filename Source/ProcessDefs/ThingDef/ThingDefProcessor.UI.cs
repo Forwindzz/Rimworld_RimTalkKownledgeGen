@@ -19,14 +19,13 @@ namespace GenKnowledge.ProcessDefs
             int propertyCount = typed.PropertyDeviationConfigs?.Count ?? 0;
             const float lineHeight = 24f;
             const float gap = 6f;
-            // Keep this strictly aligned with DrawConfig + DrawAdvancedConfig increments.
-            const float commonHeight = 360f; // ProcessDefProcessorBase.DrawConfig fixed section
+            float commonHeight = BaseConfigSectionHeight;
             float categoryBlockDrawHeight = lineHeight * 4f + gap * 4f;
             float propertyBlockDrawHeight = lineHeight * 12f + gap * 13f;
 
             // Advanced top rows before foldout headers:
-            // 24 standard rows (line+gap) + one 2-line info row.
-            float advancedBaseHeight = 24f * (lineHeight + gap) + (lineHeight * 2f + gap);
+            // 21 standard rows (line+gap) + one 2-line info row.
+            float advancedBaseHeight = 21f * (lineHeight + gap) + (lineHeight * 2f + gap);
 
             // Two foldout headers (Category Rules + Property Deviation Configs).
             float foldoutHeadersHeight = 2f * (lineHeight + gap);
@@ -74,13 +73,6 @@ namespace GenKnowledge.ProcessDefs
             y = ProcessDefUiUtility.DrawIntRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.MaxSemanticLinesGlobal"), config.MaxSemanticLinesGlobal, v => config.MaxSemanticLinesGlobal = v);
             y += gap;
             y = ProcessDefUiUtility.DrawIntRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.SpecialValueTopN"), config.SpecialValueTopN, v => config.SpecialValueTopN = v);
-            y += gap;
-            Rect fallbackRect = new Rect(x, y, width, lineHeight);
-            Widgets.CheckboxLabeled(fallbackRect, T("RimTalkGenKnowledge.Settings.Thing.EnableFallbackAttributeOutput"), ref config.EnableFallbackAttributeOutput);
-            y += lineHeight + gap;
-            y = ProcessDefUiUtility.DrawIntRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.FallbackMaxLines"), config.FallbackAttributeMaxLines, v => config.FallbackAttributeMaxLines = v);
-            y += gap;
-            y = ProcessDefUiUtility.DrawTextRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.FallbackExcludeKeys"), config.FallbackAttributeExcludeKeys, v => config.FallbackAttributeExcludeKeys = v);
             y += gap;
             y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.WeightMarketValueLog10"), config.ImportanceWeightMarketValueLog10, v => config.ImportanceWeightMarketValueLog10 = v);
             y += gap;

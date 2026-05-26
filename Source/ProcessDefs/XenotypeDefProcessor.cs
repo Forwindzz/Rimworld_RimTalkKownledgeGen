@@ -33,13 +33,8 @@ namespace GenKnowledge.ProcessDefs
                 return;
             }
 
-            typed.Enabled = true;
-            typed.IncludeModDefs = true;
-            typed.TagTemplate = "RimTalkGenKnowledge.DefaultTemplate.Xenotype.Tag".Translate();
-            typed.KnowledgeTemplate = "RimTalkGenKnowledge.DefaultTemplate.Xenotype.Knowledge".Translate();
-            typed.BaseImportance = 0.75f;
-            typed.ImportanceMin = 0f;
-            typed.ImportanceMax = 1f;
+            XenotypeProcessDefConfig defaults = (XenotypeProcessDefConfig)CreateDefaultConfig();
+            CopyBaseConfigFields(defaults, typed);
         }
 
         public override IEnumerable<PlaceholderDescriptor> GetPlaceholders()

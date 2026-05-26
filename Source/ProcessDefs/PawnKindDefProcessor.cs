@@ -40,13 +40,7 @@ namespace GenKnowledge.ProcessDefs
             }
 
             PawnKindProcessDefConfig defaults = (PawnKindProcessDefConfig)CreateDefaultConfig();
-            typed.Enabled = defaults.Enabled;
-            typed.IncludeModDefs = defaults.IncludeModDefs;
-            typed.TagTemplate = defaults.TagTemplate;
-            typed.KnowledgeTemplate = defaults.KnowledgeTemplate;
-            typed.BaseImportance = defaults.BaseImportance;
-            typed.ImportanceMin = defaults.ImportanceMin;
-            typed.ImportanceMax = defaults.ImportanceMax;
+            CopyBaseConfigFields(defaults, typed);
             typed.IncludeAnimals = defaults.IncludeAnimals;
             typed.IncludeMechanoids = defaults.IncludeMechanoids;
             typed.ImportanceWeightCombatPowerLog10 = defaults.ImportanceWeightCombatPowerLog10;
@@ -117,7 +111,7 @@ namespace GenKnowledge.ProcessDefs
                 }
 
                 string description = ProcessDefUtility.TrimOrNull(def.description) ?? string.Empty;
-                if (description.Length < label.Length * 3)
+                if (!ProcessDefUtility.MeetsDescriptionLengthThreshold(label, description, 3f))
                 {
                     continue;
                 }

@@ -43,13 +43,7 @@ namespace GenKnowledge.ProcessDefs
             }
 
             ResearchProjectProcessDefConfig defaults = (ResearchProjectProcessDefConfig)CreateDefaultConfig();
-            typed.Enabled = defaults.Enabled;
-            typed.IncludeModDefs = defaults.IncludeModDefs;
-            typed.TagTemplate = defaults.TagTemplate;
-            typed.KnowledgeTemplate = defaults.KnowledgeTemplate;
-            typed.BaseImportance = defaults.BaseImportance;
-            typed.ImportanceMin = defaults.ImportanceMin;
-            typed.ImportanceMax = defaults.ImportanceMax;
+            CopyBaseConfigFields(defaults, typed);
             typed.IncludePrerequisites = defaults.IncludePrerequisites;
             typed.IncludePostrequisites = defaults.IncludePostrequisites;
             typed.ImportanceWeightCost = defaults.ImportanceWeightCost;
@@ -155,7 +149,7 @@ namespace GenKnowledge.ProcessDefs
                 string costDisplay = showNumericValues
                     ? cost.ToString("0.##")
                     : researchDifficulty;
-                string techLevelText = LocalizeTechLevel(def.techLevel);
+                string techLevelText = ProcessDefUtility.LocalizeTechLevel(def.techLevel);
                 SetTemplateValues(new Dictionary<string, string>
                 {
                     ["label"] = label,
@@ -246,28 +240,5 @@ namespace GenKnowledge.ProcessDefs
             return string.Empty;
         }
 
-        private static string LocalizeTechLevel(TechLevel techLevel)
-        {
-            switch (techLevel)
-            {
-                case TechLevel.Animal:
-                    return "RimTalkGenKnowledge.Text.TechLevel.Animal".Translate();
-                case TechLevel.Neolithic:
-                    return "RimTalkGenKnowledge.Text.TechLevel.Neolithic".Translate();
-                case TechLevel.Medieval:
-                    return "RimTalkGenKnowledge.Text.TechLevel.Medieval".Translate();
-                case TechLevel.Industrial:
-                    return "RimTalkGenKnowledge.Text.TechLevel.Industrial".Translate();
-                case TechLevel.Spacer:
-                    return "RimTalkGenKnowledge.Text.TechLevel.Spacer".Translate();
-                case TechLevel.Ultra:
-                    return "RimTalkGenKnowledge.Text.TechLevel.Ultra".Translate();
-                case TechLevel.Archotech:
-                    return "RimTalkGenKnowledge.Text.TechLevel.Archotech".Translate();
-                case TechLevel.Undefined:
-                default:
-                    return "RimTalkGenKnowledge.Text.TechLevel.Undefined".Translate();
-            }
-        }
     }
 }

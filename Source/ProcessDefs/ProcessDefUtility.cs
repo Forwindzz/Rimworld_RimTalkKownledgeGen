@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using RimWorld;
 using Verse;
 
 namespace GenKnowledge.ProcessDefs
@@ -182,6 +183,53 @@ namespace GenKnowledge.ProcessDefs
         public static string GetDefDescription(Def def)
         {
             return TrimOrNull(def?.description);
+        }
+
+        public static bool MeetsDescriptionLengthThreshold(string label, string description, float minLabelLengthMultiplier)
+        {
+            if (string.IsNullOrWhiteSpace(label) || string.IsNullOrWhiteSpace(description))
+            {
+                return false;
+            }
+
+            if (minLabelLengthMultiplier <= 0f)
+            {
+                return true;
+            }
+
+            int threshold = (int)Math.Ceiling(label.Length * minLabelLengthMultiplier);
+            return description.Length >= threshold;
+        }
+
+        public static string TranslateKeyOrFallback(string key, string fallback)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return fallback ?? string.Empty;
+            }
+
+            if (Translator.CanTranslate(key))
+            {
+                return key.Translate().ToString();
+            }
+
+            return fallback ?? key;
+        }
+
+        public static string LocalizeTechLevel(string techLevel)
+        {
+            if (string.IsNullOrWhiteSpace(techLevel))
+            {
+                return string.Empty;
+            }
+
+            string key = "RimTalkGenKnowledge.Text.TechLevel." + techLevel;
+            return TranslateKeyOrFallback(key, techLevel);
+        }
+
+        public static string LocalizeTechLevel(TechLevel techLevel)
+        {
+            return LocalizeTechLevel(techLevel.ToString());
         }
 
         public static bool TryGetMemberValue(object target, string memberName, out object value)

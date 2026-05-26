@@ -40,13 +40,7 @@ namespace GenKnowledge.ProcessDefs
             }
 
             MemeProcessDefConfig defaults = (MemeProcessDefConfig)CreateDefaultConfig();
-            typed.Enabled = defaults.Enabled;
-            typed.IncludeModDefs = defaults.IncludeModDefs;
-            typed.TagTemplate = defaults.TagTemplate;
-            typed.KnowledgeTemplate = defaults.KnowledgeTemplate;
-            typed.BaseImportance = defaults.BaseImportance;
-            typed.ImportanceMin = defaults.ImportanceMin;
-            typed.ImportanceMax = defaults.ImportanceMax;
+            CopyBaseConfigFields(defaults, typed);
             typed.IncludeStructureMemes = defaults.IncludeStructureMemes;
             typed.IncludeJokeMemes = defaults.IncludeJokeMemes;
             typed.ImportanceWeightImpact = defaults.ImportanceWeightImpact;

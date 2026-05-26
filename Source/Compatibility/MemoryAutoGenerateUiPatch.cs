@@ -9,17 +9,10 @@ namespace GenKnowledge.Compatibility
 {
     public static class MemoryAutoGenerateUiPatch
     {
-        private const string HelperTypeName = "RimTalk.Memory.UI.CommonKnowledgeUIHelpers";
-        private const string MemorySettingsModTypeName = "RimTalk.MemoryPatch.RimTalkMemoryPatchMod";
+        private const string DialogTypeName = "RimTalk.Memory.UI.Dialog_CommonKnowledge";
 
         private static bool patchAttempted;
         private static bool drawHookLoggedOnce;
-
-        private static Type cachedMemorySettingsType;
-        private static PropertyInfo cachedMemorySettingsProperty;
-        private static FieldInfo cachedEnablePawnStatusField;
-        private static FieldInfo cachedEnableEventRecordField;
-        private static bool reflectionInitialized;
 
         public static void TryApply(Harmony harmony)
         {
@@ -37,21 +30,21 @@ namespace GenKnowledge.Compatibility
 
             try
             {
-                Type helperType = AccessTools.TypeByName(HelperTypeName);
-                if (helperType == null)
+                Type dialogType = AccessTools.TypeByName(DialogTypeName);
+                if (dialogType == null)
                 {
-                    Log.Error("[GenKnowledge] Memory UI patch failed: target type not found: " + HelperTypeName);
+                    Log.Error("[GenKnowledge] Memory UI patch failed: target type not found: " + DialogTypeName);
                     return;
                 }
 
-                MethodInfo target = AccessTools.Method(helperType, "DrawAutoGenerateSettings", new[] { typeof(Rect), typeof(Action), typeof(Action) });
+                MethodInfo target = AccessTools.Method(dialogType, "DrawSidebar", new[] { typeof(Rect) });
                 if (target == null)
                 {
-                    Log.Error("[GenKnowledge] Memory UI patch failed: target method not found: " + HelperTypeName + ".DrawAutoGenerateSettings(Rect,Action,Action).");
+                    Log.Error("[GenKnowledge] Memory UI patch failed: target method not found: " + DialogTypeName + ".DrawSidebar(Rect).");
                     return;
                 }
 
-                MethodInfo postfix = AccessTools.Method(typeof(MemoryAutoGenerateUiPatch), nameof(PostfixDrawAutoGenerateSettings));
+                MethodInfo postfix = AccessTools.Method(typeof(MemoryAutoGenerateUiPatch), nameof(PostfixDrawSidebar));
                 if (postfix == null)
                 {
                     Log.Error("[GenKnowledge] Memory UI patch failed: postfix method not found.");
@@ -59,7 +52,7 @@ namespace GenKnowledge.Compatibility
                 }
 
                 harmony.Patch(target, postfix: new HarmonyMethod(postfix));
-                Log.Message("[GenKnowledge] Memory UI postfix patch applied: " + HelperTypeName + ".DrawAutoGenerateSettings");
+                Log.Message("[GenKnowledge] Memory UI postfix patch applied: " + DialogTypeName + ".DrawSidebar");
             }
             catch (Exception ex)
             {
@@ -67,45 +60,34 @@ namespace GenKnowledge.Compatibility
             }
         }
 
-        private static void PostfixDrawAutoGenerateSettings(Rect rect, Action onGeneratePawnStatus, Action onGenerateEventRecord)
+        private static void PostfixDrawSidebar(Rect rect)
         {
+            if (!(GenKnowledgeMod.Settings?.enableMemoryUiPatch ?? true))
+            {
+                return;
+            }
+
             if (!drawHookLoggedOnce)
             {
                 drawHookLoggedOnce = true;
                 Log.Message("[GenKnowledge] Memory UI draw hook entered.");
             }
 
-            if (!TryInitMemorySettingsReflection())
-            {
-                return;
-            }
-
-            object settingsObj = cachedMemorySettingsProperty.GetValue(null, null);
-            if (settingsObj == null)
-            {
-                return;
-            }
-
-            Rect innerRect = rect.ContractedBy(5f);
-            float y = innerRect.y;
+            Rect innerRect = rect.ContractedBy(8f);
             const float rowHeight = 24f;
             const float gap = 4f;
-            float halfWidth = (innerRect.width - 6f) / 2f;
+            const float bottomReserve = 70f;
 
-            // Skip pawn checkbox row, overlay only on the generate button row.
-            y += rowHeight + gap;
-
-            Rect defsGenerateRect = new Rect(innerRect.x + halfWidth + 6f, y, halfWidth, rowHeight);
+            // Always append in sidebar footer region so it does not depend on foldout expansion.
+            float y = innerRect.yMax - bottomReserve - (rowHeight * 2f + gap);
+            Rect defsGenerateRect = new Rect(innerRect.x, y, innerRect.width, rowHeight);
             if (Widgets.ButtonText(defsGenerateRect, "RimTalkGenKnowledge.Memory.Button.GenerateFromDefs".Translate()))
             {
                 RunDefsGeneration();
             }
 
-            // Skip event checkbox row.
             y += rowHeight + gap;
-            y += rowHeight + gap;
-
-            Rect openPanelRect = new Rect(innerRect.x + halfWidth + 6f, y, halfWidth, rowHeight);
+            Rect openPanelRect = new Rect(innerRect.x, y, innerRect.width, rowHeight);
             if (Widgets.ButtonText(openPanelRect, "RimTalkGenKnowledge.Memory.Button.OpenDefsPanel".Translate()))
             {
                 OpenDefsSettingsPanel();
@@ -152,42 +134,5 @@ namespace GenKnowledge.Compatibility
             }
         }
 
-        private static bool TryInitMemorySettingsReflection()
-        {
-            if (reflectionInitialized)
-            {
-                return cachedMemorySettingsProperty != null &&
-                    cachedEnablePawnStatusField != null &&
-                    cachedEnableEventRecordField != null;
-            }
-
-            reflectionInitialized = true;
-
-            Type modType = AccessTools.TypeByName(MemorySettingsModTypeName);
-            if (modType == null)
-            {
-                Log.Error("[GenKnowledge] Memory UI patch failed: settings mod type not found: " + MemorySettingsModTypeName);
-                return false;
-            }
-
-            cachedMemorySettingsProperty = AccessTools.Property(modType, "Settings");
-            cachedMemorySettingsType = cachedMemorySettingsProperty?.PropertyType;
-            if (cachedMemorySettingsType == null)
-            {
-                Log.Error("[GenKnowledge] Memory UI patch failed: RimTalk settings property type is null.");
-                return false;
-            }
-
-            cachedEnablePawnStatusField = AccessTools.Field(cachedMemorySettingsType, "enablePawnStatusKnowledge");
-            cachedEnableEventRecordField = AccessTools.Field(cachedMemorySettingsType, "enableEventRecordKnowledge");
-
-            if (cachedEnablePawnStatusField == null || cachedEnableEventRecordField == null)
-            {
-                Log.Error("[GenKnowledge] Memory UI patch failed: RimTalk settings fields not found.");
-                return false;
-            }
-
-            return true;
-        }
     }
 }
