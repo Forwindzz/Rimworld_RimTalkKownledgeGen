@@ -6,6 +6,10 @@
   <RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>Show numeric values globally (off = tendency-only descriptions)</RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>
   <RimTalkGenKnowledge.Settings.SkipList.RealWorld>Skip list: real-world common concepts (1.6/Data/KnowledgeSkipList.txt)</RimTalkGenKnowledge.Settings.SkipList.RealWorld>
   <RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>Skip list: high-redundancy concepts (1.6/Data/KnowledgeSkipList.HighRedundancy.txt)</RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>
+  <RimTalkGenKnowledge.Memory.Button.GenerateFromDefs>Generate from Defs</RimTalkGenKnowledge.Memory.Button.GenerateFromDefs>
+  <RimTalkGenKnowledge.Memory.Button.OpenDefsPanel>Defs Config Panel</RimTalkGenKnowledge.Memory.Button.OpenDefsPanel>
+  <RimTalkGenKnowledge.Memory.Message.ModNotLoaded>RimTalk_GenKnowledge mod instance not found.</RimTalkGenKnowledge.Memory.Message.ModNotLoaded>
+  <RimTalkGenKnowledge.Memory.Message.OpenSettingsFailed>Failed to open settings panel: {0}</RimTalkGenKnowledge.Memory.Message.OpenSettingsFailed>
   <RimTalkGenKnowledge.Settings.MinKnowledgeImportance>Global minimum importance (items below are dropped): {0}</RimTalkGenKnowledge.Settings.MinKnowledgeImportance>
   <RimTalkGenKnowledge.Settings.OnlyLoadedSave>Generate knowledge only works in a loaded save.</RimTalkGenKnowledge.Settings.OnlyLoadedSave>
   <RimTalkGenKnowledge.Settings.GenerateCurrentSave>Generate knowledge (current save)</RimTalkGenKnowledge.Settings.GenerateCurrentSave>

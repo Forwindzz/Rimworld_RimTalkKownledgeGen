@@ -1,6 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using GenKnowledge.Compatibility;
 using GenKnowledge.ProcessDefs;
+using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -19,6 +21,9 @@ namespace GenKnowledge
             ModRootDir = content?.RootDir?.ToString();
             Settings = GetSettings<GenKnowledgeSettings>();
             Settings.EnsureDefaults(ProcessDefRegistry.CreateProcessors());
+
+            var harmony = new Harmony("RimTalk.GenKnowledge");
+            harmony.PatchAll();
         }
 
         public override string SettingsCategory()

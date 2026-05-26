@@ -855,8 +855,12 @@ namespace GenKnowledge.ProcessDefs
             }
 
             string key = "RimTalkGenKnowledge.Text.Thing.Tag." + token;
-            string translated = key.Translate().ToString();
-            return string.Equals(translated, key, StringComparison.Ordinal) ? token : translated;
+            if (!Translator.CanTranslate(key))
+            {
+                return token;
+            }
+
+            return key.Translate().ToString();
         }
 
         private static string LocalizeThingCategory(string category)
@@ -867,8 +871,12 @@ namespace GenKnowledge.ProcessDefs
             }
 
             string key = "RimTalkGenKnowledge.Text.Thing.Category." + category;
-            string translated = key.Translate().ToString();
-            return string.Equals(translated, key, StringComparison.Ordinal) ? category : translated;
+            if (!Translator.CanTranslate(key))
+            {
+                return category;
+            }
+
+            return key.Translate().ToString();
         }
 
         private static string LocalizeTechLevel(string techLevel)
@@ -879,8 +887,12 @@ namespace GenKnowledge.ProcessDefs
             }
 
             string key = "RimTalkGenKnowledge.Text.TechLevel." + techLevel;
-            string translated = key.Translate().ToString();
-            return string.Equals(translated, key, StringComparison.Ordinal) ? techLevel : translated;
+            if (!Translator.CanTranslate(key))
+            {
+                return techLevel;
+            }
+
+            return key.Translate().ToString();
         }
 
         private static string ResolveModSource(ThingDef def)

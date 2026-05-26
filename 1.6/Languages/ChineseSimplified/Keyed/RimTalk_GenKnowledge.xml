@@ -6,6 +6,10 @@
   <RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>全局显示数值（关闭时仅保留程度描述）</RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>
   <RimTalkGenKnowledge.Settings.SkipList.RealWorld>Skip list：现实常识概念（1.6/Data/KnowledgeSkipList.txt）</RimTalkGenKnowledge.Settings.SkipList.RealWorld>
   <RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>Skip list：高重复概念（1.6/Data/KnowledgeSkipList.HighRedundancy.txt）</RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>
+  <RimTalkGenKnowledge.Memory.Button.GenerateFromDefs>根据Defs生成</RimTalkGenKnowledge.Memory.Button.GenerateFromDefs>
+  <RimTalkGenKnowledge.Memory.Button.OpenDefsPanel>Defs生成面板</RimTalkGenKnowledge.Memory.Button.OpenDefsPanel>
+  <RimTalkGenKnowledge.Memory.Message.ModNotLoaded>未找到 RimTalk_GenKnowledge 模组实例。</RimTalkGenKnowledge.Memory.Message.ModNotLoaded>
+  <RimTalkGenKnowledge.Memory.Message.OpenSettingsFailed>打开设置面板失败：{0}</RimTalkGenKnowledge.Memory.Message.OpenSettingsFailed>
   <RimTalkGenKnowledge.Settings.MinKnowledgeImportance>全局最小重要性（小于该值将被丢弃）：{0}</RimTalkGenKnowledge.Settings.MinKnowledgeImportance>
   <RimTalkGenKnowledge.Settings.OnlyLoadedSave>常识生成仅可在已加载存档中执行。</RimTalkGenKnowledge.Settings.OnlyLoadedSave>
   <RimTalkGenKnowledge.Settings.GenerateCurrentSave>生成常识（当前存档）</RimTalkGenKnowledge.Settings.GenerateCurrentSave>
