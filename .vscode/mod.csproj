@@ -24,6 +24,8 @@
 		<Reference Include="$(UserProfile)\.nuget\packages\krafs.rimworld.ref\1.6.4633\ref\net472\*.dll">
 			<Private>false</Private>
 		</Reference>
-		<PackageReference Include="Lib.Harmony" Version="2.3.3" ExcludeAssets="runtime" />
-	</ItemGroup>
+		<Reference Include="$(UserProfile)\.nuget\packages\lib.harmony\2.3.3\lib\net472\0Harmony.dll">
+			<Private>false</Private>
+		</Reference>
+ 	</ItemGroup>
 </Project>

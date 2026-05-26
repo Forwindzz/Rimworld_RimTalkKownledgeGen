@@ -24,6 +24,7 @@ namespace GenKnowledge
 
             var harmony = new Harmony("RimTalk.GenKnowledge");
             harmony.PatchAll();
+            MemoryAutoGenerateUiPatch.TryApply(harmony);
         }
 
         public override string SettingsCategory()
