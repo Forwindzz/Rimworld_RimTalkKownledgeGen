@@ -17,8 +17,8 @@ namespace GenKnowledge.ProcessDefs
             {
                 Enabled = true,
                 IncludeModDefs = true,
-                TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: {{description}}",
+                TagTemplate = "RimTalkGenKnowledge.DefaultTemplate.Xenotype.Tag".Translate(),
+                KnowledgeTemplate = "RimTalkGenKnowledge.DefaultTemplate.Xenotype.Knowledge".Translate(),
                 BaseImportance = 0.75f,
                 ImportanceMin = 0f,
                 ImportanceMax = 1f
@@ -35,8 +35,8 @@ namespace GenKnowledge.ProcessDefs
 
             typed.Enabled = true;
             typed.IncludeModDefs = true;
-            typed.TagTemplate = "{{label}}";
-            typed.KnowledgeTemplate = "{{label}}: {{description}}";
+            typed.TagTemplate = "RimTalkGenKnowledge.DefaultTemplate.Xenotype.Tag".Translate();
+            typed.KnowledgeTemplate = "RimTalkGenKnowledge.DefaultTemplate.Xenotype.Knowledge".Translate();
             typed.BaseImportance = 0.75f;
             typed.ImportanceMin = 0f;
             typed.ImportanceMax = 1f;

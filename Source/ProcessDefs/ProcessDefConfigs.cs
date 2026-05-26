@@ -62,7 +62,7 @@ namespace GenKnowledge.ProcessDefs
 
         public int MaxSemanticLinesGlobal = 8;
         public int SpecialValueTopN = 3;
-        public bool EnableFallbackAttributeOutput = true;
+        public bool EnableFallbackAttributeOutput = false;
         public int FallbackAttributeMaxLines = 6;
         public string FallbackAttributeExcludeKeys = "graphicData,uiIconPath,drawerType,altitudeLayer";
 
@@ -104,7 +104,7 @@ namespace GenKnowledge.ProcessDefs
 
             Scribe_Values.Look(ref MaxSemanticLinesGlobal, "maxSemanticLinesGlobal", 8);
             Scribe_Values.Look(ref SpecialValueTopN, "specialValueTopN", 3);
-            Scribe_Values.Look(ref EnableFallbackAttributeOutput, "enableFallbackAttributeOutput", true);
+            Scribe_Values.Look(ref EnableFallbackAttributeOutput, "enableFallbackAttributeOutput", false);
             Scribe_Values.Look(ref FallbackAttributeMaxLines, "fallbackAttributeMaxLines", 6);
             Scribe_Values.Look(ref FallbackAttributeExcludeKeys, "fallbackAttributeExcludeKeys", "graphicData,uiIconPath,drawerType,altitudeLayer");
 

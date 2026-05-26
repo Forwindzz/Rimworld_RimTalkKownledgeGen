@@ -3,6 +3,9 @@
   <RimTalkGenKnowledge.Settings.Category>常识生成</RimTalkGenKnowledge.Settings.Category>
   <RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>启用全局错误提示</RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>
   <RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>Debug：在常识内容前附加内部键信息（processorId/logicalKey/defName/modPackageId）</RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>
+  <RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>全局显示数值（关闭时仅保留程度描述）</RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>
+  <RimTalkGenKnowledge.Settings.SkipList.RealWorld>Skip list：现实常识概念（1.6/Data/KnowledgeSkipList.txt）</RimTalkGenKnowledge.Settings.SkipList.RealWorld>
+  <RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>Skip list：高重复概念（1.6/Data/KnowledgeSkipList.HighRedundancy.txt）</RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>
   <RimTalkGenKnowledge.Settings.MinKnowledgeImportance>全局最小重要性（小于该值将被丢弃）：{0}</RimTalkGenKnowledge.Settings.MinKnowledgeImportance>
   <RimTalkGenKnowledge.Settings.OnlyLoadedSave>常识生成仅可在已加载存档中执行。</RimTalkGenKnowledge.Settings.OnlyLoadedSave>
   <RimTalkGenKnowledge.Settings.GenerateCurrentSave>生成常识（当前存档）</RimTalkGenKnowledge.Settings.GenerateCurrentSave>
@@ -20,13 +23,70 @@
   <RimTalkGenKnowledge.Settings.ImportanceMax>重要性上限</RimTalkGenKnowledge.Settings.ImportanceMax>
   <RimTalkGenKnowledge.Settings.PlaceholdersNone>占位符：（无）</RimTalkGenKnowledge.Settings.PlaceholdersNone>
   <RimTalkGenKnowledge.Settings.PlaceholdersHint>占位符：{0}</RimTalkGenKnowledge.Settings.PlaceholdersHint>
+  <RimTalkGenKnowledge.Settings.Thing.ShowNumericInDeviationText>偏差文本中显示数值</RimTalkGenKnowledge.Settings.Thing.ShowNumericInDeviationText>
+  <RimTalkGenKnowledge.DefaultTemplate.Xenotype.Tag>{{label}}</RimTalkGenKnowledge.DefaultTemplate.Xenotype.Tag>
+  <RimTalkGenKnowledge.DefaultTemplate.Xenotype.Knowledge>{{label}}: {{description}}</RimTalkGenKnowledge.DefaultTemplate.Xenotype.Knowledge>
+  <RimTalkGenKnowledge.DefaultTemplate.Thing.Tag>{{label}}</RimTalkGenKnowledge.DefaultTemplate.Thing.Tag>
+  <RimTalkGenKnowledge.DefaultTemplate.Thing.Knowledge>{{label}}{{labelDelimiter}}{{description}}&#10;{{categoryPrefix}}{{categoryText}}&#10;{{techLevelLine}}&#10;{{modSourceLine}}&#10;{{hpLine}}&#10;{{categoryExtraText}}</RimTalkGenKnowledge.DefaultTemplate.Thing.Knowledge>
+  <RimTalkGenKnowledge.DefaultTemplate.PawnKind.Tag>{{label}}</RimTalkGenKnowledge.DefaultTemplate.PawnKind.Tag>
+  <RimTalkGenKnowledge.DefaultTemplate.PawnKind.Knowledge>{{racePrefix}}{{race}}{{combatPowerPrefix}}{{combatPower}}{{combatPowerLevelSuffix}}{{factionPrefix}}{{faction}}{{descriptionLine}}</RimTalkGenKnowledge.DefaultTemplate.PawnKind.Knowledge>
+  <RimTalkGenKnowledge.DefaultTemplate.Trait.Tag>{{label}}</RimTalkGenKnowledge.DefaultTemplate.Trait.Tag>
+  <RimTalkGenKnowledge.DefaultTemplate.Trait.Knowledge>{{label}}: {{description}}</RimTalkGenKnowledge.DefaultTemplate.Trait.Knowledge>
+  <RimTalkGenKnowledge.DefaultTemplate.Research.Tag>{{label}}</RimTalkGenKnowledge.DefaultTemplate.Research.Tag>
+  <RimTalkGenKnowledge.DefaultTemplate.Research.Knowledge>{{label}}：{{description}}。{{techLevel}}时代的技术，研究{{researchDifficulty}}{{costDifficultyLine}}</RimTalkGenKnowledge.DefaultTemplate.Research.Knowledge>
+  <RimTalkGenKnowledge.DefaultTemplate.Recipe.Tag>{{label}}</RimTalkGenKnowledge.DefaultTemplate.Recipe.Tag>
+  <RimTalkGenKnowledge.DefaultTemplate.Recipe.Knowledge>{{label}}: {{description}} (skill={{workSkill}}, work={{workAmount}})</RimTalkGenKnowledge.DefaultTemplate.Recipe.Knowledge>
+  <RimTalkGenKnowledge.DefaultTemplate.Hediff.Tag>{{label}}</RimTalkGenKnowledge.DefaultTemplate.Hediff.Tag>
+  <RimTalkGenKnowledge.DefaultTemplate.Hediff.Knowledge>{{label}}: {{description}}&#10;{{effectLinePrefix}}{{badLabel}}{{chronicLine}}{{tendableLine}}</RimTalkGenKnowledge.DefaultTemplate.Hediff.Knowledge>
+  <RimTalkGenKnowledge.DefaultTemplate.Gene.Tag>{{label}}</RimTalkGenKnowledge.DefaultTemplate.Gene.Tag>
+  <RimTalkGenKnowledge.DefaultTemplate.Gene.Knowledge>{{label}}: {{description}}{{geneStatsLine}}</RimTalkGenKnowledge.DefaultTemplate.Gene.Knowledge>
+  <RimTalkGenKnowledge.DefaultTemplate.Meme.Tag>{{label}}</RimTalkGenKnowledge.DefaultTemplate.Meme.Tag>
+  <RimTalkGenKnowledge.DefaultTemplate.Meme.Knowledge>{{label}}: {{description}}{{categoryLine}}&#10;{{impactLinePrefix}}{{impactLabel}}</RimTalkGenKnowledge.DefaultTemplate.Meme.Knowledge>
+  <RimTalkGenKnowledge.DefaultTemplate.Faction.Tag>{{label}}</RimTalkGenKnowledge.DefaultTemplate.Faction.Tag>
+  <RimTalkGenKnowledge.DefaultTemplate.Faction.Knowledge>{{label}}{{labelDescDelimiter}}{{description}}&#10;{{techLevelPrefix}}{{techLevel}}&#10;{{permanentEnemyPrefix}}{{permanentEnemy}}&#10;{{humanlikePrefix}}{{humanlike}}</RimTalkGenKnowledge.DefaultTemplate.Faction.Knowledge>
   <RimTalkGenKnowledge.Settings.Thing.IncludeStatSummary>包含属性摘要</RimTalkGenKnowledge.Settings.Thing.IncludeStatSummary>
   <RimTalkGenKnowledge.Settings.Thing.IncludeCategories>包含分类</RimTalkGenKnowledge.Settings.Thing.IncludeCategories>
   <RimTalkGenKnowledge.Settings.Thing.ExcludeCategories>排除分类</RimTalkGenKnowledge.Settings.Thing.ExcludeCategories>
   <RimTalkGenKnowledge.Settings.Thing.MaxDescriptionLength>描述最大长度</RimTalkGenKnowledge.Settings.Thing.MaxDescriptionLength>
+  <RimTalkGenKnowledge.Settings.Thing.FilterIntermediateBuildStates>过滤建造中间态</RimTalkGenKnowledge.Settings.Thing.FilterIntermediateBuildStates>
+  <RimTalkGenKnowledge.Settings.Thing.IntermediateTokens>中间态关键词</RimTalkGenKnowledge.Settings.Thing.IntermediateTokens>
+  <RimTalkGenKnowledge.Settings.Thing.FilterShortDescription>当描述长度过短时过滤</RimTalkGenKnowledge.Settings.Thing.FilterShortDescription>
+  <RimTalkGenKnowledge.Settings.Thing.MinDescriptionLengthMultiplier>最小描述长度（label倍数）</RimTalkGenKnowledge.Settings.Thing.MinDescriptionLengthMultiplier>
+  <RimTalkGenKnowledge.Settings.Thing.FilterEggVariants>过滤受精/未受精蛋变体</RimTalkGenKnowledge.Settings.Thing.FilterEggVariants>
+  <RimTalkGenKnowledge.Settings.Thing.EggVariantTokens>蛋变体关键词</RimTalkGenKnowledge.Settings.Thing.EggVariantTokens>
+  <RimTalkGenKnowledge.Settings.Thing.MaxSemanticLinesGlobal>全局最大语义行数</RimTalkGenKnowledge.Settings.Thing.MaxSemanticLinesGlobal>
+  <RimTalkGenKnowledge.Settings.Thing.SpecialValueTopN>特殊值TopN</RimTalkGenKnowledge.Settings.Thing.SpecialValueTopN>
+  <RimTalkGenKnowledge.Settings.Thing.EnableFallbackAttributeOutput>启用兜底属性输出</RimTalkGenKnowledge.Settings.Thing.EnableFallbackAttributeOutput>
+  <RimTalkGenKnowledge.Settings.Thing.FallbackMaxLines>兜底最大行数</RimTalkGenKnowledge.Settings.Thing.FallbackMaxLines>
+  <RimTalkGenKnowledge.Settings.Thing.FallbackExcludeKeys>兜底排除键</RimTalkGenKnowledge.Settings.Thing.FallbackExcludeKeys>
   <RimTalkGenKnowledge.Settings.Thing.WeightMarketValueLog10>市场价值 log10 权重</RimTalkGenKnowledge.Settings.Thing.WeightMarketValueLog10>
-  <RimTalkGenKnowledge.Settings.Thing.WeightMassLog10>质量 log10 权重</RimTalkGenKnowledge.Settings.Thing.WeightMassLog10>
+  <RimTalkGenKnowledge.Settings.Thing.WeightMassLog10>重量 log10 权重</RimTalkGenKnowledge.Settings.Thing.WeightMassLog10>
+  <RimTalkGenKnowledge.Settings.Thing.WeightHitPointsLog10>耐久 log10 权重</RimTalkGenKnowledge.Settings.Thing.WeightHitPointsLog10>
   <RimTalkGenKnowledge.Settings.Thing.WeightStackLimitIsOne>堆叠上限为1权重</RimTalkGenKnowledge.Settings.Thing.WeightStackLimitIsOne>
+  <RimTalkGenKnowledge.Settings.Thing.WeightSpecialValueScore>特殊偏差权重</RimTalkGenKnowledge.Settings.Thing.WeightSpecialValueScore>
+  <RimTalkGenKnowledge.Settings.Thing.WeightNutrition>营养权重</RimTalkGenKnowledge.Settings.Thing.WeightNutrition>
+  <RimTalkGenKnowledge.Settings.Thing.WeightDescriptionLengthRatio>描述/标签长度比权重</RimTalkGenKnowledge.Settings.Thing.WeightDescriptionLengthRatio>
+  <RimTalkGenKnowledge.Settings.Thing.CraftableImportanceMultiplier>可制作物重要性系数</RimTalkGenKnowledge.Settings.Thing.CraftableImportanceMultiplier>
+  <RimTalkGenKnowledge.Settings.Thing.EnableCategoryExtraText>启用类别扩展文本</RimTalkGenKnowledge.Settings.Thing.EnableCategoryExtraText>
+  <RimTalkGenKnowledge.Settings.Thing.EnableMarketValueTendencyText>启用价值倾向文本</RimTalkGenKnowledge.Settings.Thing.EnableMarketValueTendencyText>
+  <RimTalkGenKnowledge.Settings.Thing.EnableHpTendencyText>启用耐久倾向文本</RimTalkGenKnowledge.Settings.Thing.EnableHpTendencyText>
+  <RimTalkGenKnowledge.Settings.Thing.DebugAlwaysShowDeviationDetails>Debug：总是显示偏差细节</RimTalkGenKnowledge.Settings.Thing.DebugAlwaysShowDeviationDetails>
+  <RimTalkGenKnowledge.Settings.Thing.PerPropertyDeviationHint>每个属性的偏差配置会保存在设置中，可后续继续调整。</RimTalkGenKnowledge.Settings.Thing.PerPropertyDeviationHint>
+  <RimTalkGenKnowledge.Settings.Thing.CategoryRules>类别规则</RimTalkGenKnowledge.Settings.Thing.CategoryRules>
+  <RimTalkGenKnowledge.Settings.Thing.CategoryRuleEnabledFormat>{0} 启用</RimTalkGenKnowledge.Settings.Thing.CategoryRuleEnabledFormat>
+  <RimTalkGenKnowledge.Settings.Thing.MaxLines>最大行数</RimTalkGenKnowledge.Settings.Thing.MaxLines>
+  <RimTalkGenKnowledge.Settings.Thing.PropertyKeysComma>属性键（逗号分隔）</RimTalkGenKnowledge.Settings.Thing.PropertyKeysComma>
+  <RimTalkGenKnowledge.Settings.Thing.PropertyDeviationConfigs>属性偏差配置</RimTalkGenKnowledge.Settings.Thing.PropertyDeviationConfigs>
+  <RimTalkGenKnowledge.Settings.Thing.DisplayName>显示名称</RimTalkGenKnowledge.Settings.Thing.DisplayName>
+  <RimTalkGenKnowledge.Settings.Thing.RangeMin>范围最小值</RimTalkGenKnowledge.Settings.Thing.RangeMin>
+  <RimTalkGenKnowledge.Settings.Thing.RangeMax>范围最大值</RimTalkGenKnowledge.Settings.Thing.RangeMax>
+  <RimTalkGenKnowledge.Settings.Thing.Scale>缩放参数</RimTalkGenKnowledge.Settings.Thing.Scale>
+  <RimTalkGenKnowledge.Settings.Thing.NonNegativeOnly>仅非负</RimTalkGenKnowledge.Settings.Thing.NonNegativeOnly>
+  <RimTalkGenKnowledge.Settings.Thing.IsPercent>百分比</RimTalkGenKnowledge.Settings.Thing.IsPercent>
+  <RimTalkGenKnowledge.Settings.Thing.BiasLtNeg100>偏差 &lt;-100%</RimTalkGenKnowledge.Settings.Thing.BiasLtNeg100>
+  <RimTalkGenKnowledge.Settings.Thing.BiasNeg100To0>偏差 -100%~0%</RimTalkGenKnowledge.Settings.Thing.BiasNeg100To0>
+  <RimTalkGenKnowledge.Settings.Thing.Bias0To100>偏差 0~100%</RimTalkGenKnowledge.Settings.Thing.Bias0To100>
+  <RimTalkGenKnowledge.Settings.Thing.BiasGt100>偏差 &gt;100%</RimTalkGenKnowledge.Settings.Thing.BiasGt100>
   <RimTalkGenKnowledge.Settings.PawnKind.IncludeAnimals>包含动物</RimTalkGenKnowledge.Settings.PawnKind.IncludeAnimals>
   <RimTalkGenKnowledge.Settings.PawnKind.IncludeMechanoids>包含机械体</RimTalkGenKnowledge.Settings.PawnKind.IncludeMechanoids>
   <RimTalkGenKnowledge.Settings.PawnKind.WeightCombatPowerLog10>战力 log10 权重</RimTalkGenKnowledge.Settings.PawnKind.WeightCombatPowerLog10>
@@ -37,6 +97,7 @@
   <RimTalkGenKnowledge.Settings.Trait.WeightCommonalityLog10>Commonality log10 权重</RimTalkGenKnowledge.Settings.Trait.WeightCommonalityLog10>
   <RimTalkGenKnowledge.Settings.Research.IncludePrerequisites>包含前置科技</RimTalkGenKnowledge.Settings.Research.IncludePrerequisites>
   <RimTalkGenKnowledge.Settings.Research.IncludePostrequisites>包含后续科技</RimTalkGenKnowledge.Settings.Research.IncludePostrequisites>
+  <RimTalkGenKnowledge.Settings.Research.ShowNumericValues>显示数值</RimTalkGenKnowledge.Settings.Research.ShowNumericValues>
   <RimTalkGenKnowledge.Settings.Research.UseCostLog10Weight>使用 cost 的 log10 权重</RimTalkGenKnowledge.Settings.Research.UseCostLog10Weight>
   <RimTalkGenKnowledge.Settings.Research.WeightCost>cost 权重</RimTalkGenKnowledge.Settings.Research.WeightCost>
   <RimTalkGenKnowledge.Settings.Research.WeightPrereqCount>前置数量权重</RimTalkGenKnowledge.Settings.Research.WeightPrereqCount>
@@ -53,6 +114,7 @@
   <RimTalkGenKnowledge.Settings.Hediff.WeightIsLethal>isLethal 权重</RimTalkGenKnowledge.Settings.Hediff.WeightIsLethal>
   <RimTalkGenKnowledge.Settings.Gene.IncludeArchiteOnly>仅包含 Archite 基因</RimTalkGenKnowledge.Settings.Gene.IncludeArchiteOnly>
   <RimTalkGenKnowledge.Settings.Gene.IncludeNegativeGenes>包含负面基因</RimTalkGenKnowledge.Settings.Gene.IncludeNegativeGenes>
+  <RimTalkGenKnowledge.Settings.Gene.ShowNumericValues>显示数值</RimTalkGenKnowledge.Settings.Gene.ShowNumericValues>
   <RimTalkGenKnowledge.Settings.Gene.WeightBiostatCpx>biostatCpx 权重</RimTalkGenKnowledge.Settings.Gene.WeightBiostatCpx>
   <RimTalkGenKnowledge.Settings.Gene.WeightBiostatMet>biostatMet 权重</RimTalkGenKnowledge.Settings.Gene.WeightBiostatMet>
   <RimTalkGenKnowledge.Settings.Gene.WeightBiostatArc>biostatArc 权重</RimTalkGenKnowledge.Settings.Gene.WeightBiostatArc>
@@ -120,27 +182,72 @@
   <RimTalkGenKnowledge.Text.Faction.LabelDescDelimiter>：</RimTalkGenKnowledge.Text.Faction.LabelDescDelimiter>
   <RimTalkGenKnowledge.Text.Faction.PermanentEnemyPrefix>永久敌对：</RimTalkGenKnowledge.Text.Faction.PermanentEnemyPrefix>
   <RimTalkGenKnowledge.Text.Faction.TechLevelPrefix>技术水平：</RimTalkGenKnowledge.Text.Faction.TechLevelPrefix>
+  <RimTalkGenKnowledge.Text.TechLevel.Undefined>未知</RimTalkGenKnowledge.Text.TechLevel.Undefined>
+  <RimTalkGenKnowledge.Text.TechLevel.Animal>动物</RimTalkGenKnowledge.Text.TechLevel.Animal>
+  <RimTalkGenKnowledge.Text.TechLevel.Neolithic>新石器</RimTalkGenKnowledge.Text.TechLevel.Neolithic>
+  <RimTalkGenKnowledge.Text.TechLevel.Medieval>中世纪</RimTalkGenKnowledge.Text.TechLevel.Medieval>
+  <RimTalkGenKnowledge.Text.TechLevel.Industrial>工业</RimTalkGenKnowledge.Text.TechLevel.Industrial>
+  <RimTalkGenKnowledge.Text.TechLevel.Spacer>太空</RimTalkGenKnowledge.Text.TechLevel.Spacer>
+  <RimTalkGenKnowledge.Text.TechLevel.Ultra>超科技</RimTalkGenKnowledge.Text.TechLevel.Ultra>
+  <RimTalkGenKnowledge.Text.TechLevel.Archotech>远古超智</RimTalkGenKnowledge.Text.TechLevel.Archotech>
+  <RimTalkGenKnowledge.Text.Thing.Category.Item>物品</RimTalkGenKnowledge.Text.Thing.Category.Item>
+  <RimTalkGenKnowledge.Text.Thing.Category.Building>建筑</RimTalkGenKnowledge.Text.Thing.Category.Building>
+  <RimTalkGenKnowledge.Text.Thing.Category.Pawn>生物</RimTalkGenKnowledge.Text.Thing.Category.Pawn>
+  <RimTalkGenKnowledge.Text.Thing.Category.Plant>植物</RimTalkGenKnowledge.Text.Thing.Category.Plant>
+  <RimTalkGenKnowledge.Text.Thing.Category.Filth>污物</RimTalkGenKnowledge.Text.Thing.Category.Filth>
+  <RimTalkGenKnowledge.Text.Thing.Category.Mote>特效</RimTalkGenKnowledge.Text.Thing.Category.Mote>
+  <RimTalkGenKnowledge.Text.Thing.Category.Projectile>投射物</RimTalkGenKnowledge.Text.Thing.Category.Projectile>
+  <RimTalkGenKnowledge.Text.Thing.Tag.AnimalCommon>常见动物</RimTalkGenKnowledge.Text.Thing.Tag.AnimalCommon>
+  <RimTalkGenKnowledge.Text.Thing.Tag.AnimalDryad>树灵动物</RimTalkGenKnowledge.Text.Thing.Tag.AnimalDryad>
+  <RimTalkGenKnowledge.Text.Thing.Tag.AnimalExotic>异域动物</RimTalkGenKnowledge.Text.Thing.Tag.AnimalExotic>
+  <RimTalkGenKnowledge.Text.Thing.Tag.AnimalFarm>农场动物</RimTalkGenKnowledge.Text.Thing.Tag.AnimalFarm>
+  <RimTalkGenKnowledge.Text.Thing.Tag.AnimalFighter>战斗动物</RimTalkGenKnowledge.Text.Thing.Tag.AnimalFighter>
+  <RimTalkGenKnowledge.Text.Thing.Tag.AnimalInsect>虫类动物</RimTalkGenKnowledge.Text.Thing.Tag.AnimalInsect>
+  <RimTalkGenKnowledge.Text.Thing.Tag.AnimalPart>动物产物</RimTalkGenKnowledge.Text.Thing.Tag.AnimalPart>
+  <RimTalkGenKnowledge.Text.Thing.Tag.AnimalPet>宠物</RimTalkGenKnowledge.Text.Thing.Tag.AnimalPet>
+  <RimTalkGenKnowledge.Text.Thing.Tag.AnimalUncommon>少见动物</RimTalkGenKnowledge.Text.Thing.Tag.AnimalUncommon>
+  <RimTalkGenKnowledge.Text.Thing.Tag.Armor>护甲</RimTalkGenKnowledge.Text.Thing.Tag.Armor>
+  <RimTalkGenKnowledge.Text.Thing.Tag.Art>艺术品</RimTalkGenKnowledge.Text.Thing.Tag.Art>
+  <RimTalkGenKnowledge.Text.Thing.Tag.Artifact>神器</RimTalkGenKnowledge.Text.Thing.Tag.Artifact>
+  <RimTalkGenKnowledge.Text.Thing.Tag.Artillery>火炮</RimTalkGenKnowledge.Text.Thing.Tag.Artillery>
+  <RimTalkGenKnowledge.Text.Thing.Tag.BasicClothing>基础服装</RimTalkGenKnowledge.Text.Thing.Tag.BasicClothing>
+  <RimTalkGenKnowledge.Text.Thing.Tag.Bionic>仿生</RimTalkGenKnowledge.Text.Thing.Tag.Bionic>
+  <RimTalkGenKnowledge.Text.Thing.Tag.Clothing>服装</RimTalkGenKnowledge.Text.Thing.Tag.Clothing>
+  <RimTalkGenKnowledge.Text.Thing.Tag.Drugs>药物</RimTalkGenKnowledge.Text.Thing.Tag.Drugs>
+  <RimTalkGenKnowledge.Text.Thing.Tag.ExoticBuilding>异域建筑</RimTalkGenKnowledge.Text.Thing.Tag.ExoticBuilding>
+  <RimTalkGenKnowledge.Text.Thing.Tag.ExoticMisc>异域杂项</RimTalkGenKnowledge.Text.Thing.Tag.ExoticMisc>
+  <RimTalkGenKnowledge.Text.Thing.Tag.Gun>枪械</RimTalkGenKnowledge.Text.Thing.Tag.Gun>
+  <RimTalkGenKnowledge.Text.Thing.Tag.GunHeavy>重型枪械</RimTalkGenKnowledge.Text.Thing.Tag.GunHeavy>
+  <RimTalkGenKnowledge.Text.Thing.Tag.MortarShell>迫击炮弹</RimTalkGenKnowledge.Text.Thing.Tag.MortarShell>
+  <RimTalkGenKnowledge.Text.Thing.Tag.MusicalInstrument>乐器</RimTalkGenKnowledge.Text.Thing.Tag.MusicalInstrument>
+  <RimTalkGenKnowledge.Text.Thing.Tag.PsychicApparel>灵能服装</RimTalkGenKnowledge.Text.Thing.Tag.PsychicApparel>
+  <RimTalkGenKnowledge.Text.Thing.Tag.PsychicWeapon>灵能武器</RimTalkGenKnowledge.Text.Thing.Tag.PsychicWeapon>
+  <RimTalkGenKnowledge.Text.Thing.Tag.Serum>血清</RimTalkGenKnowledge.Text.Thing.Tag.Serum>
+  <RimTalkGenKnowledge.Text.Thing.Tag.Techprint>科技蓝图</RimTalkGenKnowledge.Text.Thing.Tag.Techprint>
+  <RimTalkGenKnowledge.Text.Thing.Tag.WeaponMelee>近战武器</RimTalkGenKnowledge.Text.Thing.Tag.WeaponMelee>
+  <RimTalkGenKnowledge.Text.Thing.Tag.WeaponRanged>远程武器</RimTalkGenKnowledge.Text.Thing.Tag.WeaponRanged>
   <RimTalkGenKnowledge.Text.Gene.Archites.Line>需要 {0} 个超凡胶囊</RimTalkGenKnowledge.Text.Gene.Archites.Line>
+  <RimTalkGenKnowledge.Text.Gene.Archites.LineNoNumeric>需要超凡胶囊</RimTalkGenKnowledge.Text.Gene.Archites.LineNoNumeric>
   <RimTalkGenKnowledge.Text.Gene.Complexity.High>高复杂度</RimTalkGenKnowledge.Text.Gene.Complexity.High>
   <RimTalkGenKnowledge.Text.Gene.Complexity.Line>复杂度 {0}：{1}</RimTalkGenKnowledge.Text.Gene.Complexity.Line>
   <RimTalkGenKnowledge.Text.Gene.Complexity.Low>低复杂度</RimTalkGenKnowledge.Text.Gene.Complexity.Low>
   <RimTalkGenKnowledge.Text.Gene.Complexity.Mid>中复杂度</RimTalkGenKnowledge.Text.Gene.Complexity.Mid>
-  <RimTalkGenKnowledge.Text.Gene.Metabolism.Costly>消耗更多</RimTalkGenKnowledge.Text.Gene.Metabolism.Costly>
-  <RimTalkGenKnowledge.Text.Gene.Metabolism.LessCost>减少消耗</RimTalkGenKnowledge.Text.Gene.Metabolism.LessCost>
+  <RimTalkGenKnowledge.Text.Gene.Metabolism.Costly>代谢消耗增加</RimTalkGenKnowledge.Text.Gene.Metabolism.Costly>
+  <RimTalkGenKnowledge.Text.Gene.Metabolism.LessCost>代谢消耗减少</RimTalkGenKnowledge.Text.Gene.Metabolism.LessCost>
   <RimTalkGenKnowledge.Text.Gene.Metabolism.LineRaw>代谢率 {0}</RimTalkGenKnowledge.Text.Gene.Metabolism.LineRaw>
   <RimTalkGenKnowledge.Text.Gene.Metabolism.LineWithSummary>代谢率 {0}：{1}</RimTalkGenKnowledge.Text.Gene.Metabolism.LineWithSummary>
-  <RimTalkGenKnowledge.Text.Gene.Metabolism.MuchLessCost>大幅减少消耗</RimTalkGenKnowledge.Text.Gene.Metabolism.MuchLessCost>
-  <RimTalkGenKnowledge.Text.Gene.Metabolism.VeryCostly>消耗极多</RimTalkGenKnowledge.Text.Gene.Metabolism.VeryCostly>
+  <RimTalkGenKnowledge.Text.Gene.Metabolism.MuchLessCost>代谢消耗大幅减少</RimTalkGenKnowledge.Text.Gene.Metabolism.MuchLessCost>
+  <RimTalkGenKnowledge.Text.Gene.Metabolism.VeryCostly>代谢消耗大幅增加</RimTalkGenKnowledge.Text.Gene.Metabolism.VeryCostly>
   <RimTalkGenKnowledge.Text.Gene.StatsSeparator>；</RimTalkGenKnowledge.Text.Gene.StatsSeparator>
-  <RimTalkGenKnowledge.Text.Hediff.BadLabel.Negative>负面效果</RimTalkGenKnowledge.Text.Hediff.BadLabel.Negative>
-  <RimTalkGenKnowledge.Text.Hediff.BadLabel.Positive>正面效果</RimTalkGenKnowledge.Text.Hediff.BadLabel.Positive>
+  <RimTalkGenKnowledge.Text.Hediff.BadLabel.Negative>是负面效果</RimTalkGenKnowledge.Text.Hediff.BadLabel.Negative>
+  <RimTalkGenKnowledge.Text.Hediff.BadLabel.Positive>是正面效果</RimTalkGenKnowledge.Text.Hediff.BadLabel.Positive>
   <RimTalkGenKnowledge.Text.Hediff.ChronicLine>长期状态</RimTalkGenKnowledge.Text.Hediff.ChronicLine>
-  <RimTalkGenKnowledge.Text.Hediff.EffectPrefix>效果：</RimTalkGenKnowledge.Text.Hediff.EffectPrefix>
+  <RimTalkGenKnowledge.Text.Hediff.EffectPrefix></RimTalkGenKnowledge.Text.Hediff.EffectPrefix>
   <RimTalkGenKnowledge.Text.Hediff.TendableLine>可治疗</RimTalkGenKnowledge.Text.Hediff.TendableLine>
   <RimTalkGenKnowledge.Text.Meme.CategoryPrefix>类别：</RimTalkGenKnowledge.Text.Meme.CategoryPrefix>
-  <RimTalkGenKnowledge.Text.Meme.Impact.High>高影响</RimTalkGenKnowledge.Text.Meme.Impact.High>
-  <RimTalkGenKnowledge.Text.Meme.Impact.Low>低影响</RimTalkGenKnowledge.Text.Meme.Impact.Low>
-  <RimTalkGenKnowledge.Text.Meme.Impact.Mid>中影响</RimTalkGenKnowledge.Text.Meme.Impact.Mid>
+  <RimTalkGenKnowledge.Text.Meme.Impact.High>高影响文化形态</RimTalkGenKnowledge.Text.Meme.Impact.High>
+  <RimTalkGenKnowledge.Text.Meme.Impact.Low>低影响文化形态</RimTalkGenKnowledge.Text.Meme.Impact.Low>
+  <RimTalkGenKnowledge.Text.Meme.Impact.Mid>中影响文化形态</RimTalkGenKnowledge.Text.Meme.Impact.Mid>
   <RimTalkGenKnowledge.Text.Meme.ImpactPrefix>影响：</RimTalkGenKnowledge.Text.Meme.ImpactPrefix>
   <RimTalkGenKnowledge.Text.PawnKind.CombatPowerLevel.High>高</RimTalkGenKnowledge.Text.PawnKind.CombatPowerLevel.High>
   <RimTalkGenKnowledge.Text.PawnKind.CombatPowerLevel.Low>低</RimTalkGenKnowledge.Text.PawnKind.CombatPowerLevel.Low>
@@ -151,6 +258,7 @@
   <RimTalkGenKnowledge.Text.PawnKind.RacePrefix>种族：</RimTalkGenKnowledge.Text.PawnKind.RacePrefix>
   <RimTalkGenKnowledge.Text.Research.CostDifficulty.Easy>简单</RimTalkGenKnowledge.Text.Research.CostDifficulty.Easy>
   <RimTalkGenKnowledge.Text.Research.CostDifficulty.Hard>困难</RimTalkGenKnowledge.Text.Research.CostDifficulty.Hard>
+  <RimTalkGenKnowledge.Text.Research.CostDifficulty.Normal>普通</RimTalkGenKnowledge.Text.Research.CostDifficulty.Normal>
   <RimTalkGenKnowledge.Text.Research.CostDifficultyLine>研究难度：{0}</RimTalkGenKnowledge.Text.Research.CostDifficultyLine>
   <RimTalkGenKnowledge.Text.Thing.Filter.FertilizedEggTokens>已受精,未受精,fertilized,unfertilized</RimTalkGenKnowledge.Text.Thing.Filter.FertilizedEggTokens>
   <RimTalkGenKnowledge.Text.Thing.Filter.IntermediateStateTokens>建造中,未完成,unfinished,building under construction,under construction</RimTalkGenKnowledge.Text.Thing.Filter.IntermediateStateTokens>
@@ -160,6 +268,7 @@
   <RimTalkGenKnowledge.Text.Thing.Line.ConstructionSkill>建造技能需求：{0}</RimTalkGenKnowledge.Text.Thing.Line.ConstructionSkill>
   <RimTalkGenKnowledge.Text.Thing.Line.EggIntervalPrefix>产蛋间隔：</RimTalkGenKnowledge.Text.Thing.Line.EggIntervalPrefix>
   <RimTalkGenKnowledge.Text.Thing.Line.FertilityMin>最低肥沃需求：{0}%</RimTalkGenKnowledge.Text.Thing.Line.FertilityMin>
+  <RimTalkGenKnowledge.Text.Thing.Line.CannotGestate>无法妊娠</RimTalkGenKnowledge.Text.Thing.Line.CannotGestate>
   <RimTalkGenKnowledge.Text.Thing.Line.GestationDays>妊娠周期：{0}{1}</RimTalkGenKnowledge.Text.Thing.Line.GestationDays>
   <RimTalkGenKnowledge.Text.Thing.Line.GrowDays>生长时间：{0}{1}</RimTalkGenKnowledge.Text.Thing.Line.GrowDays>
   <RimTalkGenKnowledge.Text.Thing.Line.HitPoints>耐久：{0}</RimTalkGenKnowledge.Text.Thing.Line.HitPoints>
@@ -230,9 +339,9 @@
   <RimTalkGenKnowledge.Text.Thing.Prop.market_value.Display>价值</RimTalkGenKnowledge.Text.Thing.Prop.market_value.Display>
   <RimTalkGenKnowledge.Text.Thing.Prop.market_value.High>价值偏高</RimTalkGenKnowledge.Text.Thing.Prop.market_value.High>
   <RimTalkGenKnowledge.Text.Thing.Prop.market_value.Low>价值偏低</RimTalkGenKnowledge.Text.Thing.Prop.market_value.Low>
-  <RimTalkGenKnowledge.Text.Thing.Prop.mass.Display>质量</RimTalkGenKnowledge.Text.Thing.Prop.mass.Display>
-  <RimTalkGenKnowledge.Text.Thing.Prop.mass.High>质量偏高</RimTalkGenKnowledge.Text.Thing.Prop.mass.High>
-  <RimTalkGenKnowledge.Text.Thing.Prop.mass.Low>质量偏低</RimTalkGenKnowledge.Text.Thing.Prop.mass.Low>
+  <RimTalkGenKnowledge.Text.Thing.Prop.mass.Display>重量</RimTalkGenKnowledge.Text.Thing.Prop.mass.Display>
+  <RimTalkGenKnowledge.Text.Thing.Prop.mass.High>重量偏高</RimTalkGenKnowledge.Text.Thing.Prop.mass.High>
+  <RimTalkGenKnowledge.Text.Thing.Prop.mass.Low>重量偏低</RimTalkGenKnowledge.Text.Thing.Prop.mass.Low>
   <RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.Display>耐久</RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.Display>
   <RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.High>耐久偏高</RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.High>
   <RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.Low>耐久偏低</RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.Low>
@@ -303,6 +412,8 @@
   <RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.High>制作工作量偏高</RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.High>
   <RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.Low>制作工作量偏低</RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.Low>
   <RimTalkGenKnowledge.Text.Thing.Separator.Semicolon>；</RimTalkGenKnowledge.Text.Thing.Separator.Semicolon>
+  <RimTalkGenKnowledge.Text.Thing.Separator.CategoryList>，</RimTalkGenKnowledge.Text.Thing.Separator.CategoryList>
+  <RimTalkGenKnowledge.Text.Thing.Line.CategoryMerged>（{0}）</RimTalkGenKnowledge.Text.Thing.Line.CategoryMerged>
   <RimTalkGenKnowledge.Text.Thing.Stage.NegLight>偏低</RimTalkGenKnowledge.Text.Thing.Stage.NegLight>
   <RimTalkGenKnowledge.Text.Thing.Stage.NegStrong>极低</RimTalkGenKnowledge.Text.Thing.Stage.NegStrong>
   <RimTalkGenKnowledge.Text.Thing.Stage.PosLight>偏高</RimTalkGenKnowledge.Text.Thing.Stage.PosLight>

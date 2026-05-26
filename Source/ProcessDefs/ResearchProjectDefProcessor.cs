@@ -20,8 +20,8 @@ namespace GenKnowledge.ProcessDefs
             {
                 Enabled = true,
                 IncludeModDefs = true,
-                TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: {{description}} (cost={{cost}}, tech={{techLevel}}){{costDifficultyLine}}",
+                TagTemplate = "RimTalkGenKnowledge.DefaultTemplate.Research.Tag".Translate(),
+                KnowledgeTemplate = "RimTalkGenKnowledge.DefaultTemplate.Research.Knowledge".Translate(),
                 BaseImportance = 0.1f,
                 ImportanceMin = 0.01f,
                 ImportanceMax = 0.83f,
@@ -66,6 +66,7 @@ namespace GenKnowledge.ProcessDefs
                 new PlaceholderDescriptor { Key = "description", Token = "{{description}}", Description = "Research description" },
                 new PlaceholderDescriptor { Key = "cost", Token = "{{cost}}", Description = "Research cost" },
                 new PlaceholderDescriptor { Key = "costDifficulty", Token = "{{costDifficulty}}", Description = "Cost difficulty label" },
+                new PlaceholderDescriptor { Key = "researchDifficulty", Token = "{{researchDifficulty}}", Description = "Research difficulty label" },
                 new PlaceholderDescriptor { Key = "costDifficultyLine", Token = "{{costDifficultyLine}}", Description = "Cost difficulty line" },
                 new PlaceholderDescriptor { Key = "techLevel", Token = "{{techLevel}}", Description = "Tech level" },
                 new PlaceholderDescriptor { Key = "prerequisites", Token = "{{prerequisites}}", Description = "Prerequisite projects" },
@@ -102,6 +103,7 @@ namespace GenKnowledge.ProcessDefs
         public override IEnumerable<GeneratedKnowledgeItem> ProcessDefs(ProcessDefContext context, ProcessDefBaseConfig config)
         {
             ResearchProjectProcessDefConfig typed = config as ResearchProjectProcessDefConfig ?? (ResearchProjectProcessDefConfig)CreateDefaultConfig();
+            bool showNumericValues = context?.ShowNumericValues ?? false;
             if (!typed.Enabled)
             {
                 yield break;
@@ -144,17 +146,25 @@ namespace GenKnowledge.ProcessDefs
 
                 float cost = def.baseCost;
                 string costDifficulty = GetCostDifficultyLabel(cost);
-                string costDifficultyLine = string.IsNullOrWhiteSpace(costDifficulty)
+                string researchDifficulty = string.IsNullOrWhiteSpace(costDifficulty)
+                    ? "RimTalkGenKnowledge.Text.Research.CostDifficulty.Normal".Translate().ToString()
+                    : costDifficulty;
+                string costDifficultyLine = (!showNumericValues || string.IsNullOrWhiteSpace(costDifficulty))
                     ? string.Empty
                     : "\n" + string.Format("RimTalkGenKnowledge.Text.Research.CostDifficultyLine".Translate(), costDifficulty);
+                string costDisplay = showNumericValues
+                    ? cost.ToString("0.##")
+                    : researchDifficulty;
+                string techLevelText = LocalizeTechLevel(def.techLevel);
                 SetTemplateValues(new Dictionary<string, string>
                 {
                     ["label"] = label,
                     ["description"] = description,
-                    ["cost"] = cost.ToString("0.##"),
+                    ["cost"] = costDisplay,
                     ["costDifficulty"] = costDifficulty,
+                    ["researchDifficulty"] = researchDifficulty,
                     ["costDifficultyLine"] = costDifficultyLine,
-                    ["techLevel"] = def.techLevel.ToString(),
+                    ["techLevel"] = techLevelText,
                     ["prerequisites"] = prerequisites,
                     ["postrequisites"] = postrequisites,
                     ["defName"] = def.defName
@@ -234,6 +244,30 @@ namespace GenKnowledge.ProcessDefs
             }
 
             return string.Empty;
+        }
+
+        private static string LocalizeTechLevel(TechLevel techLevel)
+        {
+            switch (techLevel)
+            {
+                case TechLevel.Animal:
+                    return "RimTalkGenKnowledge.Text.TechLevel.Animal".Translate();
+                case TechLevel.Neolithic:
+                    return "RimTalkGenKnowledge.Text.TechLevel.Neolithic".Translate();
+                case TechLevel.Medieval:
+                    return "RimTalkGenKnowledge.Text.TechLevel.Medieval".Translate();
+                case TechLevel.Industrial:
+                    return "RimTalkGenKnowledge.Text.TechLevel.Industrial".Translate();
+                case TechLevel.Spacer:
+                    return "RimTalkGenKnowledge.Text.TechLevel.Spacer".Translate();
+                case TechLevel.Ultra:
+                    return "RimTalkGenKnowledge.Text.TechLevel.Ultra".Translate();
+                case TechLevel.Archotech:
+                    return "RimTalkGenKnowledge.Text.TechLevel.Archotech".Translate();
+                case TechLevel.Undefined:
+                default:
+                    return "RimTalkGenKnowledge.Text.TechLevel.Undefined".Translate();
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ namespace GenKnowledge
     {
         public bool enableGlobalErrorReporting = false;
         public bool debugIncludeInternalKeys = false;
+        public bool showNumericValues = false;
         public bool enableRealWorldSkipList = true;
         public bool enableHighRedundancySkipList = false;
         public float minKnowledgeImportance = 0.21f;
@@ -23,6 +24,7 @@ namespace GenKnowledge
         {
             Scribe_Values.Look(ref enableGlobalErrorReporting, "enableGlobalErrorReporting", false);
             Scribe_Values.Look(ref debugIncludeInternalKeys, "debugIncludeInternalKeys", false);
+            Scribe_Values.Look(ref showNumericValues, "showNumericValues", false);
             Scribe_Values.Look(ref enableRealWorldSkipList, "enableRealWorldSkipList", true);
             Scribe_Values.Look(ref enableHighRedundancySkipList, "enableHighRedundancySkipList", false);
             Scribe_Values.Look(ref minKnowledgeImportance, "minKnowledgeImportance", 0.21f);

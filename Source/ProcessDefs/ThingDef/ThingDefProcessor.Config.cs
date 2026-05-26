@@ -113,7 +113,7 @@ namespace GenKnowledge.ProcessDefs
             }
             EnsureProperty(config, "max_hit_points", T("RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.Display"), 20f, 300f, true, false, T("RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.max_hit_points.High"));
             EnsureProperty(config, "comfort", T("RimTalkGenKnowledge.Text.Thing.Prop.comfort.Display"), 0.5f, 1.0f, true, false, T("RimTalkGenKnowledge.Text.Thing.Stage.NegLight"), T("RimTalkGenKnowledge.Text.Thing.Stage.PosLight"));
-            EnsureProperty(config, "flammability", T("RimTalkGenKnowledge.Text.Thing.Prop.flammability.Display"), 0.1f, 0.5f, true, false, T("RimTalkGenKnowledge.Text.Thing.Prop.flammability.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.flammability.High"));
+            EnsureProperty(config, "flammability", T("RimTalkGenKnowledge.Text.Thing.Prop.flammability.Display"), 0.1f, 0.5f, true, false, T("RimTalkGenKnowledge.Text.Thing.Prop.flammability.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.flammability.High"), 1f, false);
             EnsureProperty(config, "work_to_build", T("RimTalkGenKnowledge.Text.Thing.Prop.work_to_build.Display"), 500f, 5000f, true, false, T("RimTalkGenKnowledge.Text.Thing.Prop.work_to_build.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.work_to_build.High"));
             EnsureProperty(config, "work_to_make", T("RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.Display"), 10f, 500f, true, false, T("RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.work_to_make.High"));
             EnsureProperty(config, "construction_skill_prerequisite", T("RimTalkGenKnowledge.Text.Thing.Prop.construction_skill_prerequisite.Display"), 0f, 3f, true, false, T("RimTalkGenKnowledge.Text.Thing.Prop.construction_skill_prerequisite.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.construction_skill_prerequisite.High"));
@@ -157,7 +157,7 @@ namespace GenKnowledge.ProcessDefs
             EnsureProperty(config, "armor_penetration_pct", T("RimTalkGenKnowledge.Text.Thing.Prop.armor_penetration_pct.Display"), 50f, 100f, true, true, T("RimTalkGenKnowledge.Text.Thing.Prop.armor_penetration_pct.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.armor_penetration_pct.High"));
             EnsureProperty(config, "sharp_damage_pct", T("RimTalkGenKnowledge.Text.Thing.Prop.sharp_damage_pct.Display"), 50f, 100f, true, true, T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.High"));
             EnsureProperty(config, "blunt_damage_pct", T("RimTalkGenKnowledge.Text.Thing.Prop.blunt_damage_pct.Display"), 50f, 100f, true, true, T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.Low"), T("RimTalkGenKnowledge.Text.Thing.Prop.damagePct.High"));
-            EnsureProperty(config, "stuff_max_hit_points_pct", T("RimTalkGenKnowledge.Text.Thing.Prop.stuff_max_hit_points_pct.Display"), 50f, 150f, true, true, T("RimTalkGenKnowledge.Text.Thing.Stage.NegLight"), T("RimTalkGenKnowledge.Text.Thing.Stage.PosLight"));
+            EnsureProperty(config, "stuff_max_hit_points_pct", T("RimTalkGenKnowledge.Text.Thing.Prop.stuff_max_hit_points_pct.Display"), 50f, 150f, true, true, T("RimTalkGenKnowledge.Text.Thing.Stage.NegLight"), T("RimTalkGenKnowledge.Text.Thing.Stage.PosLight"), 1f, false);
             RemoveProperty(config, "uninstall_work");
             RemoveProperty(config, "cost_total_count");
         }
@@ -170,13 +170,13 @@ namespace GenKnowledge.ProcessDefs
             }
         }
 
-        private static void EnsureProperty(ThingProcessDefConfig config, string key, string displayName, float rangeMin, float rangeMax, bool nonNegativeOnly, bool isPercent, string lowLabel, string highLabel, float scale = 1f)
+        private static void EnsureProperty(ThingProcessDefConfig config, string key, string displayName, float rangeMin, float rangeMax, bool nonNegativeOnly, bool isPercent, string lowLabel, string highLabel, float scale = 1f, bool enabledByDefault = true)
         {
             if (!config.PropertyDeviationConfigs.TryGetValue(key, out ThingPropertyDeviationConfig property) || property == null)
             {
                 config.PropertyDeviationConfigs[key] = new ThingPropertyDeviationConfig
                 {
-                    Enabled = true,
+                    Enabled = enabledByDefault,
                     DisplayName = displayName,
                     RangeMin = rangeMin,
                     RangeMax = rangeMax,

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -31,8 +32,8 @@ namespace GenKnowledge.ProcessDefs
             {
                 Enabled = true,
                 IncludeModDefs = true,
-                TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}{{labelDescDelimiter}}{{description}}\n{{techLevelPrefix}}{{techLevel}}\n{{permanentEnemyPrefix}}{{permanentEnemy}}\n{{humanlikePrefix}}{{humanlike}}",
+                TagTemplate = "RimTalkGenKnowledge.DefaultTemplate.Faction.Tag".Translate(),
+                KnowledgeTemplate = "RimTalkGenKnowledge.DefaultTemplate.Faction.Knowledge".Translate(),
                 BaseImportance = 0.5f,
                 ImportanceMin = 0.2f,
                 ImportanceMax = 0.9f,
@@ -79,7 +80,11 @@ namespace GenKnowledge.ProcessDefs
                 new PlaceholderDescriptor { Key = "humanlike", Token = "{{humanlike}}", Description = "Humanlike faction" },
                 new PlaceholderDescriptor { Key = "permanentEnemy", Token = "{{permanentEnemy}}", Description = "Permanent enemy faction" },
                 new PlaceholderDescriptor { Key = "isPlayer", Token = "{{isPlayer}}", Description = "Player faction" },
-                new PlaceholderDescriptor { Key = "defName", Token = "{{defName}}", Description = "Def name" }
+                new PlaceholderDescriptor { Key = "defName", Token = "{{defName}}", Description = "Def name" },
+                new PlaceholderDescriptor { Key = "labelDescDelimiter", Token = "{{labelDescDelimiter}}", Description = "Label/description delimiter" },
+                new PlaceholderDescriptor { Key = "techLevelPrefix", Token = "{{techLevelPrefix}}", Description = "Tech level prefix" },
+                new PlaceholderDescriptor { Key = "permanentEnemyPrefix", Token = "{{permanentEnemyPrefix}}", Description = "Permanent enemy prefix" },
+                new PlaceholderDescriptor { Key = "humanlikePrefix", Token = "{{humanlikePrefix}}", Description = "Humanlike prefix" }
             };
         }
 
@@ -151,39 +156,52 @@ namespace GenKnowledge.ProcessDefs
                 }
 
                 string techLevel = def.techLevel.ToString();
+                bool hasTechLevel = def.techLevel != TechLevel.Undefined;
                 float techMetric = techMap.TryGetValue(techLevel, out float mapped) ? mapped : 0f;
                 bool permanentEnemy = def.permanentEnemy;
                 bool humanlike = def.humanlikeFaction;
                 string description = ProcessDefUtility.TrimOrNull(def.description);
                 if (string.IsNullOrWhiteSpace(description))
                 {
-                    description = string.Format(
-                        "{0}{1}{2}{3}{4}{5}",
-                        "RimTalkGenKnowledge.Text.Faction.Fallback.TechLevelPrefix".Translate(),
-                        techLevel,
-                        "RimTalkGenKnowledge.Text.Faction.Fallback.PermanentEnemyPrefix".Translate(),
-                        permanentEnemy ? "RimTalkGenKnowledge.Text.Boolean.Yes".Translate() : "RimTalkGenKnowledge.Text.Boolean.No".Translate(),
-                        "RimTalkGenKnowledge.Text.Faction.Fallback.HumanlikePrefix".Translate(),
-                        humanlike ? "RimTalkGenKnowledge.Text.Boolean.Yes".Translate() : "RimTalkGenKnowledge.Text.Boolean.No".Translate());
+                    var fallbackParts = new List<string>();
+                    if (hasTechLevel)
+                    {
+                        fallbackParts.Add("RimTalkGenKnowledge.Text.Faction.Fallback.TechLevelPrefix".Translate() + techLevel);
+                    }
+                    if (permanentEnemy)
+                    {
+                        fallbackParts.Add(
+                            "RimTalkGenKnowledge.Text.Faction.Fallback.PermanentEnemyPrefix".Translate()
+                            + "RimTalkGenKnowledge.Text.Boolean.Yes".Translate());
+                    }
+
+                    description = string.Join(string.Empty, fallbackParts.ToArray());
                 }
+
+                string permanentEnemyText = permanentEnemy ? "RimTalkGenKnowledge.Text.Boolean.True".Translate().ToString() : string.Empty;
+                string permanentEnemyPrefix = permanentEnemy ? "RimTalkGenKnowledge.Text.Faction.PermanentEnemyPrefix".Translate().ToString() : string.Empty;
+
+                // Hide humanlike line by default; it is usually redundant for faction knowledge.
+                string humanlikeText = string.Empty;
+                string humanlikePrefix = string.Empty;
 
                 SetTemplateValues(new Dictionary<string, string>
                 {
                     ["label"] = label,
                     ["description"] = description,
-                    ["techLevel"] = techLevel,
-                    ["humanlike"] = humanlike ? "RimTalkGenKnowledge.Text.Boolean.True".Translate() : "RimTalkGenKnowledge.Text.Boolean.False".Translate(),
-                    ["permanentEnemy"] = permanentEnemy ? "RimTalkGenKnowledge.Text.Boolean.True".Translate() : "RimTalkGenKnowledge.Text.Boolean.False".Translate(),
+                    ["techLevel"] = hasTechLevel ? techLevel : string.Empty,
+                    ["humanlike"] = humanlikeText,
+                    ["permanentEnemy"] = permanentEnemyText,
                     ["isPlayer"] = isPlayer ? "true" : "false",
                     ["defName"] = def.defName,
                     ["labelDescDelimiter"] = "RimTalkGenKnowledge.Text.Faction.LabelDescDelimiter".Translate(),
-                    ["techLevelPrefix"] = "RimTalkGenKnowledge.Text.Faction.TechLevelPrefix".Translate(),
-                    ["permanentEnemyPrefix"] = "RimTalkGenKnowledge.Text.Faction.PermanentEnemyPrefix".Translate(),
-                    ["humanlikePrefix"] = "RimTalkGenKnowledge.Text.Faction.HumanlikePrefix".Translate()
+                    ["techLevelPrefix"] = hasTechLevel ? "RimTalkGenKnowledge.Text.Faction.TechLevelPrefix".Translate().ToString() : string.Empty,
+                    ["permanentEnemyPrefix"] = permanentEnemyPrefix,
+                    ["humanlikePrefix"] = humanlikePrefix
                 });
 
                 string tag = RenderTag(typed);
-                string content = RenderContent(typed);
+                string content = CleanupFactionDisplayLines(RenderContent(typed));
                 if (string.IsNullOrWhiteSpace(tag) || string.IsNullOrWhiteSpace(content))
                 {
                     continue;
@@ -202,6 +220,55 @@ namespace GenKnowledge.ProcessDefs
                     Importance = ComputeFinalImportance(raw, typed)
                 };
             }
+        }
+
+        private static string CleanupFactionDisplayLines(string content)
+        {
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                return string.Empty;
+            }
+
+            string normalized = content.Replace("\r\n", "\n").Replace('\r', '\n');
+            string humanlikePrefix = "RimTalkGenKnowledge.Text.Faction.HumanlikePrefix".Translate().ToString().Trim();
+            string permanentEnemyPrefix = "RimTalkGenKnowledge.Text.Faction.PermanentEnemyPrefix".Translate().ToString().Trim();
+            string falseCn = "RimTalkGenKnowledge.Text.Boolean.False".Translate().ToString().Trim();
+            string falseEn = "false";
+            string noCn = "RimTalkGenKnowledge.Text.Boolean.No".Translate().ToString().Trim();
+            string noEn = "no";
+
+            string[] lines = normalized.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            List<string> kept = new List<string>(lines.Length);
+            foreach (string rawLine in lines)
+            {
+                string line = rawLine.Trim();
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+
+                if (!string.IsNullOrEmpty(humanlikePrefix) && line.StartsWith(humanlikePrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (!string.IsNullOrEmpty(permanentEnemyPrefix) && line.StartsWith(permanentEnemyPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    string tail = line.Substring(permanentEnemyPrefix.Length).Trim();
+                    if (string.IsNullOrEmpty(tail)
+                        || string.Equals(tail, falseCn, StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(tail, falseEn, StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(tail, noCn, StringComparison.OrdinalIgnoreCase)
+                        || string.Equals(tail, noEn, StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+                }
+
+                kept.Add(line);
+            }
+
+            return kept.Count == 0 ? string.Empty : string.Join("\n", kept.Where(l => !string.IsNullOrWhiteSpace(l)));
         }
     }
 }

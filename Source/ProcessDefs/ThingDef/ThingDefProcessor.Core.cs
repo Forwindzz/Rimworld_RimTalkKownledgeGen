@@ -19,7 +19,14 @@ namespace GenKnowledge.ProcessDefs
             public string PropertyKey;
             public float SignedC;
             public float StrengthD;
+            public string TendencyText;
             public string DisplayLine;
+        }
+
+        private class SemanticLineEntry
+        {
+            public string PropertyKey;
+            public string Text;
         }
 
         public const string ProcessorId = "ThingDefProcessor";
@@ -32,8 +39,8 @@ namespace GenKnowledge.ProcessDefs
             {
                 Enabled = true,
                 IncludeModDefs = true,
-                TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}{{labelDelimiter}}{{description}}\n{{categoryPrefix}}{{categoryText}}\n{{techLevelLine}}\n{{modSourceLine}}\n{{hpLine}}\n{{categoryExtraText}}",
+                TagTemplate = "RimTalkGenKnowledge.DefaultTemplate.Thing.Tag".Translate(),
+                KnowledgeTemplate = "RimTalkGenKnowledge.DefaultTemplate.Thing.Knowledge".Translate(),
                 BaseImportance = 0.1f,
                 ImportanceMin = 0f,
                 ImportanceMax = 0.8f,
@@ -60,7 +67,7 @@ namespace GenKnowledge.ProcessDefs
                 IntermediateBuildStateTokens = "RimTalkGenKnowledge.Text.Thing.Filter.IntermediateStateTokens".Translate(),
                 MaxSemanticLinesGlobal = 8,
                 SpecialValueTopN = 3,
-                EnableFallbackAttributeOutput = true,
+                EnableFallbackAttributeOutput = false,
                 FallbackAttributeMaxLines = 6,
                 FallbackAttributeExcludeKeys = "graphicData,uiIconPath,drawerType,altitudeLayer"
             };

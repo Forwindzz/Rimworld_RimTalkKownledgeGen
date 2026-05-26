@@ -19,8 +19,8 @@ namespace GenKnowledge.ProcessDefs
             {
                 Enabled = true,
                 IncludeModDefs = true,
-                TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: {{description}}",
+                TagTemplate = "RimTalkGenKnowledge.DefaultTemplate.Trait.Tag".Translate(),
+                KnowledgeTemplate = "RimTalkGenKnowledge.DefaultTemplate.Trait.Knowledge".Translate(),
                 BaseImportance = 0.6f,
                 ImportanceMin = 0.1f,
                 ImportanceMax = 0.9f,

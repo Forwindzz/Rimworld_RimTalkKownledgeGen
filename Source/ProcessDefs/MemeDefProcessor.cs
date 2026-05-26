@@ -19,8 +19,8 @@ namespace GenKnowledge.ProcessDefs
             {
                 Enabled = true,
                 IncludeModDefs = true,
-                TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: {{description}}{{categoryLine}}\n{{impactLinePrefix}}{{impactLabel}}",
+                TagTemplate = "RimTalkGenKnowledge.DefaultTemplate.Meme.Tag".Translate(),
+                KnowledgeTemplate = "RimTalkGenKnowledge.DefaultTemplate.Meme.Knowledge".Translate(),
                 BaseImportance = 0.5f,
                 ImportanceMin = 0.05f,
                 ImportanceMax = 0.82f,

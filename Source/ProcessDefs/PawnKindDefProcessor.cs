@@ -19,8 +19,8 @@ namespace GenKnowledge.ProcessDefs
             {
                 Enabled = true,
                 IncludeModDefs = true,
-                TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{racePrefix}}{{race}}{{combatPowerPrefix}}{{combatPower}}{{combatPowerLevelSuffix}}{{factionPrefix}}{{faction}}{{descriptionLine}}",
+                TagTemplate = "RimTalkGenKnowledge.DefaultTemplate.PawnKind.Tag".Translate(),
+                KnowledgeTemplate = "RimTalkGenKnowledge.DefaultTemplate.PawnKind.Knowledge".Translate(),
                 BaseImportance = 0.5f,
                 ImportanceMin = 0.05f,
                 ImportanceMax = 0.85f,

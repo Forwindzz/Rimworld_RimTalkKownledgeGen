@@ -13,6 +13,7 @@ namespace GenKnowledge.ProcessDefs
         public override IEnumerable<GeneratedKnowledgeItem> ProcessDefs(ProcessDefContext context, ProcessDefBaseConfig config)
         {
             ThingProcessDefConfig typed = config as ThingProcessDefConfig ?? (ThingProcessDefConfig)CreateDefaultConfig();
+            bool showNumericValues = context?.ShowNumericValues ?? false;
             EnsureDefaults(typed);
             if (!typed.Enabled)
             {
@@ -69,38 +70,62 @@ namespace GenKnowledge.ProcessDefs
                 float mass = def.BaseMass;
                 int stackLimit = def.stackLimit;
                 float maxHitPoints = ResolveMaxHitPoints(def);
-                string techLevel = def.techLevel.ToString();
+                string techLevel = LocalizeTechLevel(def.techLevel.ToString());
                 string thingCategories = JoinThingCategoryLabels(def);
-                string tradeTags = JoinStrings(def.tradeTags);
-                string weaponTags = JoinStrings(def.weaponTags);
+                string tradeTags = JoinStrings(def.tradeTags, true);
+                string weaponTags = JoinStrings(def.weaponTags, true);
                 string modSource = ResolveModSource(def);
-                string categoryText = BuildCategoryText(category, thingCategories, tradeTags, weaponTags);
+                string categoryText = BuildCategoryText(LocalizeThingCategory(category), thingCategories, tradeTags, weaponTags);
 
-                List<PropertyObservation> observations = BuildObservations(def, typed, typed.DebugForceShowDeviation);
+                List<PropertyObservation> observations = BuildObservations(def, typed, typed.DebugForceShowDeviation, showNumericValues);
                 int globalLimit = Math.Max(1, typed.MaxSemanticLinesGlobal);
                 int lineLimit = globalLimit;
                 List<PropertyObservation> selected = observations.OrderByDescending(o => o.StrengthD).Take(lineLimit).ToList();
                 float specialValueScore = observations.Sum(o => o.StrengthD);
+                bool showMarketLine = typed.DebugForceShowDeviation || IsObviousDeviation(selected, "market_value");
+                bool showHpLine = typed.DebugForceShowDeviation || IsObviousDeviation(selected, "max_hit_points");
 
-                List<string> semanticLines = BuildDefSemanticLines(def, typed.DebugForceShowDeviation);
+                List<SemanticLineEntry> semanticLines = BuildDefSemanticLines(def, typed, typed.DebugForceShowDeviation);
                 string categoryExtraText = string.Empty;
                 if (typed.EnableCategoryExtraText)
                 {
+                    HashSet<string> selectedKeys = new HashSet<string>(
+                        selected.Where(o => !string.IsNullOrWhiteSpace(o.PropertyKey)).Select(o => o.PropertyKey),
+                        StringComparer.OrdinalIgnoreCase);
+
+                    // Avoid repeating the same concept in both dedicated line and deviation list.
+                    if (showMarketLine)
+                    {
+                        selectedKeys.Add("market_value");
+                    }
+                    if (showHpLine)
+                    {
+                        selectedKeys.Add("max_hit_points");
+                    }
+
                     var combined = new List<string>();
-                    combined.AddRange(selected.Select(o => o.DisplayLine).Where(s => !string.IsNullOrWhiteSpace(s)));
-                    combined.AddRange(semanticLines.Where(s => !string.IsNullOrWhiteSpace(s)));
+                    combined.AddRange(
+                        selected
+                            .Where(o => !(showMarketLine && string.Equals(o.PropertyKey, "market_value", StringComparison.OrdinalIgnoreCase)))
+                            .Where(o => !(showHpLine && string.Equals(o.PropertyKey, "max_hit_points", StringComparison.OrdinalIgnoreCase)))
+                            .Select(o => o.DisplayLine)
+                            .Where(s => !string.IsNullOrWhiteSpace(s)));
+                    combined.AddRange(
+                        semanticLines
+                            .Where(s => !string.IsNullOrWhiteSpace(s?.Text))
+                            .Where(s => showNumericValues || string.IsNullOrWhiteSpace(s.PropertyKey))
+                            .Where(s => showNumericValues || !selectedKeys.Contains(s.PropertyKey))
+                            .Where(s => showNumericValues || !ContainsDigit(s.Text))
+                            .Select(s => s.Text));
                     categoryExtraText = string.Join("；", combined.Take(lineLimit).ToArray());
                 }
 
                 string marketValueText = typed.EnablePriceFeelingText
-                    ? BuildValueWithTendency(marketValue, selected, "market_value")
+                    ? BuildValueWithTendency(marketValue, selected, "market_value", showNumericValues)
                     : marketValue.ToString("0.##", CultureInfo.InvariantCulture);
                 string hpText = typed.EnableHitPointsFeelingText
-                    ? BuildValueWithTendency(maxHitPoints, selected, "max_hit_points")
+                    ? BuildValueWithTendency(maxHitPoints, selected, "max_hit_points", showNumericValues)
                     : maxHitPoints.ToString("0.##", CultureInfo.InvariantCulture);
-
-                bool showMarketLine = typed.DebugForceShowDeviation || IsObviousDeviation(selected, "market_value");
-                bool showHpLine = typed.DebugForceShowDeviation || IsObviousDeviation(selected, "max_hit_points");
                 string techLevelLine = string.Equals(techLevel, "Undefined", StringComparison.OrdinalIgnoreCase) ? string.Empty : Tr("RimTalkGenKnowledge.Text.Thing.Line.TechLevel").Formatted(techLevel).ToString();
                 string modSourceLine = string.Equals(modSource, "Core", StringComparison.OrdinalIgnoreCase) ? string.Empty : Tr("RimTalkGenKnowledge.Text.Thing.Line.ModSourceConcept").Formatted(modSource).ToString();
                 string marketValueLine = showMarketLine ? Tr("RimTalkGenKnowledge.Text.Thing.Line.MarketValue").Formatted(marketValueText).ToString() : string.Empty;
@@ -178,7 +203,7 @@ namespace GenKnowledge.ProcessDefs
             }
         }
 
-        private static List<PropertyObservation> BuildObservations(ThingDef def, ThingProcessDefConfig config, bool forceShowDebug)
+        private static List<PropertyObservation> BuildObservations(ThingDef def, ThingProcessDefConfig config, bool forceShowDebug, bool showNumericValues)
         {
             var observations = new List<PropertyObservation>();
             foreach (var pair in config.PropertyDeviationConfigs)
@@ -218,7 +243,9 @@ namespace GenKnowledge.ProcessDefs
                     tendencyText = string.IsNullOrWhiteSpace(stageText) ? Tr("RimTalkGenKnowledge.Text.Thing.Tendency.Default") : stageText;
                 }
                 string displayName = string.IsNullOrWhiteSpace(propertyConfig.DisplayName) ? key : propertyConfig.DisplayName;
-                string displayLine = displayName + "=" + valueText + " (" + tendencyText + ")";
+                string displayLine = showNumericValues
+                    ? (displayName + "=" + valueText + " (" + tendencyText + ")")
+                    : (displayName + tendencyText);
                 if (forceShowDebug)
                 {
                     displayLine += $" [c'={cScaled:0.###}, d={d:0.###}]";
@@ -229,6 +256,7 @@ namespace GenKnowledge.ProcessDefs
                     PropertyKey = key,
                     SignedC = cScaled,
                     StrengthD = d,
+                    TendencyText = tendencyText,
                     DisplayLine = displayLine
                 });
             }
@@ -335,47 +363,75 @@ namespace GenKnowledge.ProcessDefs
 
         private static string BuildCategoryText(string category, string thingCategories, string tradeTags, string weaponTags)
         {
-            var parts = new List<string>();
-            if (!string.IsNullOrWhiteSpace(category))
+            var tokens = new List<string>();
+            tokens.AddRange(ParseCategoryTokens(category));
+            tokens.AddRange(ParseCategoryTokens(thingCategories));
+            tokens.AddRange(ParseCategoryTokens(tradeTags));
+            tokens.AddRange(ParseCategoryTokens(weaponTags));
+
+            string[] unique = tokens
+                .Where(t => !string.IsNullOrWhiteSpace(t))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+
+            if (unique.Length == 0)
             {
-                parts.Add(category);
+                return string.Empty;
             }
-            if (!string.IsNullOrWhiteSpace(thingCategories))
-            {
-                parts.Add(thingCategories);
-            }
-            if (!string.IsNullOrWhiteSpace(tradeTags))
-            {
-                parts.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.TradeTags").Formatted(tradeTags));
-            }
-            if (!string.IsNullOrWhiteSpace(weaponTags))
-            {
-                parts.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.WeaponTags").Formatted(weaponTags));
-            }
-            return string.Join(Tr("RimTalkGenKnowledge.Text.Thing.Separator.Semicolon"), parts.ToArray());
+
+            string separator = Tr("RimTalkGenKnowledge.Text.Thing.Separator.CategoryList");
+            string joined = string.Join(separator, unique);
+            return Tr("RimTalkGenKnowledge.Text.Thing.Line.CategoryMerged").Formatted(joined).ToString();
         }
 
-        private static string BuildValueWithTendency(float value, List<PropertyObservation> observations, string propertyKey)
+        private static IEnumerable<string> ParseCategoryTokens(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                yield break;
+            }
+
+            string[] parts = text.Split(new[] { ',', '，', ';', '；' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < parts.Length; i++)
+            {
+                string token = parts[i]?.Trim();
+                if (string.IsNullOrWhiteSpace(token))
+                {
+                    continue;
+                }
+
+                if (IsHiddenMiscToken(token))
+                {
+                    continue;
+                }
+
+                yield return token;
+            }
+        }
+
+        private static bool IsHiddenMiscToken(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return false;
+            }
+
+            return string.Equals(token, "杂项", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(token, "misc", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string BuildValueWithTendency(float value, List<PropertyObservation> observations, string propertyKey, bool showNumericValues)
         {
             PropertyObservation obs = observations.FirstOrDefault(o => string.Equals(o.PropertyKey, propertyKey, StringComparison.OrdinalIgnoreCase));
             if (obs == null)
             {
-                return value.ToString("0.##", CultureInfo.InvariantCulture);
+                return showNumericValues ? value.ToString("0.##", CultureInfo.InvariantCulture) : string.Empty;
             }
 
-            string tendency = obs.DisplayLine;
-            int left = tendency.IndexOf('(');
-            int right = tendency.IndexOf(')', left + 1);
-            if (left < 0 || right <= left)
-            {
-                left = tendency.IndexOf('（');
-                right = tendency.IndexOf('）', left + 1);
-            }
-            if (left >= 0 && right > left)
-            {
-                tendency = tendency.Substring(left + 1, right - left - 1);
-            }
-            return value.ToString("0.##", CultureInfo.InvariantCulture) + " (" + tendency + ")";
+            string tendency = string.IsNullOrWhiteSpace(obs.TendencyText) ? obs.DisplayLine : obs.TendencyText;
+            return showNumericValues
+                ? value.ToString("0.##", CultureInfo.InvariantCulture) + " (" + tendency + ")"
+                : tendency;
         }
 
         private static bool IsObviousDeviation(List<PropertyObservation> observations, string propertyKey)
@@ -411,9 +467,27 @@ namespace GenKnowledge.ProcessDefs
             return string.Join("\n", lines);
         }
 
-        private static List<string> BuildDefSemanticLines(ThingDef def, bool debug)
+        private static bool ContainsDigit(string text)
         {
-            var lines = new List<string>();
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (char.IsDigit(text[i]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static List<SemanticLineEntry> BuildDefSemanticLines(ThingDef def, ThingProcessDefConfig config, bool debug)
+        {
+            var lines = new List<SemanticLineEntry>();
             if (def == null)
             {
                 return lines;
@@ -424,14 +498,14 @@ namespace GenKnowledge.ProcessDefs
                 string terrainLine = BuildTerrainAffordanceLine(terrainAffordance);
                 if (!string.IsNullOrWhiteSpace(terrainLine))
                 {
-                    lines.Add(terrainLine);
+                    AddSemanticLine(lines, config, null, terrainLine);
                 }
             }
 
             float constructionSkill = Mathf.Max(0f, ProcessDefUtility.GetFloatMemberOrDefault(def, "constructionSkillPrerequisite", 0f));
             if (!Mathf.Approximately(constructionSkill, 0f))
             {
-                lines.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.ConstructionSkill").Formatted(constructionSkill.ToString("0.#", CultureInfo.InvariantCulture)));
+                AddSemanticLine(lines, config, "construction_skill_prerequisite", Tr("RimTalkGenKnowledge.Text.Thing.Line.ConstructionSkill").Formatted(constructionSkill.ToString("0.#", CultureInfo.InvariantCulture)));
             }
 
             if (ProcessDefUtility.TryGetMemberValue(def, "costList", out object costListObj) && costListObj is System.Collections.IList costList && costList.Count > 0)
@@ -439,7 +513,7 @@ namespace GenKnowledge.ProcessDefs
                 string costText = BuildCostListText(costList, 4);
                 if (!string.IsNullOrWhiteSpace(costText))
                 {
-                    lines.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.BuildCost").Formatted(costText));
+                    AddSemanticLine(lines, config, null, Tr("RimTalkGenKnowledge.Text.Thing.Line.BuildCost").Formatted(costText));
                 }
             }
 
@@ -448,13 +522,13 @@ namespace GenKnowledge.ProcessDefs
                 bool isSittable = ProcessDefUtility.GetBoolMemberOrDefault(building, "isSittable", false);
                 if (isSittable)
                 {
-                    lines.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.Sittable"));
+                    AddSemanticLine(lines, config, null, Tr("RimTalkGenKnowledge.Text.Thing.Line.Sittable"));
                 }
 
                 bool paintable = ProcessDefUtility.GetBoolMemberOrDefault(building, "paintable", false);
                 if (paintable)
                 {
-                    lines.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.Paintable"));
+                    AddSemanticLine(lines, config, null, Tr("RimTalkGenKnowledge.Text.Thing.Line.Paintable"));
                 }
             }
 
@@ -463,13 +537,13 @@ namespace GenKnowledge.ProcessDefs
                 string layers = JoinDefNamesOrLabels(apparel, "layers");
                 if (!string.IsNullOrWhiteSpace(layers))
                 {
-                    lines.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.ApparelLayers").Formatted(layers));
+                    AddSemanticLine(lines, config, null, Tr("RimTalkGenKnowledge.Text.Thing.Line.ApparelLayers").Formatted(layers));
                 }
 
                 string bodyParts = JoinDefNamesOrLabels(apparel, "bodyPartGroups");
                 if (!string.IsNullOrWhiteSpace(bodyParts))
                 {
-                    lines.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.ApparelBodyParts").Formatted(bodyParts));
+                    AddSemanticLine(lines, config, null, Tr("RimTalkGenKnowledge.Text.Thing.Line.ApparelBodyParts").Formatted(bodyParts));
                 }
             }
 
@@ -478,14 +552,14 @@ namespace GenKnowledge.ProcessDefs
                 float growDays = ProcessDefUtility.GetFloatMemberOrDefault(plant, "growDays", 0f);
                 if (!Mathf.Approximately(growDays, 0f))
                 {
-                    lines.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.GrowDays").Formatted(growDays.ToString("0.##", CultureInfo.InvariantCulture), DayUnit()));
+                    AddSemanticLine(lines, config, "grow_days", Tr("RimTalkGenKnowledge.Text.Thing.Line.GrowDays").Formatted(growDays.ToString("0.##", CultureInfo.InvariantCulture), DayUnit()));
                 }
 
                 float fertilityMin = ProcessDefUtility.GetFloatMemberOrDefault(plant, "fertilityMin", 0f);
                 if (!Mathf.Approximately(fertilityMin, 0f))
                 {
                     float pct = fertilityMin <= 2f ? fertilityMin * 100f : fertilityMin;
-                    lines.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.FertilityMin").Formatted(pct.ToString("0.#", CultureInfo.InvariantCulture)));
+                    AddSemanticLine(lines, config, "fertility_min_pct", Tr("RimTalkGenKnowledge.Text.Thing.Line.FertilityMin").Formatted(pct.ToString("0.#", CultureInfo.InvariantCulture)));
                 }
             }
 
@@ -494,25 +568,29 @@ namespace GenKnowledge.ProcessDefs
                 float life = ProcessDefUtility.GetFloatMemberOrDefault(race, "lifeExpectancy", 0f);
                 if (!Mathf.Approximately(life, 0f))
                 {
-                    lines.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.LifeExpectancy").Formatted(life.ToString("0.##", CultureInfo.InvariantCulture)));
+                    AddSemanticLine(lines, config, "life_expectancy", Tr("RimTalkGenKnowledge.Text.Thing.Line.LifeExpectancy").Formatted(life.ToString("0.##", CultureInfo.InvariantCulture)));
                 }
 
                 float gestation = ProcessDefUtility.GetFloatMemberOrDefault(race, "gestationPeriodDays", 0f);
-                if (!Mathf.Approximately(gestation, 0f))
+                if (gestation < 0f)
                 {
-                    lines.Add(Tr("RimTalkGenKnowledge.Text.Thing.Line.GestationDays").Formatted(gestation.ToString("0.##", CultureInfo.InvariantCulture), DayUnit()));
+                    AddSemanticLine(lines, config, null, Tr("RimTalkGenKnowledge.Text.Thing.Line.CannotGestate"));
+                }
+                else if (!Mathf.Approximately(gestation, 0f))
+                {
+                    AddSemanticLine(lines, config, "gestation_days", Tr("RimTalkGenKnowledge.Text.Thing.Line.GestationDays").Formatted(gestation.ToString("0.##", CultureInfo.InvariantCulture), DayUnit()));
                 }
             }
 
-            AppendCompSemantic(lines, def, "milkable", "milkAmount", Tr("RimTalkGenKnowledge.Text.Thing.Line.MilkAmountPrefix"), string.Empty);
-            AppendCompSemantic(lines, def, "milkable", "milkIntervalDays", Tr("RimTalkGenKnowledge.Text.Thing.Line.MilkIntervalPrefix"), DayUnit());
-            AppendCompSemantic(lines, def, "shearable", "woolAmount", Tr("RimTalkGenKnowledge.Text.Thing.Line.WoolAmountPrefix"), string.Empty);
-            AppendCompSemantic(lines, def, "shearable", "shearIntervalDays", Tr("RimTalkGenKnowledge.Text.Thing.Line.ShearIntervalPrefix"), DayUnit());
-            AppendCompSemantic(lines, def, "egglayer", "eggLayIntervalDays", Tr("RimTalkGenKnowledge.Text.Thing.Line.EggIntervalPrefix"), DayUnit());
+            AppendCompSemantic(lines, config, def, "milkable", "milkAmount", "milk_amount", Tr("RimTalkGenKnowledge.Text.Thing.Line.MilkAmountPrefix"), string.Empty);
+            AppendCompSemantic(lines, config, def, "milkable", "milkIntervalDays", "milk_interval_days", Tr("RimTalkGenKnowledge.Text.Thing.Line.MilkIntervalPrefix"), DayUnit());
+            AppendCompSemantic(lines, config, def, "shearable", "woolAmount", "wool_amount", Tr("RimTalkGenKnowledge.Text.Thing.Line.WoolAmountPrefix"), string.Empty);
+            AppendCompSemantic(lines, config, def, "shearable", "shearIntervalDays", "shear_interval_days", Tr("RimTalkGenKnowledge.Text.Thing.Line.ShearIntervalPrefix"), DayUnit());
+            AppendCompSemantic(lines, config, def, "egglayer", "eggLayIntervalDays", "egg_interval_days", Tr("RimTalkGenKnowledge.Text.Thing.Line.EggIntervalPrefix"), DayUnit());
 
             if (debug)
             {
-                lines.Add("kind=" + ResolveKind(def));
+                AddSemanticLine(lines, config, null, "kind=" + ResolveKind(def));
             }
 
             return lines;
@@ -595,7 +673,36 @@ namespace GenKnowledge.ProcessDefs
             return string.Empty;
         }
 
-        private static void AppendCompSemantic(List<string> lines, ThingDef def, string compToken, string memberName, string prefix, string suffix)
+        private static bool IsPropertyEnabled(ThingProcessDefConfig config, string propertyKey)
+        {
+            if (string.IsNullOrWhiteSpace(propertyKey) || config?.PropertyDeviationConfigs == null)
+            {
+                return true;
+            }
+
+            if (!config.PropertyDeviationConfigs.TryGetValue(propertyKey, out ThingPropertyDeviationConfig property) || property == null)
+            {
+                return true;
+            }
+
+            return property.Enabled;
+        }
+
+        private static void AddSemanticLine(List<SemanticLineEntry> lines, ThingProcessDefConfig config, string propertyKey, string text)
+        {
+            if (lines == null || string.IsNullOrWhiteSpace(text) || !IsPropertyEnabled(config, propertyKey))
+            {
+                return;
+            }
+
+            lines.Add(new SemanticLineEntry
+            {
+                PropertyKey = propertyKey,
+                Text = text
+            });
+        }
+
+        private static void AppendCompSemantic(List<SemanticLineEntry> lines, ThingProcessDefConfig config, ThingDef def, string compToken, string memberName, string propertyKey, string prefix, string suffix)
         {
             if (lines == null || def?.comps == null)
             {
@@ -627,7 +734,7 @@ namespace GenKnowledge.ProcessDefs
                     continue;
                 }
 
-                lines.Add(prefix + value.ToString("0.##", CultureInfo.InvariantCulture) + suffix);
+                AddSemanticLine(lines, config, propertyKey, prefix + value.ToString("0.##", CultureInfo.InvariantCulture) + suffix);
                 return;
             }
         }
@@ -724,13 +831,56 @@ namespace GenKnowledge.ProcessDefs
             return string.Join(",", values.ToArray());
         }
 
-        private static string JoinStrings(List<string> values)
+        private static string JoinStrings(List<string> values, bool tryLocalize = false)
         {
             if (values == null || values.Count == 0)
             {
                 return string.Empty;
             }
-            return string.Join(",", values.Where(v => !string.IsNullOrWhiteSpace(v)).ToArray());
+
+            IEnumerable<string> normalized = values.Where(v => !string.IsNullOrWhiteSpace(v));
+            if (tryLocalize)
+            {
+                normalized = normalized.Select(LocalizeTagToken);
+            }
+
+            return string.Join(",", normalized.Where(v => !string.IsNullOrWhiteSpace(v)).Distinct().ToArray());
+        }
+
+        private static string LocalizeTagToken(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return string.Empty;
+            }
+
+            string key = "RimTalkGenKnowledge.Text.Thing.Tag." + token;
+            string translated = key.Translate().ToString();
+            return string.Equals(translated, key, StringComparison.Ordinal) ? token : translated;
+        }
+
+        private static string LocalizeThingCategory(string category)
+        {
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                return string.Empty;
+            }
+
+            string key = "RimTalkGenKnowledge.Text.Thing.Category." + category;
+            string translated = key.Translate().ToString();
+            return string.Equals(translated, key, StringComparison.Ordinal) ? category : translated;
+        }
+
+        private static string LocalizeTechLevel(string techLevel)
+        {
+            if (string.IsNullOrWhiteSpace(techLevel))
+            {
+                return string.Empty;
+            }
+
+            string key = "RimTalkGenKnowledge.Text.TechLevel." + techLevel;
+            string translated = key.Translate().ToString();
+            return string.Equals(translated, key, StringComparison.Ordinal) ? techLevel : translated;
         }
 
         private static string ResolveModSource(ThingDef def)

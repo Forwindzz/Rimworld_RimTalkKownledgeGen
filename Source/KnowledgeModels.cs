@@ -13,6 +13,7 @@ namespace GenKnowledge
 
     public class ProcessDefContext
     {
+        public bool ShowNumericValues = false;
     }
 
     public class GenerationReport

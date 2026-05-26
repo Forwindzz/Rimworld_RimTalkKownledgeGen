@@ -23,7 +23,8 @@ namespace GenKnowledge.ProcessDefs
 
         public virtual string ProcessTemplateString(string templateString, ProcessDefBaseConfig config)
         {
-            return ProcessDefPlaceholderUtility.ProcessTemplateString(templateString, GetPlaceholders(), ResolveValueByKey);
+            string rendered = ProcessDefPlaceholderUtility.ProcessTemplateString(templateString, GetPlaceholders(), ResolveValueByKey);
+            return RenderFallbackTemplateKeys(rendered);
         }
 
         public virtual void DrawConfig(Rect rect, ProcessDefBaseConfig config)
@@ -133,6 +134,28 @@ namespace GenKnowledge.ProcessDefs
             }
 
             return currentValues.TryGetValue(key, out string value) ? value ?? string.Empty : string.Empty;
+        }
+
+        private string RenderFallbackTemplateKeys(string rendered)
+        {
+            if (string.IsNullOrEmpty(rendered) || currentValues == null || currentValues.Count == 0)
+            {
+                return rendered;
+            }
+
+            string result = rendered;
+            foreach (KeyValuePair<string, string> entry in currentValues)
+            {
+                if (string.IsNullOrWhiteSpace(entry.Key))
+                {
+                    continue;
+                }
+
+                string token = "{{" + entry.Key + "}}";
+                result = result.Replace(token, entry.Value ?? string.Empty);
+            }
+
+            return result;
         }
 
         private float DrawTemplateRow(float x, float y, float width, float lineHeight, string label, string value, Action<string> setter)

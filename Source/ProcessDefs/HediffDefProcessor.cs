@@ -19,8 +19,8 @@ namespace GenKnowledge.ProcessDefs
             {
                 Enabled = true,
                 IncludeModDefs = true,
-                TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: {{description}}\n{{effectLinePrefix}}{{badLabel}}{{chronicLine}}{{tendableLine}}",
+                TagTemplate = "RimTalkGenKnowledge.DefaultTemplate.Hediff.Tag".Translate(),
+                KnowledgeTemplate = "RimTalkGenKnowledge.DefaultTemplate.Hediff.Knowledge".Translate(),
                 BaseImportance = 0.6f,
                 ImportanceMin = 0.1f,
                 ImportanceMax = 0.88f,

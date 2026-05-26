@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GenKnowledge.ProcessDefs;
 using RimWorld;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace GenKnowledge
         public static GenKnowledgeSettings Settings;
         public static string ModRootDir { get; private set; }
         private Vector2 settingsScrollPosition = Vector2.zero;
+        private readonly Dictionary<string, bool> processorFoldoutStates = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
 
         public GenKnowledgeMod(ModContentPack content) : base(content)
         {
@@ -43,7 +45,11 @@ namespace GenKnowledge
                     continue;
                 }
 
-                estimatedHeight += processor.GetConfigHeight(cfg, inRect.width - 28f) + 48f;
+                estimatedHeight += 34f;
+                if (IsProcessorExpanded(processor.Id))
+                {
+                    estimatedHeight += processor.GetConfigHeight(cfg, inRect.width - 28f) + 12f;
+                }
             }
 
             Rect viewRect = new Rect(0f, 0f, inRect.width - 16f, Mathf.Max(inRect.height, estimatedHeight));
@@ -54,8 +60,9 @@ namespace GenKnowledge
 
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting".Translate(), ref Settings.enableGlobalErrorReporting);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys".Translate(), ref Settings.debugIncludeInternalKeys);
-            listing.CheckboxLabeled("Skip list: real-world common concepts (1.6/Data/KnowledgeSkipList.txt)", ref Settings.enableRealWorldSkipList);
-            listing.CheckboxLabeled("Skip list: high-redundancy concepts (1.6/Data/KnowledgeSkipList.HighRedundancy.txt)", ref Settings.enableHighRedundancySkipList);
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal".Translate(), ref Settings.showNumericValues);
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.SkipList.RealWorld".Translate(), ref Settings.enableRealWorldSkipList);
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.SkipList.HighRedundancy".Translate(), ref Settings.enableHighRedundancySkipList);
             listing.Label("RimTalkGenKnowledge.Settings.MinKnowledgeImportance".Translate(Settings.minKnowledgeImportance.ToString("0.00")));
             Settings.minKnowledgeImportance = Mathf.Clamp01(listing.Slider(Settings.minKnowledgeImportance, 0f, 1f));
             listing.GapLine();
@@ -93,13 +100,24 @@ namespace GenKnowledge
                     continue;
                 }
 
-                listing.Label(processor.DisplayName);
-                float configHeight = processor.GetConfigHeight(config, viewRect.width);
-                Rect container = listing.GetRect(configHeight);
-                Widgets.DrawMenuSection(container);
-                Rect contentRect = container.ContractedBy(6f);
-                processor.DrawConfig(contentRect, config);
-                listing.Gap(6f);
+                bool expanded = IsProcessorExpanded(processor.Id);
+                Rect foldoutRect = listing.GetRect(30f);
+                string foldoutText = (expanded ? "▼ " : "▶ ") + processor.DisplayName;
+                if (Widgets.ButtonText(foldoutRect, foldoutText))
+                {
+                    expanded = !expanded;
+                    SetProcessorExpanded(processor.Id, expanded);
+                }
+
+                if (expanded)
+                {
+                    float configHeight = processor.GetConfigHeight(config, viewRect.width);
+                    Rect container = listing.GetRect(configHeight);
+                    Widgets.DrawMenuSection(container);
+                    Rect contentRect = container.ContractedBy(6f);
+                    processor.DrawConfig(contentRect, config);
+                    listing.Gap(6f);
+                }
             }
 
             listing.GapLine();
@@ -223,6 +241,31 @@ namespace GenKnowledge
             }
 
             Messages.Message("RimTalkGenKnowledge.Message.ResetAllProcessConfigsDone".Translate(), MessageTypeDefOf.TaskCompletion, false);
+        }
+
+        private bool IsProcessorExpanded(string processorId)
+        {
+            if (string.IsNullOrWhiteSpace(processorId))
+            {
+                return false;
+            }
+
+            if (!processorFoldoutStates.TryGetValue(processorId, out bool expanded))
+            {
+                expanded = false;
+                processorFoldoutStates[processorId] = false;
+            }
+            return expanded;
+        }
+
+        private void SetProcessorExpanded(string processorId, bool expanded)
+        {
+            if (string.IsNullOrWhiteSpace(processorId))
+            {
+                return;
+            }
+
+            processorFoldoutStates[processorId] = expanded;
         }
     }
 }

@@ -20,8 +20,8 @@ namespace GenKnowledge.ProcessDefs
             {
                 Enabled = true,
                 IncludeModDefs = true,
-                TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: {{description}}{{geneStatsLine}}",
+                TagTemplate = "RimTalkGenKnowledge.DefaultTemplate.Gene.Tag".Translate(),
+                KnowledgeTemplate = "RimTalkGenKnowledge.DefaultTemplate.Gene.Knowledge".Translate(),
                 BaseImportance = 0.2f,
                 ImportanceMin = 0.05f,
                 ImportanceMax = 0.8f,
@@ -103,6 +103,7 @@ namespace GenKnowledge.ProcessDefs
         public override IEnumerable<GeneratedKnowledgeItem> ProcessDefs(ProcessDefContext context, ProcessDefBaseConfig config)
         {
             GeneProcessDefConfig typed = config as GeneProcessDefConfig ?? (GeneProcessDefConfig)CreateDefaultConfig();
+            bool showNumericValues = context?.ShowNumericValues ?? false;
             if (!typed.Enabled || !ModsConfig.BiotechActive)
             {
                 yield break;
@@ -142,9 +143,9 @@ namespace GenKnowledge.ProcessDefs
                     continue;
                 }
 
-                string complexityLine = BuildComplexityLine(cpx);
-                string metabolismLine = BuildMetabolismLine(met);
-                string architesLine = BuildArchitesLine(arc);
+                string complexityLine = BuildComplexityLine(cpx, showNumericValues);
+                string metabolismLine = BuildMetabolismLine(met, showNumericValues);
+                string architesLine = BuildArchitesLine(arc, showNumericValues);
                 string separator = "RimTalkGenKnowledge.Text.Gene.StatsSeparator".Translate();
                 string geneStats = string.Join(separator, new[] { complexityLine, metabolismLine, architesLine }.Where(s => !string.IsNullOrWhiteSpace(s)));
                 string geneStatsLine = string.IsNullOrWhiteSpace(geneStats) ? string.Empty : ("\n" + geneStats);
@@ -187,7 +188,7 @@ namespace GenKnowledge.ProcessDefs
             }
         }
 
-        private static string BuildComplexityLine(int cpx)
+        private static string BuildComplexityLine(int cpx, bool showNumericValues)
         {
             if (cpx == 0)
             {
@@ -208,10 +209,15 @@ namespace GenKnowledge.ProcessDefs
                 level = "RimTalkGenKnowledge.Text.Gene.Complexity.High".Translate();
             }
 
+            if (!showNumericValues)
+            {
+                return level;
+            }
+
             return string.Format("RimTalkGenKnowledge.Text.Gene.Complexity.Line".Translate(), cpx, level);
         }
 
-        private static string BuildMetabolismLine(int met)
+        private static string BuildMetabolismLine(int met, bool showNumericValues)
         {
             if (met == 0)
             {
@@ -236,6 +242,11 @@ namespace GenKnowledge.ProcessDefs
                 summary = "RimTalkGenKnowledge.Text.Gene.Metabolism.MuchLessCost".Translate();
             }
 
+            if (!showNumericValues)
+            {
+                return summary;
+            }
+
             if (string.IsNullOrWhiteSpace(summary))
             {
                 return string.Format("RimTalkGenKnowledge.Text.Gene.Metabolism.LineRaw".Translate(), met);
@@ -244,11 +255,16 @@ namespace GenKnowledge.ProcessDefs
             return string.Format("RimTalkGenKnowledge.Text.Gene.Metabolism.LineWithSummary".Translate(), met, summary);
         }
 
-        private static string BuildArchitesLine(int arc)
+        private static string BuildArchitesLine(int arc, bool showNumericValues)
         {
             if (arc <= 0)
             {
                 return string.Empty;
+            }
+
+            if (!showNumericValues)
+            {
+                return "RimTalkGenKnowledge.Text.Gene.Archites.LineNoNumeric".Translate();
             }
 
             return string.Format("RimTalkGenKnowledge.Text.Gene.Archites.Line".Translate(), arc);

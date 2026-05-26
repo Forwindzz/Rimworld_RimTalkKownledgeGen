@@ -31,6 +31,7 @@ namespace GenKnowledge
                 GenKnowledgeMod.Settings?.processConfigs,
                 GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.21f,
                 GenKnowledgeMod.Settings?.debugIncludeInternalKeys ?? false,
+                GenKnowledgeMod.Settings?.showNumericValues ?? false,
                 GenKnowledgeMod.Settings?.enableRealWorldSkipList ?? true,
                 GenKnowledgeMod.Settings?.enableHighRedundancySkipList ?? false);
 
@@ -51,6 +52,7 @@ namespace GenKnowledge
                 GenKnowledgeMod.Settings?.processConfigs,
                 GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.21f,
                 GenKnowledgeMod.Settings?.debugIncludeInternalKeys ?? false,
+                GenKnowledgeMod.Settings?.showNumericValues ?? false,
                 GenKnowledgeMod.Settings?.enableRealWorldSkipList ?? true,
                 GenKnowledgeMod.Settings?.enableHighRedundancySkipList ?? false);
 

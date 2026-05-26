@@ -7,6 +7,9 @@ namespace GenKnowledge.ProcessDefs
 {
     public partial class ThingDefProcessor
     {
+        private static bool categoryRulesExpanded = true;
+        private static bool propertyDeviationConfigsExpanded = false;
+
         public override float GetConfigHeight(ProcessDefBaseConfig config, float viewWidth)
         {
             ThingProcessDefConfig typed = config as ThingProcessDefConfig ?? (ThingProcessDefConfig)CreateDefaultConfig();
@@ -16,10 +19,35 @@ namespace GenKnowledge.ProcessDefs
             int propertyCount = typed.PropertyDeviationConfigs?.Count ?? 0;
             const float lineHeight = 24f;
             const float gap = 6f;
-            float categoryBlockHeight = lineHeight * 4f + gap * 4f;
-            float propertyBlockHeight = lineHeight * 13f + gap * 14f;
+            // Keep this strictly aligned with DrawConfig + DrawAdvancedConfig increments.
+            const float commonHeight = 360f; // ProcessDefProcessorBase.DrawConfig fixed section
+            float categoryBlockDrawHeight = lineHeight * 4f + gap * 4f;
+            float propertyBlockDrawHeight = lineHeight * 12f + gap * 13f;
 
-            return 1040f + categoryCount * (categoryBlockHeight + gap) + propertyCount * (propertyBlockHeight + gap);
+            // Advanced top rows before foldout headers:
+            // 24 standard rows (line+gap) + one 2-line info row.
+            float advancedBaseHeight = 24f * (lineHeight + gap) + (lineHeight * 2f + gap);
+
+            // Two foldout headers (Category Rules + Property Deviation Configs).
+            float foldoutHeadersHeight = 2f * (lineHeight + gap);
+
+            float categoryExpandedHeight = categoryRulesExpanded
+                ? categoryCount * (categoryBlockDrawHeight + gap)
+                : 0f;
+
+            float propertyExpandedHeight = propertyDeviationConfigsExpanded
+                ? propertyCount * (propertyBlockDrawHeight + gap)
+                : 0f;
+
+            // Extra safe margin to avoid clipping at bottom due to contracted container rect.
+            const float safetyMargin = 20f;
+
+            return commonHeight
+                + advancedBaseHeight
+                + foldoutHeadersHeight
+                + categoryExpandedHeight
+                + propertyExpandedHeight
+                + safetyMargin;
         }
 
         protected override float DrawAdvancedConfig(float x, float y, float width, float lineHeight, float gap, ThingProcessDefConfig config)
@@ -27,125 +55,129 @@ namespace GenKnowledge.ProcessDefs
             EnsureDefaults(config);
 
             Rect filterIntermediateRect = new Rect(x, y, width, lineHeight);
-            Widgets.CheckboxLabeled(filterIntermediateRect, "Filter intermediate build states", ref config.FilterIntermediateBuildStates);
+            Widgets.CheckboxLabeled(filterIntermediateRect, T("RimTalkGenKnowledge.Settings.Thing.FilterIntermediateBuildStates"), ref config.FilterIntermediateBuildStates);
             y += lineHeight + gap;
-            y = ProcessDefUiUtility.DrawTextRow(x, y, width, lineHeight, "Intermediate tokens", config.IntermediateBuildStateTokens, v => config.IntermediateBuildStateTokens = v);
+            y = ProcessDefUiUtility.DrawTextRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.IntermediateTokens"), config.IntermediateBuildStateTokens, v => config.IntermediateBuildStateTokens = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawIntRow(x, y, width, lineHeight, "Max description length", config.MaxDescriptionLength, v => config.MaxDescriptionLength = v);
+            y = ProcessDefUiUtility.DrawIntRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.MaxDescriptionLength"), config.MaxDescriptionLength, v => config.MaxDescriptionLength = v);
             y += gap;
             Rect filterShortDescRect = new Rect(x, y, width, lineHeight);
-            Widgets.CheckboxLabeled(filterShortDescRect, "Filter when description is shorter than label", ref config.FilterDescriptionShorterThanLabel);
+            Widgets.CheckboxLabeled(filterShortDescRect, T("RimTalkGenKnowledge.Settings.Thing.FilterShortDescription"), ref config.FilterDescriptionShorterThanLabel);
             y += lineHeight + gap;
-            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "Min description length (x label)", config.DescriptionMinLabelLengthMultiplier, v => config.DescriptionMinLabelLengthMultiplier = Mathf.Max(0f, v));
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.MinDescriptionLengthMultiplier"), config.DescriptionMinLabelLengthMultiplier, v => config.DescriptionMinLabelLengthMultiplier = Mathf.Max(0f, v));
             y += gap;
             Rect filterEggVariantRect = new Rect(x, y, width, lineHeight);
-            Widgets.CheckboxLabeled(filterEggVariantRect, "Filter fertilized/unfertilized egg variants", ref config.FilterFertilizedEggVariants);
+            Widgets.CheckboxLabeled(filterEggVariantRect, T("RimTalkGenKnowledge.Settings.Thing.FilterEggVariants"), ref config.FilterFertilizedEggVariants);
             y += lineHeight + gap;
-            y = ProcessDefUiUtility.DrawTextRow(x, y, width, lineHeight, "Egg variant tokens", config.FertilizedEggVariantTokens, v => config.FertilizedEggVariantTokens = v);
+            y = ProcessDefUiUtility.DrawTextRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.EggVariantTokens"), config.FertilizedEggVariantTokens, v => config.FertilizedEggVariantTokens = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawIntRow(x, y, width, lineHeight, "Max semantic lines (global)", config.MaxSemanticLinesGlobal, v => config.MaxSemanticLinesGlobal = v);
+            y = ProcessDefUiUtility.DrawIntRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.MaxSemanticLinesGlobal"), config.MaxSemanticLinesGlobal, v => config.MaxSemanticLinesGlobal = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawIntRow(x, y, width, lineHeight, "Special value TopN", config.SpecialValueTopN, v => config.SpecialValueTopN = v);
+            y = ProcessDefUiUtility.DrawIntRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.SpecialValueTopN"), config.SpecialValueTopN, v => config.SpecialValueTopN = v);
             y += gap;
             Rect fallbackRect = new Rect(x, y, width, lineHeight);
-            Widgets.CheckboxLabeled(fallbackRect, "Enable fallback attribute output", ref config.EnableFallbackAttributeOutput);
+            Widgets.CheckboxLabeled(fallbackRect, T("RimTalkGenKnowledge.Settings.Thing.EnableFallbackAttributeOutput"), ref config.EnableFallbackAttributeOutput);
             y += lineHeight + gap;
-            y = ProcessDefUiUtility.DrawIntRow(x, y, width, lineHeight, "Fallback max lines", config.FallbackAttributeMaxLines, v => config.FallbackAttributeMaxLines = v);
+            y = ProcessDefUiUtility.DrawIntRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.FallbackMaxLines"), config.FallbackAttributeMaxLines, v => config.FallbackAttributeMaxLines = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawTextRow(x, y, width, lineHeight, "Fallback exclude keys", config.FallbackAttributeExcludeKeys, v => config.FallbackAttributeExcludeKeys = v);
+            y = ProcessDefUiUtility.DrawTextRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.FallbackExcludeKeys"), config.FallbackAttributeExcludeKeys, v => config.FallbackAttributeExcludeKeys = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "Weight marketValue log10", config.ImportanceWeightMarketValueLog10, v => config.ImportanceWeightMarketValueLog10 = v);
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.WeightMarketValueLog10"), config.ImportanceWeightMarketValueLog10, v => config.ImportanceWeightMarketValueLog10 = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "Weight mass log10", config.ImportanceWeightMassLog10, v => config.ImportanceWeightMassLog10 = v);
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.WeightMassLog10"), config.ImportanceWeightMassLog10, v => config.ImportanceWeightMassLog10 = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "Weight hitPoints log10", config.ImportanceWeightHitPointsLog10, v => config.ImportanceWeightHitPointsLog10 = v);
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.WeightHitPointsLog10"), config.ImportanceWeightHitPointsLog10, v => config.ImportanceWeightHitPointsLog10 = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "Weight stackLimit==1", config.ImportanceWeightStackLimitIsOne, v => config.ImportanceWeightStackLimitIsOne = v);
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.WeightStackLimitIsOne"), config.ImportanceWeightStackLimitIsOne, v => config.ImportanceWeightStackLimitIsOne = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "Weight special value score", config.ImportanceWeightSpecialValueScore, v => config.ImportanceWeightSpecialValueScore = v);
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.WeightSpecialValueScore"), config.ImportanceWeightSpecialValueScore, v => config.ImportanceWeightSpecialValueScore = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "Weight nutrition", config.ImportanceWeightNutrition, v => config.ImportanceWeightNutrition = v);
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.WeightNutrition"), config.ImportanceWeightNutrition, v => config.ImportanceWeightNutrition = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "Weight description/label length ratio", config.ImportanceWeightDescriptionLengthRatio, v => config.ImportanceWeightDescriptionLengthRatio = v);
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.WeightDescriptionLengthRatio"), config.ImportanceWeightDescriptionLengthRatio, v => config.ImportanceWeightDescriptionLengthRatio = v);
             y += gap;
-            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "Craftable importance multiplier", config.ImportanceMultiplierCraftable, v => config.ImportanceMultiplierCraftable = Mathf.Max(0f, v));
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.CraftableImportanceMultiplier"), config.ImportanceMultiplierCraftable, v => config.ImportanceMultiplierCraftable = Mathf.Max(0f, v));
             y += gap;
             Rect categoryTextRect = new Rect(x, y, width, lineHeight);
-            Widgets.CheckboxLabeled(categoryTextRect, "Enable category extra text", ref config.EnableCategoryExtraText);
+            Widgets.CheckboxLabeled(categoryTextRect, T("RimTalkGenKnowledge.Settings.Thing.EnableCategoryExtraText"), ref config.EnableCategoryExtraText);
             y += lineHeight + gap;
             Rect priceTextRect = new Rect(x, y, width, lineHeight);
-            Widgets.CheckboxLabeled(priceTextRect, "Enable market value tendency text", ref config.EnablePriceFeelingText);
+            Widgets.CheckboxLabeled(priceTextRect, T("RimTalkGenKnowledge.Settings.Thing.EnableMarketValueTendencyText"), ref config.EnablePriceFeelingText);
             y += lineHeight + gap;
             Rect hpTextRect = new Rect(x, y, width, lineHeight);
-            Widgets.CheckboxLabeled(hpTextRect, "Enable HP tendency text", ref config.EnableHitPointsFeelingText);
+            Widgets.CheckboxLabeled(hpTextRect, T("RimTalkGenKnowledge.Settings.Thing.EnableHpTendencyText"), ref config.EnableHitPointsFeelingText);
             y += lineHeight + gap;
             Rect debugDeviationRect = new Rect(x, y, width, lineHeight);
-            Widgets.CheckboxLabeled(debugDeviationRect, "Debug: always show deviation details", ref config.DebugForceShowDeviation);
+            Widgets.CheckboxLabeled(debugDeviationRect, T("RimTalkGenKnowledge.Settings.Thing.DebugAlwaysShowDeviationDetails"), ref config.DebugForceShowDeviation);
             y += lineHeight + gap;
             Rect infoRect = new Rect(x, y, width, lineHeight * 2f);
-            Widgets.Label(infoRect, "Per-property deviation configs are persisted in settings and can be tuned later.");
+            Widgets.Label(infoRect, T("RimTalkGenKnowledge.Settings.Thing.PerPropertyDeviationHint"));
             y += lineHeight * 2f + gap;
 
-            Rect catHeader = new Rect(x, y, width, lineHeight);
-            Widgets.Label(catHeader, "Category Rules");
+            categoryRulesExpanded = DrawFoldoutHeader(new Rect(x, y, width, lineHeight), T("RimTalkGenKnowledge.Settings.Thing.CategoryRules"), categoryRulesExpanded);
             y += lineHeight + gap;
 
-            foreach (string key in config.CategoryRules.Keys.OrderBy(k => k, StringComparer.OrdinalIgnoreCase).ToList())
+            if (categoryRulesExpanded)
             {
-                ThingCategoryRuleConfig rule = config.CategoryRules[key];
-                if (rule == null)
+                foreach (string key in config.CategoryRules.Keys.OrderBy(k => k, StringComparer.OrdinalIgnoreCase).ToList())
                 {
-                    rule = new ThingCategoryRuleConfig();
-                    config.CategoryRules[key] = rule;
-                }
+                    ThingCategoryRuleConfig rule = config.CategoryRules[key];
+                    if (rule == null)
+                    {
+                        rule = new ThingCategoryRuleConfig();
+                        config.CategoryRules[key] = rule;
+                    }
 
-                Rect categoryBox = new Rect(x, y, width, lineHeight * 4f + gap * 4f);
-                Widgets.DrawMenuSection(categoryBox);
-                float cy = categoryBox.y + 4f;
-                cy = DrawCheckboxRow(x + 6f, cy, width - 12f, lineHeight, $"{key} Enabled", rule.Enabled, v => rule.Enabled = v) + gap;
-                cy = ProcessDefUiUtility.DrawIntRow(x + 6f, cy, width - 12f, lineHeight, "Max lines", rule.MaxLines, v => rule.MaxLines = v) + gap;
-                cy = ProcessDefUiUtility.DrawTextRow(x + 6f, cy, width - 12f, lineHeight, "Property keys (comma)", rule.PropertyKeys, v => rule.PropertyKeys = v) + gap;
-                y += categoryBox.height + gap;
+                    Rect categoryBox = new Rect(x, y, width, lineHeight * 4f + gap * 4f);
+                    Widgets.DrawMenuSection(categoryBox);
+                    float cy = categoryBox.y + 4f;
+                    cy = DrawCheckboxRow(x + 6f, cy, width - 12f, lineHeight, "RimTalkGenKnowledge.Settings.Thing.CategoryRuleEnabledFormat".Translate(key), rule.Enabled, v => rule.Enabled = v) + gap;
+                    cy = ProcessDefUiUtility.DrawIntRow(x + 6f, cy, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.MaxLines"), rule.MaxLines, v => rule.MaxLines = v) + gap;
+                    cy = ProcessDefUiUtility.DrawTextRow(x + 6f, cy, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.PropertyKeysComma"), rule.PropertyKeys, v => rule.PropertyKeys = v) + gap;
+                    y += categoryBox.height + gap;
+                }
             }
 
-            Rect propHeader = new Rect(x, y, width, lineHeight);
-            Widgets.Label(propHeader, "Property Deviation Configs");
+            propertyDeviationConfigsExpanded = DrawFoldoutHeader(new Rect(x, y, width, lineHeight), T("RimTalkGenKnowledge.Settings.Thing.PropertyDeviationConfigs"), propertyDeviationConfigsExpanded);
             y += lineHeight + gap;
 
-            foreach (string key in config.PropertyDeviationConfigs.Keys.OrderBy(k => k, StringComparer.OrdinalIgnoreCase).ToList())
+            if (propertyDeviationConfigsExpanded)
             {
-                ThingPropertyDeviationConfig p = config.PropertyDeviationConfigs[key];
-                if (p == null)
+                foreach (string key in config.PropertyDeviationConfigs.Keys.OrderBy(k => k, StringComparer.OrdinalIgnoreCase).ToList())
                 {
-                    p = new ThingPropertyDeviationConfig();
-                    config.PropertyDeviationConfigs[key] = p;
+                    ThingPropertyDeviationConfig p = config.PropertyDeviationConfigs[key];
+                    if (p == null)
+                    {
+                        p = new ThingPropertyDeviationConfig();
+                        config.PropertyDeviationConfigs[key] = p;
+                    }
+
+                    // title + 11 editable rows + spacing
+                    float boxHeight = lineHeight * 12f + gap * 13f;
+                    Rect box = new Rect(x, y, width, boxHeight);
+                    Widgets.DrawMenuSection(box);
+                    float py = box.y + 4f;
+
+                    Rect title = new Rect(x + 6f, py, width - 12f, lineHeight);
+                    Widgets.Label(title, key);
+                    py += lineHeight + gap;
+
+                    py = DrawCheckboxRow(x + 6f, py, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Enabled"), p.Enabled, v => p.Enabled = v) + gap;
+                    py = ProcessDefUiUtility.DrawTextRow(x + 6f, py, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.DisplayName"), p.DisplayName, v => p.DisplayName = v) + gap;
+                    py = ProcessDefUiUtility.DrawFloatRow(x + 6f, py, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.RangeMin"), p.RangeMin, v => p.RangeMin = v) + gap;
+                    py = ProcessDefUiUtility.DrawFloatRow(x + 6f, py, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.RangeMax"), p.RangeMax, v => p.RangeMax = v) + gap;
+                    py = ProcessDefUiUtility.DrawFloatRow(x + 6f, py, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.Scale"), p.Scale, v => p.Scale = v) + gap;
+
+                    py = DrawCheckboxRow(x + 6f, py, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.NonNegativeOnly"), p.NonNegativeOnly, v => p.NonNegativeOnly = v) + gap;
+                    py = DrawCheckboxRow(x + 6f, py, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.IsPercent"), p.IsPercent, v => p.IsPercent = v) + gap;
+
+                    py = ProcessDefUiUtility.DrawTextRow(x + 6f, py, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.BiasLtNeg100"), p.StageTextNegStrong, v => p.StageTextNegStrong = v) + gap;
+                    py = ProcessDefUiUtility.DrawTextRow(x + 6f, py, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.BiasNeg100To0"), p.StageTextNegLight, v => p.StageTextNegLight = v) + gap;
+                    py = ProcessDefUiUtility.DrawTextRow(x + 6f, py, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.Bias0To100"), p.StageTextPosLight, v => p.StageTextPosLight = v) + gap;
+                    py = ProcessDefUiUtility.DrawTextRow(x + 6f, py, width - 12f, lineHeight, T("RimTalkGenKnowledge.Settings.Thing.BiasGt100"), p.StageTextPosStrong, v => p.StageTextPosStrong = v) + gap;
+
+                    y += box.height + gap;
                 }
-
-                // title + 11 editable rows + spacing
-                float boxHeight = lineHeight * 12f + gap * 13f;
-                Rect box = new Rect(x, y, width, boxHeight);
-                Widgets.DrawMenuSection(box);
-                float py = box.y + 4f;
-
-                Rect title = new Rect(x + 6f, py, width - 12f, lineHeight);
-                Widgets.Label(title, key);
-                py += lineHeight + gap;
-
-                py = DrawCheckboxRow(x + 6f, py, width - 12f, lineHeight, "Enabled", p.Enabled, v => p.Enabled = v) + gap;
-                py = ProcessDefUiUtility.DrawTextRow(x + 6f, py, width - 12f, lineHeight, "Display name", p.DisplayName, v => p.DisplayName = v) + gap;
-                py = ProcessDefUiUtility.DrawFloatRow(x + 6f, py, width - 12f, lineHeight, "Range min", p.RangeMin, v => p.RangeMin = v) + gap;
-                py = ProcessDefUiUtility.DrawFloatRow(x + 6f, py, width - 12f, lineHeight, "Range max", p.RangeMax, v => p.RangeMax = v) + gap;
-                py = ProcessDefUiUtility.DrawFloatRow(x + 6f, py, width - 12f, lineHeight, "Scale", p.Scale, v => p.Scale = v) + gap;
-
-                py = DrawCheckboxRow(x + 6f, py, width - 12f, lineHeight, "Non negative only", p.NonNegativeOnly, v => p.NonNegativeOnly = v) + gap;
-                py = DrawCheckboxRow(x + 6f, py, width - 12f, lineHeight, "Is percent", p.IsPercent, v => p.IsPercent = v) + gap;
-
-                py = ProcessDefUiUtility.DrawTextRow(x + 6f, py, width - 12f, lineHeight, "Bias <-100%", p.StageTextNegStrong, v => p.StageTextNegStrong = v) + gap;
-                py = ProcessDefUiUtility.DrawTextRow(x + 6f, py, width - 12f, lineHeight, "Bias -100%~0%", p.StageTextNegLight, v => p.StageTextNegLight = v) + gap;
-                py = ProcessDefUiUtility.DrawTextRow(x + 6f, py, width - 12f, lineHeight, "Bias 0~100%", p.StageTextPosLight, v => p.StageTextPosLight = v) + gap;
-                py = ProcessDefUiUtility.DrawTextRow(x + 6f, py, width - 12f, lineHeight, "Bias >100%", p.StageTextPosStrong, v => p.StageTextPosStrong = v) + gap;
-
-                y += box.height + gap;
             }
 
             return y;
@@ -160,6 +192,17 @@ namespace GenKnowledge.ProcessDefs
                 setter(next);
             }
             return y + lineHeight;
+        }
+
+        private static bool DrawFoldoutHeader(Rect rect, string label, bool expanded)
+        {
+            string foldoutText = (expanded ? "▼ " : "▶ ") + label;
+            if (Widgets.ButtonText(rect, foldoutText))
+            {
+                return !expanded;
+            }
+
+            return expanded;
         }
     }
 }

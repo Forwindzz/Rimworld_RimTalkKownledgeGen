@@ -396,6 +396,10 @@ namespace GenKnowledge.ProcessDefs
                     {
                         return false;
                     }
+                    if (value <= 0f)
+                    {
+                        return false;
+                    }
                     value = Mathf.Max(0f, value);
                     baseValueIsZero = Mathf.Approximately(value, 0f);
                     valueText = value.ToString("0.##", CultureInfo.InvariantCulture) + DayUnit();

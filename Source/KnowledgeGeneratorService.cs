@@ -15,6 +15,7 @@ namespace GenKnowledge
         private readonly Dictionary<string, ProcessDefBaseConfig> processConfigs;
         private readonly float minKnowledgeImportance;
         private readonly bool debugIncludeInternalKeys;
+        private readonly bool showNumericValues;
         private readonly bool enableRealWorldSkipList;
         private readonly bool enableHighRedundancySkipList;
 
@@ -24,6 +25,7 @@ namespace GenKnowledge
             Dictionary<string, ProcessDefBaseConfig> processConfigs,
             float minKnowledgeImportance,
             bool debugIncludeInternalKeys,
+            bool showNumericValues,
             bool enableRealWorldSkipList,
             bool enableHighRedundancySkipList)
         {
@@ -32,6 +34,7 @@ namespace GenKnowledge
             this.processConfigs = processConfigs;
             this.minKnowledgeImportance = Mathf.Clamp01(minKnowledgeImportance);
             this.debugIncludeInternalKeys = debugIncludeInternalKeys;
+            this.showNumericValues = showNumericValues;
             this.enableRealWorldSkipList = enableRealWorldSkipList;
             this.enableHighRedundancySkipList = enableHighRedundancySkipList;
         }
@@ -61,7 +64,10 @@ namespace GenKnowledge
                 return report;
             }
 
-            var context = new ProcessDefContext();
+            var context = new ProcessDefContext
+            {
+                ShowNumericValues = showNumericValues
+            };
             var generated = new List<GeneratedKnowledgeItem>();
             KnowledgeSkipRuleSet skipRules = BuildSkipRuleSet(report, reportEachError);
 
