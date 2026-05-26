@@ -9,10 +9,12 @@ namespace GenKnowledge
     public class GenKnowledgeMod : Mod
     {
         public static GenKnowledgeSettings Settings;
+        public static string ModRootDir { get; private set; }
         private Vector2 settingsScrollPosition = Vector2.zero;
 
         public GenKnowledgeMod(ModContentPack content) : base(content)
         {
+            ModRootDir = content?.RootDir?.ToString();
             Settings = GetSettings<GenKnowledgeSettings>();
             Settings.EnsureDefaults(ProcessDefRegistry.CreateProcessors());
         }
@@ -52,6 +54,8 @@ namespace GenKnowledge
 
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting".Translate(), ref Settings.enableGlobalErrorReporting);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys".Translate(), ref Settings.debugIncludeInternalKeys);
+            listing.CheckboxLabeled("Skip list: real-world common concepts (1.6/Data/KnowledgeSkipList.txt)", ref Settings.enableRealWorldSkipList);
+            listing.CheckboxLabeled("Skip list: high-redundancy concepts (1.6/Data/KnowledgeSkipList.HighRedundancy.txt)", ref Settings.enableHighRedundancySkipList);
             listing.Label("RimTalkGenKnowledge.Settings.MinKnowledgeImportance".Translate(Settings.minKnowledgeImportance.ToString("0.00")));
             Settings.minKnowledgeImportance = Mathf.Clamp01(listing.Slider(Settings.minKnowledgeImportance, 0f, 1f));
             listing.GapLine();

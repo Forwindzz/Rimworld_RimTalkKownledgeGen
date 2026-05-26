@@ -15,19 +15,25 @@ namespace GenKnowledge
         private readonly Dictionary<string, ProcessDefBaseConfig> processConfigs;
         private readonly float minKnowledgeImportance;
         private readonly bool debugIncludeInternalKeys;
+        private readonly bool enableRealWorldSkipList;
+        private readonly bool enableHighRedundancySkipList;
 
         public KnowledgeGeneratorService(
             KnowledgeApiBridge apiBridge,
             List<IProcessDef> processors,
             Dictionary<string, ProcessDefBaseConfig> processConfigs,
             float minKnowledgeImportance,
-            bool debugIncludeInternalKeys)
+            bool debugIncludeInternalKeys,
+            bool enableRealWorldSkipList,
+            bool enableHighRedundancySkipList)
         {
             this.apiBridge = apiBridge;
             this.processors = processors ?? new List<IProcessDef>();
             this.processConfigs = processConfigs;
             this.minKnowledgeImportance = Mathf.Clamp01(minKnowledgeImportance);
             this.debugIncludeInternalKeys = debugIncludeInternalKeys;
+            this.enableRealWorldSkipList = enableRealWorldSkipList;
+            this.enableHighRedundancySkipList = enableHighRedundancySkipList;
         }
 
         public GenerationReport Run(Dictionary<string, string> logicalToKnowledgeId, bool reportEachError)
@@ -57,6 +63,7 @@ namespace GenKnowledge
 
             var context = new ProcessDefContext();
             var generated = new List<GeneratedKnowledgeItem>();
+            KnowledgeSkipRuleSet skipRules = BuildSkipRuleSet(report, reportEachError);
 
             foreach (IProcessDef processor in processors)
             {
@@ -85,9 +92,21 @@ namespace GenKnowledge
                 }
             }
 
-            var validItems = generated
+            var validCandidates = generated
                 .Select(NormalizeItemForStorage)
                 .Where(item => IsValidItem(item, minKnowledgeImportance))
+                .ToList();
+
+            if (skipRules != null && skipRules.ApproxRuleCount > 0)
+            {
+                int skippedByList = validCandidates.RemoveAll(item => skipRules.ShouldSkip(item));
+                if (skippedByList > 0)
+                {
+                    report.SkippedCount += skippedByList;
+                }
+            }
+
+            var validItems = validCandidates
                 .GroupBy(i => i.LogicalKey)
                 .Select(g => g.Last())
                 .ToList();
@@ -267,6 +286,43 @@ namespace GenKnowledge
             }
 
             return true;
+        }
+
+        private KnowledgeSkipRuleSet BuildSkipRuleSet(GenerationReport report, bool reportEachError)
+        {
+            var merged = new KnowledgeSkipRuleSet();
+            if (!enableRealWorldSkipList && !enableHighRedundancySkipList)
+            {
+                return merged;
+            }
+
+            if (enableRealWorldSkipList)
+            {
+                KnowledgeSkipRuleSet one = KnowledgeSkipListLoader.LoadRulesForRelativePath(
+                    KnowledgeSkipListLoader.RealWorldListRelativePath,
+                    out string error,
+                    out string loadedPath);
+                merged.MergeFrom(one);
+                if (!string.IsNullOrWhiteSpace(error))
+                {
+                    AppendError(report, $"Knowledge skip list load issue ({loadedPath ?? KnowledgeSkipListLoader.RealWorldListRelativePath}): {error}", reportEachError);
+                }
+            }
+
+            if (enableHighRedundancySkipList)
+            {
+                KnowledgeSkipRuleSet one = KnowledgeSkipListLoader.LoadRulesForRelativePath(
+                    KnowledgeSkipListLoader.HighRedundancyListRelativePath,
+                    out string error,
+                    out string loadedPath);
+                merged.MergeFrom(one);
+                if (!string.IsNullOrWhiteSpace(error))
+                {
+                    AppendError(report, $"Knowledge skip list load issue ({loadedPath ?? KnowledgeSkipListLoader.HighRedundancyListRelativePath}): {error}", reportEachError);
+                }
+            }
+
+            return merged;
         }
 
         private static GeneratedKnowledgeItem NormalizeItemForStorage(GeneratedKnowledgeItem item)

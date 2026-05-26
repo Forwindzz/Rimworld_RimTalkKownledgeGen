@@ -30,7 +30,9 @@ namespace GenKnowledge
                 processors,
                 GenKnowledgeMod.Settings?.processConfigs,
                 GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.21f,
-                GenKnowledgeMod.Settings?.debugIncludeInternalKeys ?? false);
+                GenKnowledgeMod.Settings?.debugIncludeInternalKeys ?? false,
+                GenKnowledgeMod.Settings?.enableRealWorldSkipList ?? true,
+                GenKnowledgeMod.Settings?.enableHighRedundancySkipList ?? false);
 
             lastReport = service.Run(logicalToKnowledgeId, reportEachError);
             return lastReport;
@@ -48,7 +50,9 @@ namespace GenKnowledge
                 ProcessDefRegistry.CreateProcessors(),
                 GenKnowledgeMod.Settings?.processConfigs,
                 GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.21f,
-                GenKnowledgeMod.Settings?.debugIncludeInternalKeys ?? false);
+                GenKnowledgeMod.Settings?.debugIncludeInternalKeys ?? false,
+                GenKnowledgeMod.Settings?.enableRealWorldSkipList ?? true,
+                GenKnowledgeMod.Settings?.enableHighRedundancySkipList ?? false);
 
             lastReport = service.Clear(logicalToKnowledgeId, reportEachError);
             return lastReport;
