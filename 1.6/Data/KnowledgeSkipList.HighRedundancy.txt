@@ -1,0 +1,47 @@
+﻿# High-redundancy skip list for RimTalk_GenKnowledge
+# Rule syntax:
+# - logicalKey:<pattern>  (supports * and ?)
+# - content:<substring>   (case-insensitive)
+# - tag:<substring>       (case-insensitive)
+# - regex:<pattern>       (regex on content)
+# - !logicalKey:<pattern> force keep override
+# NOTE: This file intentionally uses logicalKey/id rules only.
+
+# 1) Gene generic aptitude templates
+logicalKey:gene:AptitudeTerrible_*
+logicalKey:gene:AptitudePoor_*
+logicalKey:gene:AptitudeStrong_*
+logicalKey:gene:AptitudeRemarkable_*
+
+# 2) Blueprint template-like descriptions
+logicalKey:thing:*Schematic*
+
+# 3) Ancient / rusted structures (def id prefix)
+logicalKey:thing:Ancient*
+
+# 4) Meats (except human meat)
+logicalKey:thing:Meat_*
+!logicalKey:thing:Meat_Human
+
+# 5) Psychic / skill trainers
+logicalKey:thing:Neurotrainer_*
+
+# 6) Repetitive implant template ("installed in ...")
+logicalKey:hediff:LearningAssistant
+logicalKey:hediff:Coagulator
+logicalKey:hediff:ToughskinGland
+logicalKey:hediff:ArmorskinGland
+logicalKey:hediff:StoneskinGland
+logicalKey:hediff:AestheticNose
+logicalKey:hediff:DetoxifierStomach
+logicalKey:hediff:ReprocessorStomach
+logicalKey:hediff:NuclearStomach
+logicalKey:hediff:CircadianAssistant
+logicalKey:hediff:Mindscrew
+logicalKey:hediff:DrillArm
+logicalKey:hediff:FieldHand
+logicalKey:hediff:HandTalon
+logicalKey:hediff:ElbowBlade
+logicalKey:hediff:KneeSpike
+logicalKey:hediff:VenomFangs
+logicalKey:hediff:VenomTalon
