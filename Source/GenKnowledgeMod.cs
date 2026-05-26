@@ -68,6 +68,9 @@ namespace GenKnowledge
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys".Translate(), ref Settings.debugIncludeInternalKeys);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal".Translate(), ref Settings.showNumericValues);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.EnableMemoryUiPatch".Translate(), ref Settings.enableMemoryUiPatch);
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.MemoryAllowExtraction".Translate(), ref Settings.memoryAllowExtraction);
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.MemoryAllowMatching".Translate(), ref Settings.memoryAllowMatching);
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.FilterSingleChineseLabel".Translate(), ref Settings.filterSingleChineseLabel);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.EnableGlobalLabelDedup".Translate(), ref Settings.enableGlobalLabelDedup);
             listing.Label("RimTalkGenKnowledge.Settings.LabelDedupSimilarityThreshold".Translate(Settings.labelDedupSimilarityThreshold.ToString("0.00")));
             Settings.labelDedupSimilarityThreshold = Mathf.Clamp01(listing.Slider(Settings.labelDedupSimilarityThreshold, 0f, 1f));

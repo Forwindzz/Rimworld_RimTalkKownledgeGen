@@ -12,6 +12,9 @@ namespace GenKnowledge
         public bool debugIncludeInternalKeys = false;
         public bool showNumericValues = false;
         public bool enableMemoryUiPatch = true;
+        public bool memoryAllowExtraction = true;
+        public bool memoryAllowMatching = true;
+        public bool filterSingleChineseLabel = true;
         public bool enableGlobalLabelDedup = true;
         public float labelDedupSimilarityThreshold = 0.5f;
         public bool labelDedupHighSimilarityKeepLongest = true;
@@ -31,6 +34,9 @@ namespace GenKnowledge
             Scribe_Values.Look(ref debugIncludeInternalKeys, "debugIncludeInternalKeys", false);
             Scribe_Values.Look(ref showNumericValues, "showNumericValues", false);
             Scribe_Values.Look(ref enableMemoryUiPatch, "enableMemoryUiPatch", true);
+            Scribe_Values.Look(ref memoryAllowExtraction, "memoryAllowExtraction", true);
+            Scribe_Values.Look(ref memoryAllowMatching, "memoryAllowMatching", true);
+            Scribe_Values.Look(ref filterSingleChineseLabel, "filterSingleChineseLabel", true);
             Scribe_Values.Look(ref enableGlobalLabelDedup, "enableGlobalLabelDedup", true);
             Scribe_Values.Look(ref labelDedupSimilarityThreshold, "labelDedupSimilarityThreshold", 0.5f);
             Scribe_Values.Look(ref labelDedupHighSimilarityKeepLongest, "labelDedupHighSimilarityKeepLongest", true);

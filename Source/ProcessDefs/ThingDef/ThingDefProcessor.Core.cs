@@ -53,7 +53,7 @@ namespace GenKnowledge.ProcessDefs
                 ImportanceWeightMassLog10 = 0.001f,
                 ImportanceWeightHitPointsLog10 = 0.02f,
                 ImportanceWeightStackLimitIsOne = 0.05f,
-                ImportanceWeightSpecialValueScore = 0.02f,
+                ImportanceWeightSpecialValueScore = 0.01f,
                 ImportanceWeightNutrition = 0.05f,
                 ImportanceWeightDescriptionLengthRatio = 0.02f,
                 ImportanceMultiplierCraftable = 0.85f,

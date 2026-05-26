@@ -45,7 +45,7 @@ namespace GenKnowledge.ProcessDefs
         public float ImportanceWeightMassLog10 = 0.001f;
         public float ImportanceWeightHitPointsLog10 = 0.02f;
         public float ImportanceWeightStackLimitIsOne = 0.05f;
-        public float ImportanceWeightSpecialValueScore = 0.02f;
+        public float ImportanceWeightSpecialValueScore = 0.01f;
         public float ImportanceWeightNutrition = 0.05f;
         public float ImportanceWeightDescriptionLengthRatio = 0.02f;
         public float ImportanceMultiplierCraftable = 0.85f;
@@ -81,7 +81,7 @@ namespace GenKnowledge.ProcessDefs
             Scribe_Values.Look(ref ImportanceWeightMassLog10, "importanceWeightMassLog10", 0.001f);
             Scribe_Values.Look(ref ImportanceWeightHitPointsLog10, "importanceWeightHitPointsLog10", 0.02f);
             Scribe_Values.Look(ref ImportanceWeightStackLimitIsOne, "importanceWeightStackLimitIsOne", 0.05f);
-            Scribe_Values.Look(ref ImportanceWeightSpecialValueScore, "importanceWeightSpecialValueScore", 0.02f);
+            Scribe_Values.Look(ref ImportanceWeightSpecialValueScore, "importanceWeightSpecialValueScore", 0.01f);
             Scribe_Values.Look(ref ImportanceWeightNutrition, "importanceWeightNutrition", 0.05f);
             Scribe_Values.Look(ref ImportanceWeightDescriptionLengthRatio, "importanceWeightDescriptionLengthRatio", 0.02f);
             Scribe_Values.Look(ref ImportanceMultiplierCraftable, "importanceMultiplierCraftable", 0.85f);

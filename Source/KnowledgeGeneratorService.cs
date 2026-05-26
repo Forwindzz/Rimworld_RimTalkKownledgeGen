@@ -48,6 +48,7 @@ namespace GenKnowledge
         private readonly float labelDedupSimilarityThreshold;
         private readonly bool labelDedupHighSimilarityKeepLongest;
         private readonly bool labelDedupLowSimilarityMerge;
+        private readonly bool filterSingleChineseLabel;
         private readonly bool enableRealWorldSkipList;
         private readonly bool enableHighRedundancySkipList;
 
@@ -62,6 +63,7 @@ namespace GenKnowledge
             float labelDedupSimilarityThreshold,
             bool labelDedupHighSimilarityKeepLongest,
             bool labelDedupLowSimilarityMerge,
+            bool filterSingleChineseLabel,
             bool enableRealWorldSkipList,
             bool enableHighRedundancySkipList)
         {
@@ -75,6 +77,7 @@ namespace GenKnowledge
             this.labelDedupSimilarityThreshold = Mathf.Clamp01(labelDedupSimilarityThreshold);
             this.labelDedupHighSimilarityKeepLongest = labelDedupHighSimilarityKeepLongest;
             this.labelDedupLowSimilarityMerge = labelDedupLowSimilarityMerge;
+            this.filterSingleChineseLabel = filterSingleChineseLabel;
             this.enableRealWorldSkipList = enableRealWorldSkipList;
             this.enableHighRedundancySkipList = enableHighRedundancySkipList;
         }
@@ -140,7 +143,7 @@ namespace GenKnowledge
 
             var validCandidates = generated
                 .Select(NormalizeItemForStorage)
-                .Where(item => IsValidItem(item, minKnowledgeImportance))
+                .Where(item => IsValidItem(item, minKnowledgeImportance, filterSingleChineseLabel))
                 .ToList();
 
             if (skipRules != null && skipRules.ApproxRuleCount > 0)
@@ -312,7 +315,7 @@ namespace GenKnowledge
             return config;
         }
 
-        private static bool IsValidItem(GeneratedKnowledgeItem item, float minImportance)
+        private static bool IsValidItem(GeneratedKnowledgeItem item, float minImportance, bool filterSingleChineseLabel)
         {
             if (item == null)
             {
@@ -336,7 +339,35 @@ namespace GenKnowledge
                 return false;
             }
 
+            if (filterSingleChineseLabel)
+            {
+                string label = GetPrimaryLabel(item);
+                if (IsSingleChineseLabel(label))
+                {
+                    return false;
+                }
+            }
+
             return true;
+        }
+
+        private static bool IsSingleChineseLabel(string label)
+        {
+            if (string.IsNullOrWhiteSpace(label))
+            {
+                return false;
+            }
+
+            string trimmed = label.Trim();
+            if (trimmed.Length != 1)
+            {
+                return false;
+            }
+
+            char c = trimmed[0];
+            return (c >= '\u4E00' && c <= '\u9FFF')
+                   || (c >= '\u3400' && c <= '\u4DBF')
+                   || (c >= '\uF900' && c <= '\uFAFF');
         }
 
         private KnowledgeSkipRuleSet BuildSkipRuleSet(GenerationReport report, bool reportEachError)

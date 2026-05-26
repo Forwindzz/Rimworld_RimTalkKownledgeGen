@@ -5,6 +5,12 @@
   <RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>Debug: prepend internal key info (processorId/logicalKey/defName/modPackageId)</RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>
   
   <RimTalkGenKnowledge.Settings.EnableMemoryUiPatch>Enable knowledge-panel UI patch (Memory sidebar buttons)</RimTalkGenKnowledge.Settings.EnableMemoryUiPatch>
+  <RimTalkGenKnowledge.Settings.FilterSingleChineseLabel>Filter 1-char Chinese labels</RimTalkGenKnowledge.Settings.FilterSingleChineseLabel>
+
+  <RimTalkGenKnowledge.Settings.MemoryAllowMatching>Memory: allow matching</RimTalkGenKnowledge.Settings.MemoryAllowMatching>
+
+  <RimTalkGenKnowledge.Settings.MemoryAllowExtraction>Memory: allow extraction</RimTalkGenKnowledge.Settings.MemoryAllowExtraction>
+
   <RimTalkGenKnowledge.Settings.LabelDedupLowSimilarityMerge>Low similarity: merge content</RimTalkGenKnowledge.Settings.LabelDedupLowSimilarityMerge>
 
   <RimTalkGenKnowledge.Settings.LabelDedupHighSimilarityKeepLongest>High similarity: keep longest</RimTalkGenKnowledge.Settings.LabelDedupHighSimilarityKeepLongest>

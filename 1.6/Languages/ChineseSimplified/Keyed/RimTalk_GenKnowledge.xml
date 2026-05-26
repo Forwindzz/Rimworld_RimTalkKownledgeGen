@@ -5,6 +5,12 @@
   <RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>Debug：在常识内容前附加内部键信息（processorId/logicalKey/defName/modPackageId）</RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>
   <RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>全局显示数值（关闭时仅保留程度描述）</RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>
   <RimTalkGenKnowledge.Settings.EnableMemoryUiPatch>启用常识面板UI Patch（Memory侧栏按钮）</RimTalkGenKnowledge.Settings.EnableMemoryUiPatch>
+  <RimTalkGenKnowledge.Settings.FilterSingleChineseLabel>过滤中文单字标签</RimTalkGenKnowledge.Settings.FilterSingleChineseLabel>
+
+  <RimTalkGenKnowledge.Settings.MemoryAllowMatching>Memory：允许被匹配</RimTalkGenKnowledge.Settings.MemoryAllowMatching>
+
+  <RimTalkGenKnowledge.Settings.MemoryAllowExtraction>Memory：允许被提取</RimTalkGenKnowledge.Settings.MemoryAllowExtraction>
+
   <RimTalkGenKnowledge.Settings.LabelDedupLowSimilarityMerge>低相似度：合并内容</RimTalkGenKnowledge.Settings.LabelDedupLowSimilarityMerge>
 
   <RimTalkGenKnowledge.Settings.LabelDedupHighSimilarityKeepLongest>高相似度：保留较长内容</RimTalkGenKnowledge.Settings.LabelDedupHighSimilarityKeepLongest>

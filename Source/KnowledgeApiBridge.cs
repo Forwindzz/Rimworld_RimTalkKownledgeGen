@@ -13,6 +13,8 @@ namespace GenKnowledge
         private const string MatchModeTypeName = "RimTalk.Memory.KeywordMatchMode";
 
         private readonly bool reportEachError;
+        private readonly bool allowExtraction;
+        private readonly bool allowMatching;
         private Assembly targetAssembly;
         private Type apiType;
         private Type keywordMatchModeType;
@@ -24,9 +26,11 @@ namespace GenKnowledge
         public bool IsReady { get; private set; }
         public string LastInitError { get; private set; }
 
-        public KnowledgeApiBridge(bool reportEachError)
+        public KnowledgeApiBridge(bool reportEachError, bool allowExtraction, bool allowMatching)
         {
             this.reportEachError = reportEachError;
+            this.allowExtraction = allowExtraction;
+            this.allowMatching = allowMatching;
         }
 
         public bool Initialize()
@@ -96,8 +100,8 @@ namespace GenKnowledge
                     importance,
                     matchModeAny,
                     -1,
-                    false,
-                    false
+                    allowExtraction,
+                    allowMatching
                 });
                 return result as string;
             }

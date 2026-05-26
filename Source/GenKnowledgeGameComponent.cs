@@ -26,7 +26,10 @@ namespace GenKnowledge
             GenKnowledgeMod.Settings?.EnsureDefaults(processors);
 
             var service = new KnowledgeGeneratorService(
-                new KnowledgeApiBridge(reportEachError),
+                new KnowledgeApiBridge(
+                    reportEachError,
+                    GenKnowledgeMod.Settings?.memoryAllowExtraction ?? true,
+                    GenKnowledgeMod.Settings?.memoryAllowMatching ?? true),
                 processors,
                 GenKnowledgeMod.Settings?.processConfigs,
                 GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.21f,
@@ -36,6 +39,7 @@ namespace GenKnowledge
                 GenKnowledgeMod.Settings?.labelDedupSimilarityThreshold ?? 0.5f,
                 GenKnowledgeMod.Settings?.labelDedupHighSimilarityKeepLongest ?? true,
                 GenKnowledgeMod.Settings?.labelDedupLowSimilarityMerge ?? true,
+                GenKnowledgeMod.Settings?.filterSingleChineseLabel ?? true,
                 GenKnowledgeMod.Settings?.enableRealWorldSkipList ?? true,
                 GenKnowledgeMod.Settings?.enableHighRedundancySkipList ?? false);
 
@@ -51,7 +55,10 @@ namespace GenKnowledge
             }
 
             var service = new KnowledgeGeneratorService(
-                new KnowledgeApiBridge(reportEachError),
+                new KnowledgeApiBridge(
+                    reportEachError,
+                    GenKnowledgeMod.Settings?.memoryAllowExtraction ?? true,
+                    GenKnowledgeMod.Settings?.memoryAllowMatching ?? true),
                 ProcessDefRegistry.GetProcessors(),
                 GenKnowledgeMod.Settings?.processConfigs,
                 GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.21f,
@@ -61,6 +68,7 @@ namespace GenKnowledge
                 GenKnowledgeMod.Settings?.labelDedupSimilarityThreshold ?? 0.5f,
                 GenKnowledgeMod.Settings?.labelDedupHighSimilarityKeepLongest ?? true,
                 GenKnowledgeMod.Settings?.labelDedupLowSimilarityMerge ?? true,
+                GenKnowledgeMod.Settings?.filterSingleChineseLabel ?? true,
                 GenKnowledgeMod.Settings?.enableRealWorldSkipList ?? true,
                 GenKnowledgeMod.Settings?.enableHighRedundancySkipList ?? false);
 
