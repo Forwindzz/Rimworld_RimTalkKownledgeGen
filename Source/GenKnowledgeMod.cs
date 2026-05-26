@@ -14,13 +14,17 @@ namespace GenKnowledge
         public static GenKnowledgeSettings Settings;
         public static string ModRootDir { get; private set; }
         private Vector2 settingsScrollPosition = Vector2.zero;
+        private float settingsContentHeight = 0f;
         private readonly Dictionary<string, bool> processorFoldoutStates = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
 
         public GenKnowledgeMod(ModContentPack content) : base(content)
         {
             ModRootDir = content?.RootDir?.ToString();
             Settings = GetSettings<GenKnowledgeSettings>();
-            Settings.EnsureDefaults(ProcessDefRegistry.GetProcessors());
+            // Do not initialize translated defaults in constructor.
+            // At this stage RimWorld language may not be active yet, which causes
+            // "No active language" spam for Translate() calls in default templates.
+            // Defaults are initialized later in settings UI / in-game generation.
 
             var harmony = new Harmony("RimTalk.GenKnowledge");
             harmony.PatchAll();
@@ -58,7 +62,10 @@ namespace GenKnowledge
                 }
             }
 
-            Rect viewRect = new Rect(0f, 0f, inRect.width - 16f, Mathf.Max(inRect.height, estimatedHeight));
+            float fallbackHeight = inRect.height + 1f;
+            float measuredHeight = settingsContentHeight > 0f ? settingsContentHeight : fallbackHeight;
+            float initialViewHeight = Mathf.Max(fallbackHeight, Mathf.Max(estimatedHeight + 160f, measuredHeight));
+            Rect viewRect = new Rect(0f, 0f, inRect.width - 16f, initialViewHeight);
             Widgets.BeginScrollView(inRect, ref settingsScrollPosition, viewRect);
 
             var listing = new Listing_Standard();
@@ -140,6 +147,9 @@ namespace GenKnowledge
 
             listing.End();
             Widgets.EndScrollView();
+
+            // Keep scroll area synced with real drawn content height so long processor sections remain reachable.
+            settingsContentHeight = Mathf.Max(fallbackHeight, listing.CurHeight + 48f);
 
             if (GUI.changed)
             {

@@ -248,7 +248,7 @@ namespace GenKnowledge.ProcessDefs
                 string displayName = string.IsNullOrWhiteSpace(propertyConfig.DisplayName) ? key : propertyConfig.DisplayName;
                 string displayLine = showNumericValues
                     ? (displayName + "=" + valueText + " (" + tendencyText + ")")
-                    : (displayName + tendencyText);
+                    : JoinDisplayAndTendency(displayName, tendencyText);
                 if (forceShowDebug)
                 {
                     displayLine += $" [c'={cScaled:0.###}, d={d:0.###}]";
@@ -474,6 +474,47 @@ namespace GenKnowledge.ProcessDefs
             }
 
             return false;
+        }
+
+        private static string JoinDisplayAndTendency(string displayName, string tendencyText)
+        {
+            string left = displayName ?? string.Empty;
+            string right = tendencyText ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(left))
+            {
+                return right;
+            }
+
+            if (string.IsNullOrWhiteSpace(right))
+            {
+                return left;
+            }
+
+            char leftLast = left[left.Length - 1];
+            char rightFirst = right[0];
+
+            if (char.IsWhiteSpace(leftLast) || char.IsWhiteSpace(rightFirst))
+            {
+                return left + right;
+            }
+
+            bool leftWord = char.IsLetterOrDigit(leftLast) && !IsCjk(leftLast);
+            bool rightWord = char.IsLetterOrDigit(rightFirst) && !IsCjk(rightFirst);
+            if (leftWord && rightWord)
+            {
+                return left + " " + right;
+            }
+
+            return left + right;
+        }
+
+        private static bool IsCjk(char c)
+        {
+            return (c >= '\u4E00' && c <= '\u9FFF')     // CJK Unified Ideographs
+                || (c >= '\u3400' && c <= '\u4DBF')     // CJK Unified Ideographs Extension A
+                || (c >= '\u3040' && c <= '\u30FF')     // Hiragana + Katakana
+                || (c >= '\uAC00' && c <= '\uD7AF');    // Hangul Syllables
         }
 
         private static List<SemanticLineEntry> BuildDefSemanticLines(ThingDef def, ThingProcessDefConfig config, bool debug)
