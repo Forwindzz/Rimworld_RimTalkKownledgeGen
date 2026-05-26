@@ -77,9 +77,11 @@ namespace GenKnowledge.Compatibility
             const float rowHeight = 24f;
             const float gap = 4f;
             const float bottomReserve = 70f;
+            const float bottomOffset = 96f;
 
             // Always append in sidebar footer region so it does not depend on foldout expansion.
-            float y = innerRect.yMax - bottomReserve - (rowHeight * 2f + gap);
+            float y = innerRect.yMax - bottomReserve - bottomOffset - (rowHeight * 2f + gap);
+            y = Mathf.Max(innerRect.y, y);
             Rect defsGenerateRect = new Rect(innerRect.x, y, innerRect.width, rowHeight);
             if (Widgets.ButtonText(defsGenerateRect, "RimTalkGenKnowledge.Memory.Button.GenerateFromDefs".Translate()))
             {

@@ -34,5 +34,5 @@
 		<li>cj.rimtalk.expandmemory</li>
 	</loadAfter>
 
-	<description>Automatically generate knowledge from definitions in the game</description>
+	<description>Automatically generate knowledge from definitions in the game. 根据游戏defs自动生成常识。</description>
 </ModMetaData>
