@@ -28,7 +28,8 @@ namespace GenKnowledge
             var service = new KnowledgeGeneratorService(
                 new KnowledgeApiBridge(reportEachError),
                 processors,
-                GenKnowledgeMod.Settings?.processConfigs);
+                GenKnowledgeMod.Settings?.processConfigs,
+                GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.15f);
 
             lastReport = service.Run(logicalToKnowledgeId, reportEachError);
             return lastReport;
@@ -44,7 +45,8 @@ namespace GenKnowledge
             var service = new KnowledgeGeneratorService(
                 new KnowledgeApiBridge(reportEachError),
                 ProcessDefRegistry.CreateProcessors(),
-                GenKnowledgeMod.Settings?.processConfigs);
+                GenKnowledgeMod.Settings?.processConfigs,
+                GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.15f);
 
             lastReport = service.Clear(logicalToKnowledgeId, reportEachError);
             return lastReport;

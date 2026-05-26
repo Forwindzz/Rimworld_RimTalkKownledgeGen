@@ -120,6 +120,8 @@ namespace GenKnowledge.ProcessDefs
 
                         string label = ProcessDefUtility.TrimOrNull(degree.label) ?? ProcessDefUtility.TrimOrNull(def.label);
                         string description = ProcessDefUtility.TrimOrNull(degree.description) ?? ProcessDefUtility.TrimOrNull(def.description);
+                        label = ReplacePawnTokens(label);
+                        description = ReplacePawnTokens(description);
                         if (string.IsNullOrWhiteSpace(label) || string.IsNullOrWhiteSpace(description))
                         {
                             continue;
@@ -133,6 +135,8 @@ namespace GenKnowledge.ProcessDefs
 
                 string baseLabel = ProcessDefUtility.TrimOrNull(def.label);
                 string baseDescription = ProcessDefUtility.TrimOrNull(def.description);
+                baseLabel = ReplacePawnTokens(baseLabel);
+                baseDescription = ReplacePawnTokens(baseDescription);
                 if (string.IsNullOrWhiteSpace(baseLabel) || string.IsNullOrWhiteSpace(baseDescription))
                 {
                     continue;
@@ -205,6 +209,18 @@ namespace GenKnowledge.ProcessDefs
             }
 
             return count > 0 ? (sum / count) : 0f;
+        }
+
+        private static string ReplacePawnTokens(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return text;
+            }
+
+            return text
+                .Replace("PAWN_nameDef", "此人")
+                .Replace("PAWN_pronoun", "此人");
         }
     }
 }

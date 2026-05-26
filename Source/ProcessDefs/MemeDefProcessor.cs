@@ -20,7 +20,7 @@ namespace GenKnowledge.ProcessDefs
                 Enabled = true,
                 IncludeModDefs = true,
                 TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: {{description}} (category={{category}}, impact={{impact}})",
+                KnowledgeTemplate = "{{label}}: {{description}}{{categoryLine}}\n影响：{{impactLabel}}",
                 BaseImportance = 0.5f,
                 ImportanceMin = 0.05f,
                 ImportanceMax = 0.82f,
@@ -61,6 +61,8 @@ namespace GenKnowledge.ProcessDefs
                 new PlaceholderDescriptor { Key = "description", Token = "{{description}}", Description = "Meme description" },
                 new PlaceholderDescriptor { Key = "category", Token = "{{category}}", Description = "Meme category" },
                 new PlaceholderDescriptor { Key = "impact", Token = "{{impact}}", Description = "Meme impact" },
+                new PlaceholderDescriptor { Key = "categoryLine", Token = "{{categoryLine}}", Description = "Category line, hidden when Normal" },
+                new PlaceholderDescriptor { Key = "impactLabel", Token = "{{impactLabel}}", Description = "Impact label text" },
                 new PlaceholderDescriptor { Key = "defName", Token = "{{defName}}", Description = "Def name" }
             };
         }
@@ -131,6 +133,9 @@ namespace GenKnowledge.ProcessDefs
                 }
 
                 float impact = ResolveImpactMetric(ProcessDefUtility.GetStringMemberOrDefault(def, "impact", string.Empty));
+                string impactLabel = ResolveImpactLabel(impact);
+                bool isNormalCategory = string.Equals(category, "Normal", StringComparison.OrdinalIgnoreCase);
+                string categoryLine = isNormalCategory || string.IsNullOrWhiteSpace(category) ? string.Empty : ("\n类别：" + category);
 
                 SetTemplateValues(new Dictionary<string, string>
                 {
@@ -138,6 +143,8 @@ namespace GenKnowledge.ProcessDefs
                     ["description"] = description ?? string.Empty,
                     ["category"] = category ?? string.Empty,
                     ["impact"] = impact.ToString("0.##"),
+                    ["categoryLine"] = categoryLine,
+                    ["impactLabel"] = impactLabel,
                     ["defName"] = def.defName
                 });
 
@@ -148,7 +155,7 @@ namespace GenKnowledge.ProcessDefs
                     continue;
                 }
 
-                bool hasCategory = !string.IsNullOrWhiteSpace(category);
+                bool hasCategory = !string.IsNullOrWhiteSpace(category) && !isNormalCategory;
                 float raw = typed.BaseImportance
                     + Math.Abs(impact) * typed.ImportanceWeightImpact
                     + Math.Abs(hasCategory ? 1f : 0f) * typed.ImportanceWeightCategory;
@@ -193,6 +200,21 @@ namespace GenKnowledge.ProcessDefs
             }
 
             return 0f;
+        }
+
+        private static string ResolveImpactLabel(float impact)
+        {
+            if (impact <= 1f)
+            {
+                return "低影响";
+            }
+
+            if (Mathf.Approximately(impact, 2f))
+            {
+                return "中影响";
+            }
+
+            return "高影响";
         }
     }
 }

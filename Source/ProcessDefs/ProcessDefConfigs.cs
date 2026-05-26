@@ -1,4 +1,5 @@
-﻿using Verse;
+﻿using System.Collections.Generic;
+using Verse;
 
 namespace GenKnowledge.ProcessDefs
 {
@@ -37,10 +38,41 @@ namespace GenKnowledge.ProcessDefs
         public string IncludeCategories = "Weapon,Apparel,Medicine,Food,Building";
         public string ExcludeCategories = string.Empty;
         public int MaxDescriptionLength = 300;
-        public bool IncludeStatSummary = false;
+        public bool FilterDescriptionShorterThanLabel = true;
+        public float DescriptionMinLabelLengthMultiplier = 3f;
+        public bool FilterFertilizedEggVariants = true;
+        public string FertilizedEggVariantTokens = "已受精,未受精,fert.,unfert.,fertilized,unfertilized";
+        public bool IncludeStatSummary = false; // legacy
+
         public float ImportanceWeightMarketValueLog10 = 0.05f;
         public float ImportanceWeightMassLog10 = 0.001f;
+        public float ImportanceWeightHitPointsLog10 = 0.02f;
         public float ImportanceWeightStackLimitIsOne = 0.05f;
+        public float ImportanceWeightSpecialValueScore = 0.02f;
+        public float ImportanceWeightNutrition = 0.05f;
+        public float ImportanceWeightDescriptionLengthRatio = 0.02f;
+        public float ImportanceMultiplierCraftable = 0.85f;
+
+        public bool EnableCategoryExtraText = true;
+        public bool EnablePriceFeelingText = true;
+        public bool EnableHitPointsFeelingText = true;
+        public bool DebugForceShowDeviation = false;
+        public bool FilterIntermediateBuildStates = true;
+        public string IntermediateBuildStateTokens = "建造中,蓝图,框架,blueprint,frame";
+
+        public int MaxSemanticLinesGlobal = 8;
+        public int SpecialValueTopN = 3;
+        public bool EnableFallbackAttributeOutput = true;
+        public int FallbackAttributeMaxLines = 6;
+        public string FallbackAttributeExcludeKeys = "graphicData,uiIconPath,drawerType,altitudeLayer";
+
+        public Dictionary<string, ThingCategoryRuleConfig> CategoryRules = new Dictionary<string, ThingCategoryRuleConfig>();
+        public Dictionary<string, ThingPropertyDeviationConfig> PropertyDeviationConfigs = new Dictionary<string, ThingPropertyDeviationConfig>();
+
+        private List<string> categoryRuleKeysWorkingList;
+        private List<ThingCategoryRuleConfig> categoryRuleValuesWorkingList;
+        private List<string> propertyDeviationKeysWorkingList;
+        private List<ThingPropertyDeviationConfig> propertyDeviationValuesWorkingList;
 
         public override void ExposeData()
         {
@@ -48,10 +80,118 @@ namespace GenKnowledge.ProcessDefs
             Scribe_Values.Look(ref IncludeCategories, "includeCategories", "Weapon,Apparel,Medicine,Food,Building");
             Scribe_Values.Look(ref ExcludeCategories, "excludeCategories", string.Empty);
             Scribe_Values.Look(ref MaxDescriptionLength, "maxDescriptionLength", 300);
+            Scribe_Values.Look(ref FilterDescriptionShorterThanLabel, "filterDescriptionShorterThanLabel", true);
+            Scribe_Values.Look(ref DescriptionMinLabelLengthMultiplier, "descriptionMinLabelLengthMultiplier", 3f);
+            Scribe_Values.Look(ref FilterFertilizedEggVariants, "filterFertilizedEggVariants", true);
+            Scribe_Values.Look(ref FertilizedEggVariantTokens, "fertilizedEggVariantTokens", "已受精,未受精,fert.,unfert.,fertilized,unfertilized");
             Scribe_Values.Look(ref IncludeStatSummary, "includeStatSummary", false);
+
             Scribe_Values.Look(ref ImportanceWeightMarketValueLog10, "importanceWeightMarketValueLog10", 0.05f);
             Scribe_Values.Look(ref ImportanceWeightMassLog10, "importanceWeightMassLog10", 0.001f);
+            Scribe_Values.Look(ref ImportanceWeightHitPointsLog10, "importanceWeightHitPointsLog10", 0.02f);
             Scribe_Values.Look(ref ImportanceWeightStackLimitIsOne, "importanceWeightStackLimitIsOne", 0.05f);
+            Scribe_Values.Look(ref ImportanceWeightSpecialValueScore, "importanceWeightSpecialValueScore", 0.02f);
+            Scribe_Values.Look(ref ImportanceWeightNutrition, "importanceWeightNutrition", 0.05f);
+            Scribe_Values.Look(ref ImportanceWeightDescriptionLengthRatio, "importanceWeightDescriptionLengthRatio", 0.02f);
+            Scribe_Values.Look(ref ImportanceMultiplierCraftable, "importanceMultiplierCraftable", 0.85f);
+
+            Scribe_Values.Look(ref EnableCategoryExtraText, "enableCategoryExtraText", true);
+            Scribe_Values.Look(ref EnablePriceFeelingText, "enablePriceFeelingText", true);
+            Scribe_Values.Look(ref EnableHitPointsFeelingText, "enableHitPointsFeelingText", true);
+            Scribe_Values.Look(ref DebugForceShowDeviation, "debugForceShowDeviation", false);
+            Scribe_Values.Look(ref FilterIntermediateBuildStates, "filterIntermediateBuildStates", true);
+            Scribe_Values.Look(ref IntermediateBuildStateTokens, "intermediateBuildStateTokens", "建造中,蓝图,框架,blueprint,frame");
+
+            Scribe_Values.Look(ref MaxSemanticLinesGlobal, "maxSemanticLinesGlobal", 8);
+            Scribe_Values.Look(ref SpecialValueTopN, "specialValueTopN", 3);
+            Scribe_Values.Look(ref EnableFallbackAttributeOutput, "enableFallbackAttributeOutput", true);
+            Scribe_Values.Look(ref FallbackAttributeMaxLines, "fallbackAttributeMaxLines", 6);
+            Scribe_Values.Look(ref FallbackAttributeExcludeKeys, "fallbackAttributeExcludeKeys", "graphicData,uiIconPath,drawerType,altitudeLayer");
+
+            Scribe_Collections.Look(
+                ref CategoryRules,
+                "categoryRules",
+                LookMode.Value,
+                LookMode.Deep,
+                ref categoryRuleKeysWorkingList,
+                ref categoryRuleValuesWorkingList);
+
+            Scribe_Collections.Look(
+                ref PropertyDeviationConfigs,
+                "propertyDeviationConfigs",
+                LookMode.Value,
+                LookMode.Deep,
+                ref propertyDeviationKeysWorkingList,
+                ref propertyDeviationValuesWorkingList);
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                if (CategoryRules == null)
+                {
+                    CategoryRules = new Dictionary<string, ThingCategoryRuleConfig>();
+                }
+
+                if (PropertyDeviationConfigs == null)
+                {
+                    PropertyDeviationConfigs = new Dictionary<string, ThingPropertyDeviationConfig>();
+                }
+            }
+        }
+    }
+
+    public class ThingCategoryRuleConfig : IExposable
+    {
+        public bool Enabled = true;
+        public string PropertyKeys = string.Empty;
+        public int MaxLines = 4;
+
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref Enabled, "enabled", true);
+            Scribe_Values.Look(ref PropertyKeys, "propertyKeys", string.Empty);
+            Scribe_Values.Look(ref MaxLines, "maxLines", 4);
+        }
+    }
+
+    public class ThingPropertyDeviationConfig : IExposable
+    {
+        public bool Enabled = true;
+        public float RangeMin = 0f;
+        public float RangeMax = 20f;
+        public float Scale = 1f;
+        public bool NonNegativeOnly = false;
+        public bool IsPercent = false;
+        public string DisplayName = string.Empty;
+        public string LowLabel = string.Empty;
+        public string HighLabel = string.Empty;
+        public string BiasTextNegStrong = string.Empty;
+        public string BiasTextNegLight = string.Empty;
+        public string BiasTextPosLight = string.Empty;
+        public string BiasTextPosStrong = string.Empty;
+        public string StageTextNegStrong = string.Empty;
+        public string StageTextNegLight = string.Empty;
+        public string StageTextPosLight = string.Empty;
+        public string StageTextPosStrong = string.Empty;
+
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref Enabled, "enabled", true);
+            Scribe_Values.Look(ref RangeMin, "rangeMin", 0f);
+            Scribe_Values.Look(ref RangeMax, "rangeMax", 20f);
+            Scribe_Values.Look(ref Scale, "scale", 1f);
+            Scribe_Values.Look(ref NonNegativeOnly, "nonNegativeOnly", false);
+            Scribe_Values.Look(ref IsPercent, "isPercent", false);
+            Scribe_Values.Look(ref DisplayName, "displayName", string.Empty);
+            Scribe_Values.Look(ref LowLabel, "lowLabel", string.Empty);
+            Scribe_Values.Look(ref HighLabel, "highLabel", string.Empty);
+            Scribe_Values.Look(ref BiasTextNegStrong, "biasTextNegStrong", string.Empty);
+            Scribe_Values.Look(ref BiasTextNegLight, "biasTextNegLight", string.Empty);
+            Scribe_Values.Look(ref BiasTextPosLight, "biasTextPosLight", string.Empty);
+            Scribe_Values.Look(ref BiasTextPosStrong, "biasTextPosStrong", string.Empty);
+            Scribe_Values.Look(ref StageTextNegStrong, "stageTextNegStrong", string.Empty);
+            Scribe_Values.Look(ref StageTextNegLight, "stageTextNegLight", string.Empty);
+            Scribe_Values.Look(ref StageTextPosLight, "stageTextPosLight", string.Empty);
+            Scribe_Values.Look(ref StageTextPosStrong, "stageTextPosStrong", string.Empty);
         }
     }
 
@@ -92,16 +232,20 @@ namespace GenKnowledge.ProcessDefs
     public class ResearchProjectProcessDefConfig : ProcessDefBaseConfig
     {
         public bool IncludePrerequisites = true;
+        public bool IncludePostrequisites = true;
         public float ImportanceWeightCost = 0.1f;
         public float ImportanceWeightPrereqCount = 0.03f;
+        public float ImportanceWeightPostreqCount = 0.04f;
         public bool UseCostLog10Weight = true;
 
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_Values.Look(ref IncludePrerequisites, "includePrerequisites", true);
+            Scribe_Values.Look(ref IncludePostrequisites, "includePostrequisites", true);
             Scribe_Values.Look(ref ImportanceWeightCost, "importanceWeightCost", 0.1f);
             Scribe_Values.Look(ref ImportanceWeightPrereqCount, "importanceWeightPrereqCount", 0.03f);
+            Scribe_Values.Look(ref ImportanceWeightPostreqCount, "importanceWeightPostreqCount", 0.04f);
             Scribe_Values.Look(ref UseCostLog10Weight, "useCostLog10Weight", true);
         }
     }

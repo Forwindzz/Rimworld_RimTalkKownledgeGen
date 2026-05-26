@@ -13,15 +13,18 @@ namespace GenKnowledge
         private readonly KnowledgeApiBridge apiBridge;
         private readonly List<IProcessDef> processors;
         private readonly Dictionary<string, ProcessDefBaseConfig> processConfigs;
+        private readonly float minKnowledgeImportance;
 
         public KnowledgeGeneratorService(
             KnowledgeApiBridge apiBridge,
             List<IProcessDef> processors,
-            Dictionary<string, ProcessDefBaseConfig> processConfigs)
+            Dictionary<string, ProcessDefBaseConfig> processConfigs,
+            float minKnowledgeImportance)
         {
             this.apiBridge = apiBridge;
             this.processors = processors ?? new List<IProcessDef>();
             this.processConfigs = processConfigs;
+            this.minKnowledgeImportance = Mathf.Clamp01(minKnowledgeImportance);
         }
 
         public GenerationReport Run(Dictionary<string, string> logicalToKnowledgeId, bool reportEachError)
@@ -80,7 +83,7 @@ namespace GenKnowledge
             }
 
             var validItems = generated
-                .Where(IsValidItem)
+                .Where(item => IsValidItem(item, minKnowledgeImportance))
                 .GroupBy(i => i.LogicalKey)
                 .Select(g => g.Last())
                 .ToList();
@@ -231,7 +234,7 @@ namespace GenKnowledge
             return config;
         }
 
-        private static bool IsValidItem(GeneratedKnowledgeItem item)
+        private static bool IsValidItem(GeneratedKnowledgeItem item, float minImportance)
         {
             if (item == null)
             {
@@ -246,6 +249,11 @@ namespace GenKnowledge
             }
 
             if (item.Tag.Length > 120 || item.Content.Length > 2000)
+            {
+                return false;
+            }
+
+            if (item.Importance < minImportance)
             {
                 return false;
             }

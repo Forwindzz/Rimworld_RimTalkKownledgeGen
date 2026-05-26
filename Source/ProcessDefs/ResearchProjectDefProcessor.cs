@@ -21,13 +21,15 @@ namespace GenKnowledge.ProcessDefs
                 Enabled = true,
                 IncludeModDefs = true,
                 TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: {{description}} (cost={{cost}}, tech={{techLevel}})",
+                KnowledgeTemplate = "{{label}}: {{description}} (cost={{cost}}, tech={{techLevel}}){{costDifficultyLine}}",
                 BaseImportance = 0.1f,
                 ImportanceMin = 0.01f,
                 ImportanceMax = 0.83f,
                 IncludePrerequisites = true,
+                IncludePostrequisites = true,
                 ImportanceWeightCost = 0.1f,
                 ImportanceWeightPrereqCount = 0.03f,
+                ImportanceWeightPostreqCount = 0.04f,
                 UseCostLog10Weight = true
             };
         }
@@ -49,8 +51,10 @@ namespace GenKnowledge.ProcessDefs
             typed.ImportanceMin = defaults.ImportanceMin;
             typed.ImportanceMax = defaults.ImportanceMax;
             typed.IncludePrerequisites = defaults.IncludePrerequisites;
+            typed.IncludePostrequisites = defaults.IncludePostrequisites;
             typed.ImportanceWeightCost = defaults.ImportanceWeightCost;
             typed.ImportanceWeightPrereqCount = defaults.ImportanceWeightPrereqCount;
+            typed.ImportanceWeightPostreqCount = defaults.ImportanceWeightPostreqCount;
             typed.UseCostLog10Weight = defaults.UseCostLog10Weight;
         }
 
@@ -61,15 +65,18 @@ namespace GenKnowledge.ProcessDefs
                 new PlaceholderDescriptor { Key = "label", Token = "{{label}}", Description = "Research label" },
                 new PlaceholderDescriptor { Key = "description", Token = "{{description}}", Description = "Research description" },
                 new PlaceholderDescriptor { Key = "cost", Token = "{{cost}}", Description = "Research cost" },
+                new PlaceholderDescriptor { Key = "costDifficulty", Token = "{{costDifficulty}}", Description = "Cost difficulty label" },
+                new PlaceholderDescriptor { Key = "costDifficultyLine", Token = "{{costDifficultyLine}}", Description = "Cost difficulty line" },
                 new PlaceholderDescriptor { Key = "techLevel", Token = "{{techLevel}}", Description = "Tech level" },
                 new PlaceholderDescriptor { Key = "prerequisites", Token = "{{prerequisites}}", Description = "Prerequisite projects" },
+                new PlaceholderDescriptor { Key = "postrequisites", Token = "{{postrequisites}}", Description = "Post-requisite projects" },
                 new PlaceholderDescriptor { Key = "defName", Token = "{{defName}}", Description = "Def name" }
             };
         }
 
         public override float GetConfigHeight(ProcessDefBaseConfig config, float viewWidth)
         {
-            return 520f;
+            return 560f;
         }
 
         protected override float DrawAdvancedConfig(float x, float y, float width, float lineHeight, float gap, ResearchProjectProcessDefConfig config)
@@ -77,12 +84,17 @@ namespace GenKnowledge.ProcessDefs
             Rect preRect = new Rect(x, y, width, lineHeight);
             Widgets.CheckboxLabeled(preRect, "RimTalkGenKnowledge.Settings.Research.IncludePrerequisites".Translate(), ref config.IncludePrerequisites);
             y += lineHeight + gap;
+            Rect postRect = new Rect(x, y, width, lineHeight);
+            Widgets.CheckboxLabeled(postRect, "RimTalkGenKnowledge.Settings.Research.IncludePostrequisites".Translate(), ref config.IncludePostrequisites);
+            y += lineHeight + gap;
             Rect logRect = new Rect(x, y, width, lineHeight);
             Widgets.CheckboxLabeled(logRect, "RimTalkGenKnowledge.Settings.Research.UseCostLog10Weight".Translate(), ref config.UseCostLog10Weight);
             y += lineHeight + gap;
             y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "RimTalkGenKnowledge.Settings.Research.WeightCost".Translate(), config.ImportanceWeightCost, v => config.ImportanceWeightCost = v);
             y += gap;
             y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "RimTalkGenKnowledge.Settings.Research.WeightPrereqCount".Translate(), config.ImportanceWeightPrereqCount, v => config.ImportanceWeightPrereqCount = v);
+            y += gap;
+            y = ProcessDefUiUtility.DrawFloatRow(x, y, width, lineHeight, "RimTalkGenKnowledge.Settings.Research.WeightPostreqCount".Translate(), config.ImportanceWeightPostreqCount, v => config.ImportanceWeightPostreqCount = v);
             y += gap;
             return y;
         }
@@ -95,13 +107,14 @@ namespace GenKnowledge.ProcessDefs
                 yield break;
             }
 
-            foreach (ResearchProjectDef def in DefDatabase<ResearchProjectDef>.AllDefsListForReading)
-            {
-                if (def == null || string.IsNullOrWhiteSpace(def.defName))
-                {
-                    continue;
-                }
+            List<ResearchProjectDef> allDefs = DefDatabase<ResearchProjectDef>.AllDefsListForReading
+                .Where(d => d != null && !string.IsNullOrWhiteSpace(d.defName))
+                .ToList();
 
+            Dictionary<ResearchProjectDef, List<ResearchProjectDef>> postreqMap = BuildPostrequisiteMap(allDefs);
+
+            foreach (ResearchProjectDef def in allDefs)
+            {
                 if (!ProcessDefUtility.ShouldIncludeDef(def, typed.IncludeModDefs))
                 {
                     continue;
@@ -121,14 +134,29 @@ namespace GenKnowledge.ProcessDefs
                     prerequisites = string.Join(",", def.prerequisites.Select(p => p?.label ?? p?.defName).Where(s => !string.IsNullOrWhiteSpace(s)).ToArray());
                 }
 
+                postreqMap.TryGetValue(def, out List<ResearchProjectDef> postreqDefs);
+                int postreqCount = postreqDefs?.Count ?? 0;
+                string postrequisites = string.Empty;
+                if (typed.IncludePostrequisites && postreqCount > 0)
+                {
+                    postrequisites = string.Join(",", postreqDefs.Select(p => p?.label ?? p?.defName).Where(s => !string.IsNullOrWhiteSpace(s)).ToArray());
+                }
+
                 float cost = def.baseCost;
+                string costDifficulty = GetCostDifficultyLabel(cost);
+                string costDifficultyLine = string.IsNullOrWhiteSpace(costDifficulty)
+                    ? string.Empty
+                    : "\n研究难度：" + costDifficulty;
                 SetTemplateValues(new Dictionary<string, string>
                 {
                     ["label"] = label,
                     ["description"] = description,
                     ["cost"] = cost.ToString("0.##"),
+                    ["costDifficulty"] = costDifficulty,
+                    ["costDifficultyLine"] = costDifficultyLine,
                     ["techLevel"] = def.techLevel.ToString(),
                     ["prerequisites"] = prerequisites,
+                    ["postrequisites"] = postrequisites,
                     ["defName"] = def.defName
                 });
 
@@ -142,7 +170,8 @@ namespace GenKnowledge.ProcessDefs
                 float costMetric = typed.UseCostLog10Weight ? ProcessDefUtility.SafeLog10(cost) : cost;
                 float raw = typed.BaseImportance
                     + Math.Abs(costMetric) * typed.ImportanceWeightCost
-                    + Math.Abs(prereqCount) * typed.ImportanceWeightPrereqCount;
+                    + Math.Abs(prereqCount) * typed.ImportanceWeightPrereqCount
+                    + Math.Abs(postreqCount) * typed.ImportanceWeightPostreqCount;
 
                 yield return new GeneratedKnowledgeItem
                 {
@@ -152,6 +181,59 @@ namespace GenKnowledge.ProcessDefs
                     Importance = ComputeFinalImportance(raw, typed)
                 };
             }
+        }
+
+        private static Dictionary<ResearchProjectDef, List<ResearchProjectDef>> BuildPostrequisiteMap(List<ResearchProjectDef> allDefs)
+        {
+            var map = new Dictionary<ResearchProjectDef, List<ResearchProjectDef>>();
+            if (allDefs == null)
+            {
+                return map;
+            }
+
+            foreach (ResearchProjectDef def in allDefs)
+            {
+                if (def?.prerequisites == null)
+                {
+                    continue;
+                }
+
+                foreach (ResearchProjectDef prereq in def.prerequisites)
+                {
+                    if (prereq == null)
+                    {
+                        continue;
+                    }
+
+                    if (!map.TryGetValue(prereq, out List<ResearchProjectDef> dependents))
+                    {
+                        dependents = new List<ResearchProjectDef>();
+                        map[prereq] = dependents;
+                    }
+
+                    if (!dependents.Contains(def))
+                    {
+                        dependents.Add(def);
+                    }
+                }
+            }
+
+            return map;
+        }
+
+        private static string GetCostDifficultyLabel(float cost)
+        {
+            if (cost < 1000f)
+            {
+                return "简单";
+            }
+
+            if (cost > 10000f)
+            {
+                return "困难";
+            }
+
+            return string.Empty;
         }
     }
 }

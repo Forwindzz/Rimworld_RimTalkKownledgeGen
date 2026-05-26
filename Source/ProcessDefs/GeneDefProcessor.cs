@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -20,7 +21,7 @@ namespace GenKnowledge.ProcessDefs
                 Enabled = true,
                 IncludeModDefs = true,
                 TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: {{description}} (cpx={{complexity}}, met={{metabolism}}, arc={{archites}})",
+                KnowledgeTemplate = "{{label}}: {{description}}{{geneStatsLine}}",
                 BaseImportance = 0.2f,
                 ImportanceMin = 0.05f,
                 ImportanceMax = 0.8f,
@@ -64,6 +65,11 @@ namespace GenKnowledge.ProcessDefs
                 new PlaceholderDescriptor { Key = "complexity", Token = "{{complexity}}", Description = "Biostat complexity" },
                 new PlaceholderDescriptor { Key = "metabolism", Token = "{{metabolism}}", Description = "Biostat metabolism" },
                 new PlaceholderDescriptor { Key = "archites", Token = "{{archites}}", Description = "Biostat archites" },
+                new PlaceholderDescriptor { Key = "complexityLine", Token = "{{complexityLine}}", Description = "Complexity summary line" },
+                new PlaceholderDescriptor { Key = "metabolismLine", Token = "{{metabolismLine}}", Description = "Metabolism summary line" },
+                new PlaceholderDescriptor { Key = "architesLine", Token = "{{architesLine}}", Description = "Archites summary line" },
+                new PlaceholderDescriptor { Key = "geneStats", Token = "{{geneStats}}", Description = "Joined gene stats text" },
+                new PlaceholderDescriptor { Key = "geneStatsLine", Token = "{{geneStatsLine}}", Description = "Joined gene stats with leading newline when non-empty" },
                 new PlaceholderDescriptor { Key = "category", Token = "{{category}}", Description = "Display category" },
                 new PlaceholderDescriptor { Key = "defName", Token = "{{defName}}", Description = "Def name" }
             };
@@ -136,6 +142,12 @@ namespace GenKnowledge.ProcessDefs
                     continue;
                 }
 
+                string complexityLine = BuildComplexityLine(cpx);
+                string metabolismLine = BuildMetabolismLine(met);
+                string architesLine = BuildArchitesLine(arc);
+                string geneStats = string.Join("；", new[] { complexityLine, metabolismLine, architesLine }.Where(s => !string.IsNullOrWhiteSpace(s)));
+                string geneStatsLine = string.IsNullOrWhiteSpace(geneStats) ? string.Empty : ("\n" + geneStats);
+
                 SetTemplateValues(new Dictionary<string, string>
                 {
                     ["label"] = label,
@@ -143,6 +155,11 @@ namespace GenKnowledge.ProcessDefs
                     ["complexity"] = cpx.ToString(),
                     ["metabolism"] = met.ToString(),
                     ["archites"] = arc.ToString(),
+                    ["complexityLine"] = complexityLine,
+                    ["metabolismLine"] = metabolismLine,
+                    ["architesLine"] = architesLine,
+                    ["geneStats"] = geneStats,
+                    ["geneStatsLine"] = geneStatsLine,
                     ["category"] = ProcessDefUtility.TrimOrNull(def.displayCategory?.label) ?? string.Empty,
                     ["defName"] = def.defName
                 });
@@ -167,6 +184,73 @@ namespace GenKnowledge.ProcessDefs
                     Importance = ComputeFinalImportance(raw, typed)
                 };
             }
+        }
+
+        private static string BuildComplexityLine(int cpx)
+        {
+            if (cpx == 0)
+            {
+                return string.Empty;
+            }
+
+            string level;
+            if (cpx >= 1 && cpx <= 3)
+            {
+                level = "低复杂度";
+            }
+            else if (cpx >= 4 && cpx <= 10)
+            {
+                level = "中复杂度";
+            }
+            else
+            {
+                level = "高复杂度";
+            }
+
+            return "复杂度：" + cpx + "（" + level + "）";
+        }
+
+        private static string BuildMetabolismLine(int met)
+        {
+            if (met == 0)
+            {
+                return string.Empty;
+            }
+
+            string summary = string.Empty;
+            if (met < -2)
+            {
+                summary = "消耗极多";
+            }
+            else if (met >= -2 && met <= -1)
+            {
+                summary = "消耗更多";
+            }
+            else if (met >= 1 && met <= 2)
+            {
+                summary = "减少消耗";
+            }
+            else if (met >= 3)
+            {
+                summary = "大幅减少消耗";
+            }
+
+            if (string.IsNullOrWhiteSpace(summary))
+            {
+                return "代谢率：" + met;
+            }
+
+            return "代谢率：" + met + "（" + summary + "）";
+        }
+
+        private static string BuildArchitesLine(int arc)
+        {
+            if (arc <= 0)
+            {
+                return string.Empty;
+            }
+
+            return "需要" + arc + "超凡胶囊";
         }
     }
 }

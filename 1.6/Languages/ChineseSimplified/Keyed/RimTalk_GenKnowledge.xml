@@ -2,9 +2,11 @@
 <LanguageData>
   <RimTalkGenKnowledge.Settings.Category>常识生成</RimTalkGenKnowledge.Settings.Category>
   <RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>启用全局错误提示</RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>
+  <RimTalkGenKnowledge.Settings.MinKnowledgeImportance>全局最小重要性（小于该值将被丢弃）：{0}</RimTalkGenKnowledge.Settings.MinKnowledgeImportance>
   <RimTalkGenKnowledge.Settings.OnlyLoadedSave>常识生成仅可在已加载存档中执行。</RimTalkGenKnowledge.Settings.OnlyLoadedSave>
   <RimTalkGenKnowledge.Settings.GenerateCurrentSave>生成常识（当前存档）</RimTalkGenKnowledge.Settings.GenerateCurrentSave>
   <RimTalkGenKnowledge.Settings.ClearGeneratedKnowledge>清理已生成常识</RimTalkGenKnowledge.Settings.ClearGeneratedKnowledge>
+  <RimTalkGenKnowledge.Settings.ResetAllProcessConfigs>重置全部处理器配置</RimTalkGenKnowledge.Settings.ResetAllProcessConfigs>
   <RimTalkGenKnowledge.Settings.Processors>处理器</RimTalkGenKnowledge.Settings.Processors>
   <RimTalkGenKnowledge.Settings.Enabled>启用</RimTalkGenKnowledge.Settings.Enabled>
   <RimTalkGenKnowledge.Settings.TagTemplate>Tag 模板</RimTalkGenKnowledge.Settings.TagTemplate>
@@ -34,9 +36,11 @@
   <RimTalkGenKnowledge.Settings.Trait.WeightCommonality>Commonality 权重</RimTalkGenKnowledge.Settings.Trait.WeightCommonality>
   <RimTalkGenKnowledge.Settings.Trait.WeightCommonalityLog10>Commonality log10 权重</RimTalkGenKnowledge.Settings.Trait.WeightCommonalityLog10>
   <RimTalkGenKnowledge.Settings.Research.IncludePrerequisites>包含前置科技</RimTalkGenKnowledge.Settings.Research.IncludePrerequisites>
+  <RimTalkGenKnowledge.Settings.Research.IncludePostrequisites>包含后续科技</RimTalkGenKnowledge.Settings.Research.IncludePostrequisites>
   <RimTalkGenKnowledge.Settings.Research.UseCostLog10Weight>使用 cost 的 log10 权重</RimTalkGenKnowledge.Settings.Research.UseCostLog10Weight>
   <RimTalkGenKnowledge.Settings.Research.WeightCost>cost 权重</RimTalkGenKnowledge.Settings.Research.WeightCost>
   <RimTalkGenKnowledge.Settings.Research.WeightPrereqCount>前置数量权重</RimTalkGenKnowledge.Settings.Research.WeightPrereqCount>
+  <RimTalkGenKnowledge.Settings.Research.WeightPostreqCount>后续数量权重</RimTalkGenKnowledge.Settings.Research.WeightPostreqCount>
   <RimTalkGenKnowledge.Settings.Recipe.IncludeIngredients>包含材料信息</RimTalkGenKnowledge.Settings.Recipe.IncludeIngredients>
   <RimTalkGenKnowledge.Settings.Recipe.IncludeWorkbench>包含工作台信息</RimTalkGenKnowledge.Settings.Recipe.IncludeWorkbench>
   <RimTalkGenKnowledge.Settings.Recipe.WeightWorkAmountLog10>工作量 log10 权重</RimTalkGenKnowledge.Settings.Recipe.WeightWorkAmountLog10>
@@ -101,6 +105,7 @@
   <RimTalkGenKnowledge.Message.ApiBridgeNotInitialized>API 桥接尚未初始化。</RimTalkGenKnowledge.Message.ApiBridgeNotInitialized>
   <RimTalkGenKnowledge.Message.InvalidXenotypeConfigType>Xenotype 配置类型无效。</RimTalkGenKnowledge.Message.InvalidXenotypeConfigType>
   <RimTalkGenKnowledge.Message.InvalidProcessorConfigType>处理器配置类型无效：{0}</RimTalkGenKnowledge.Message.InvalidProcessorConfigType>
+  <RimTalkGenKnowledge.Message.ResetAllProcessConfigsDone>已将全部处理器配置重置为默认值。</RimTalkGenKnowledge.Message.ResetAllProcessConfigsDone>
 
   <RimTalkGenKnowledge.Report.NoSaveLoaded>未加载存档。</RimTalkGenKnowledge.Report.NoSaveLoaded>
   <RimTalkGenKnowledge.Report.NoGenerationReport>暂无生成报告。</RimTalkGenKnowledge.Report.NoGenerationReport>

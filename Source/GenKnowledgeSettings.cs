@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GenKnowledge.ProcessDefs;
+using UnityEngine;
 using Verse;
 
 namespace GenKnowledge
@@ -8,6 +9,7 @@ namespace GenKnowledge
     public class GenKnowledgeSettings : ModSettings
     {
         public bool enableGlobalErrorReporting = false;
+        public float minKnowledgeImportance = 0.15f;
 
         public Dictionary<string, ProcessDefBaseConfig> processConfigs = new Dictionary<string, ProcessDefBaseConfig>();
 
@@ -17,6 +19,7 @@ namespace GenKnowledge
         public override void ExposeData()
         {
             Scribe_Values.Look(ref enableGlobalErrorReporting, "enableGlobalErrorReporting", false);
+            Scribe_Values.Look(ref minKnowledgeImportance, "minKnowledgeImportance", 0.15f);
             Scribe_Collections.Look(
                 ref processConfigs,
                 "processConfigs",
@@ -27,6 +30,8 @@ namespace GenKnowledge
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
+                minKnowledgeImportance = Mathf.Clamp01(minKnowledgeImportance);
+
                 if (processConfigs == null)
                 {
                     processConfigs = new Dictionary<string, ProcessDefBaseConfig>();

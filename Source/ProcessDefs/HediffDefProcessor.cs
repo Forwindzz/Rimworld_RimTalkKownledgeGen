@@ -20,7 +20,7 @@ namespace GenKnowledge.ProcessDefs
                 Enabled = true,
                 IncludeModDefs = true,
                 TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: {{description}} (bad={{isBad}}, chronic={{isChronic}}, tendable={{tendable}})",
+                KnowledgeTemplate = "{{label}}: {{description}}\n效果：{{badLabel}}{{chronicLine}}{{tendableLine}}",
                 BaseImportance = 0.6f,
                 ImportanceMin = 0.1f,
                 ImportanceMax = 0.88f,
@@ -66,6 +66,9 @@ namespace GenKnowledge.ProcessDefs
                 new PlaceholderDescriptor { Key = "isBad", Token = "{{isBad}}", Description = "Whether this is harmful" },
                 new PlaceholderDescriptor { Key = "isChronic", Token = "{{isChronic}}", Description = "Whether this is chronic" },
                 new PlaceholderDescriptor { Key = "tendable", Token = "{{tendable}}", Description = "Whether this can be tended" },
+                new PlaceholderDescriptor { Key = "badLabel", Token = "{{badLabel}}", Description = "Positive/negative effect label" },
+                new PlaceholderDescriptor { Key = "chronicLine", Token = "{{chronicLine}}", Description = "Shown only when chronic=true" },
+                new PlaceholderDescriptor { Key = "tendableLine", Token = "{{tendableLine}}", Description = "Shown only when tendable=true" },
                 new PlaceholderDescriptor { Key = "isLethal", Token = "{{isLethal}}", Description = "Whether this may be lethal" },
                 new PlaceholderDescriptor { Key = "defName", Token = "{{defName}}", Description = "Def name" }
             };
@@ -125,11 +128,19 @@ namespace GenKnowledge.ProcessDefs
                     continue;
                 }
 
+                if (string.IsNullOrWhiteSpace(description) || description.Length < label.Length * 3)
+                {
+                    continue;
+                }
+
                 bool isBad = def.isBad;
                 bool isChronic = def.chronic;
                 bool tendable = def.tendable;
                 bool isLethal = def.lethalSeverity > 0f;
                 bool isImplant = IsImplant(def);
+                string badLabel = isBad ? "负面效果" : "正面效果";
+                string chronicLine = isChronic ? "\n长期状态" : string.Empty;
+                string tendableLine = tendable ? "\n可处理" : string.Empty;
 
                 if (!typed.IncludeGoodHediffs && !isBad)
                 {
@@ -148,6 +159,9 @@ namespace GenKnowledge.ProcessDefs
                     ["isBad"] = isBad ? "true" : "false",
                     ["isChronic"] = isChronic ? "true" : "false",
                     ["tendable"] = tendable ? "true" : "false",
+                    ["badLabel"] = badLabel,
+                    ["chronicLine"] = chronicLine,
+                    ["tendableLine"] = tendableLine,
                     ["isLethal"] = isLethal ? "true" : "false",
                     ["defName"] = def.defName
                 });

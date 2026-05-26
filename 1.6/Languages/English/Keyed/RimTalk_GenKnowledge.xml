@@ -2,9 +2,11 @@
 <LanguageData>
   <RimTalkGenKnowledge.Settings.Category>Gen Knowledge</RimTalkGenKnowledge.Settings.Category>
   <RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>Enable global error reporting</RimTalkGenKnowledge.Settings.EnableGlobalErrorReporting>
+  <RimTalkGenKnowledge.Settings.MinKnowledgeImportance>Global minimum importance (items below are dropped): {0}</RimTalkGenKnowledge.Settings.MinKnowledgeImportance>
   <RimTalkGenKnowledge.Settings.OnlyLoadedSave>Generate knowledge only works in a loaded save.</RimTalkGenKnowledge.Settings.OnlyLoadedSave>
   <RimTalkGenKnowledge.Settings.GenerateCurrentSave>Generate knowledge (current save)</RimTalkGenKnowledge.Settings.GenerateCurrentSave>
   <RimTalkGenKnowledge.Settings.ClearGeneratedKnowledge>Clear generated knowledge</RimTalkGenKnowledge.Settings.ClearGeneratedKnowledge>
+  <RimTalkGenKnowledge.Settings.ResetAllProcessConfigs>Reset all processor configs</RimTalkGenKnowledge.Settings.ResetAllProcessConfigs>
   <RimTalkGenKnowledge.Settings.Processors>Processors</RimTalkGenKnowledge.Settings.Processors>
   <RimTalkGenKnowledge.Settings.Enabled>Enabled</RimTalkGenKnowledge.Settings.Enabled>
   <RimTalkGenKnowledge.Settings.TagTemplate>Tag Template</RimTalkGenKnowledge.Settings.TagTemplate>
@@ -34,9 +36,11 @@
   <RimTalkGenKnowledge.Settings.Trait.WeightCommonality>Weight commonality</RimTalkGenKnowledge.Settings.Trait.WeightCommonality>
   <RimTalkGenKnowledge.Settings.Trait.WeightCommonalityLog10>Weight commonality log10</RimTalkGenKnowledge.Settings.Trait.WeightCommonalityLog10>
   <RimTalkGenKnowledge.Settings.Research.IncludePrerequisites>Include prerequisites</RimTalkGenKnowledge.Settings.Research.IncludePrerequisites>
+  <RimTalkGenKnowledge.Settings.Research.IncludePostrequisites>Include post-requisites</RimTalkGenKnowledge.Settings.Research.IncludePostrequisites>
   <RimTalkGenKnowledge.Settings.Research.UseCostLog10Weight>Use cost log10 weight</RimTalkGenKnowledge.Settings.Research.UseCostLog10Weight>
   <RimTalkGenKnowledge.Settings.Research.WeightCost>Weight cost</RimTalkGenKnowledge.Settings.Research.WeightCost>
   <RimTalkGenKnowledge.Settings.Research.WeightPrereqCount>Weight prerequisite count</RimTalkGenKnowledge.Settings.Research.WeightPrereqCount>
+  <RimTalkGenKnowledge.Settings.Research.WeightPostreqCount>Weight post-requisite count</RimTalkGenKnowledge.Settings.Research.WeightPostreqCount>
   <RimTalkGenKnowledge.Settings.Recipe.IncludeIngredients>Include ingredients</RimTalkGenKnowledge.Settings.Recipe.IncludeIngredients>
   <RimTalkGenKnowledge.Settings.Recipe.IncludeWorkbench>Include workbench</RimTalkGenKnowledge.Settings.Recipe.IncludeWorkbench>
   <RimTalkGenKnowledge.Settings.Recipe.WeightWorkAmountLog10>Weight workAmount log10</RimTalkGenKnowledge.Settings.Recipe.WeightWorkAmountLog10>
@@ -101,6 +105,7 @@
   <RimTalkGenKnowledge.Message.ApiBridgeNotInitialized>API bridge not initialized.</RimTalkGenKnowledge.Message.ApiBridgeNotInitialized>
   <RimTalkGenKnowledge.Message.InvalidXenotypeConfigType>Invalid Xenotype config type.</RimTalkGenKnowledge.Message.InvalidXenotypeConfigType>
   <RimTalkGenKnowledge.Message.InvalidProcessorConfigType>Invalid processor config type: {0}</RimTalkGenKnowledge.Message.InvalidProcessorConfigType>
+  <RimTalkGenKnowledge.Message.ResetAllProcessConfigsDone>All processor configs have been reset to defaults.</RimTalkGenKnowledge.Message.ResetAllProcessConfigsDone>
 
   <RimTalkGenKnowledge.Report.NoSaveLoaded>No save loaded.</RimTalkGenKnowledge.Report.NoSaveLoaded>
   <RimTalkGenKnowledge.Report.NoGenerationReport>No generation report available.</RimTalkGenKnowledge.Report.NoGenerationReport>

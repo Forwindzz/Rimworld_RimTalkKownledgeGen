@@ -115,6 +115,11 @@ namespace GenKnowledge.ProcessDefs
                     continue;
                 }
 
+                if (description.Length < label.Length * 3)
+                {
+                    continue;
+                }
+
                 string workbench = GetRecipeUsersLabel(def.recipeUsers);
                 if (typed.IncludeWorkbench && string.IsNullOrWhiteSpace(workbench))
                 {

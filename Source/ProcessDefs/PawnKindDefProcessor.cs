@@ -20,7 +20,7 @@ namespace GenKnowledge.ProcessDefs
                 Enabled = true,
                 IncludeModDefs = true,
                 TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: race={{race}}, combat={{combatPower}}, faction={{faction}}",
+                KnowledgeTemplate = "种族：{{race}}，战斗力：{{combatPower}}{{combatPowerLevelSuffix}}，来自派系{{faction}}{{descriptionLine}}",
                 BaseImportance = 0.5f,
                 ImportanceMin = 0.05f,
                 ImportanceMax = 0.85f,
@@ -60,7 +60,11 @@ namespace GenKnowledge.ProcessDefs
                 new PlaceholderDescriptor { Key = "label", Token = "{{label}}", Description = "Pawn kind label" },
                 new PlaceholderDescriptor { Key = "race", Token = "{{race}}", Description = "Race label" },
                 new PlaceholderDescriptor { Key = "combatPower", Token = "{{combatPower}}", Description = "Combat power" },
+                new PlaceholderDescriptor { Key = "combatPowerLevel", Token = "{{combatPowerLevel}}", Description = "Combat power level label" },
+                new PlaceholderDescriptor { Key = "combatPowerLevelSuffix", Token = "{{combatPowerLevelSuffix}}", Description = "Combat power level suffix" },
                 new PlaceholderDescriptor { Key = "faction", Token = "{{faction}}", Description = "Default faction" },
+                new PlaceholderDescriptor { Key = "description", Token = "{{description}}", Description = "Pawn kind description" },
+                new PlaceholderDescriptor { Key = "descriptionLine", Token = "{{descriptionLine}}", Description = "Description line" },
                 new PlaceholderDescriptor { Key = "isTrader", Token = "{{isTrader}}", Description = "Trader flag" },
                 new PlaceholderDescriptor { Key = "defName", Token = "{{defName}}", Description = "Def name" }
             };
@@ -112,6 +116,12 @@ namespace GenKnowledge.ProcessDefs
                     continue;
                 }
 
+                string description = ProcessDefUtility.TrimOrNull(def.description) ?? string.Empty;
+                if (description.Length < label.Length * 3)
+                {
+                    continue;
+                }
+
                 bool isAnimal = def.race?.race != null && def.race.race.Animal;
                 bool isMechanoid = def.race?.race != null && def.race.race.IsMechanoid;
                 if (!typed.IncludeAnimals && isAnimal)
@@ -124,15 +134,22 @@ namespace GenKnowledge.ProcessDefs
                 }
 
                 float combatPower = def.combatPower;
+                string combatPowerLevel = ResolveCombatPowerLevel(combatPower);
+                string combatPowerLevelSuffix = string.IsNullOrWhiteSpace(combatPowerLevel) ? string.Empty : $"（{combatPowerLevel}）";
                 bool isTrader = def.trader;
                 string factionLabel = ResolveFactionLabel(def);
+                string descriptionLine = string.IsNullOrWhiteSpace(description) ? string.Empty : "\n描述：" + description;
 
                 SetTemplateValues(new Dictionary<string, string>
                 {
                     ["label"] = label,
                     ["race"] = def.race?.label ?? string.Empty,
                     ["combatPower"] = combatPower.ToString("0.##"),
+                    ["combatPowerLevel"] = combatPowerLevel,
+                    ["combatPowerLevelSuffix"] = combatPowerLevelSuffix,
                     ["faction"] = factionLabel,
+                    ["description"] = description,
+                    ["descriptionLine"] = descriptionLine,
                     ["isTrader"] = isTrader ? "true" : "false",
                     ["defName"] = def.defName
                 });
@@ -179,6 +196,21 @@ namespace GenKnowledge.ProcessDefs
             if (ProcessDefUtility.TryGetMemberValue(def, "faction", out object faction) && faction is FactionDef direct)
             {
                 return ProcessDefUtility.TrimOrNull(direct.label) ?? direct.defName ?? string.Empty;
+            }
+
+            return string.Empty;
+        }
+
+        private static string ResolveCombatPowerLevel(float combatPower)
+        {
+            if (combatPower < 90f)
+            {
+                return "低";
+            }
+
+            if (combatPower > 300f)
+            {
+                return "高";
             }
 
             return string.Empty;

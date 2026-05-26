@@ -19,7 +19,7 @@ namespace GenKnowledge.ProcessDefs
                 IncludeModDefs = true,
                 TagTemplate = "{{label}}",
                 KnowledgeTemplate = "{{label}}: {{description}}",
-                BaseImportance = 0.5f,
+                BaseImportance = 0.75f,
                 ImportanceMin = 0f,
                 ImportanceMax = 1f
             };
@@ -37,7 +37,7 @@ namespace GenKnowledge.ProcessDefs
             typed.IncludeModDefs = true;
             typed.TagTemplate = "{{label}}";
             typed.KnowledgeTemplate = "{{label}}: {{description}}";
-            typed.BaseImportance = 0.5f;
+            typed.BaseImportance = 0.75f;
             typed.ImportanceMin = 0f;
             typed.ImportanceMax = 1f;
         }

@@ -32,7 +32,7 @@ namespace GenKnowledge.ProcessDefs
                 Enabled = true,
                 IncludeModDefs = true,
                 TagTemplate = "{{label}}",
-                KnowledgeTemplate = "{{label}}: tech={{techLevel}}, enemy={{permanentEnemy}}, humanlike={{humanlike}}",
+                KnowledgeTemplate = "{{label}}：{{description}}\n技术水平：{{techLevel}}\n是否永久敌对：{{permanentEnemy}}\n是否类人：{{humanlike}}",
                 BaseImportance = 0.5f,
                 ImportanceMin = 0.2f,
                 ImportanceMax = 0.9f,
@@ -154,11 +154,18 @@ namespace GenKnowledge.ProcessDefs
                 float techMetric = techMap.TryGetValue(techLevel, out float mapped) ? mapped : 0f;
                 bool permanentEnemy = def.permanentEnemy;
                 bool humanlike = def.humanlikeFaction;
+                string description = ProcessDefUtility.TrimOrNull(def.description);
+                if (string.IsNullOrWhiteSpace(description))
+                {
+                    description = "技术水平：" + techLevel
+                        + "，永久敌对：" + (permanentEnemy ? "是" : "否")
+                        + "，类人派系：" + (humanlike ? "是" : "否");
+                }
 
                 SetTemplateValues(new Dictionary<string, string>
                 {
                     ["label"] = label,
-                    ["description"] = ProcessDefUtility.TrimOrNull(def.description) ?? string.Empty,
+                    ["description"] = description,
                     ["techLevel"] = techLevel,
                     ["humanlike"] = humanlike ? "true" : "false",
                     ["permanentEnemy"] = permanentEnemy ? "true" : "false",
