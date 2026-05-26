@@ -5,6 +5,14 @@
   <RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>Debug: prepend internal key info (processorId/logicalKey/defName/modPackageId)</RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>
   
   <RimTalkGenKnowledge.Settings.EnableMemoryUiPatch>Enable knowledge-panel UI patch (Memory sidebar buttons)</RimTalkGenKnowledge.Settings.EnableMemoryUiPatch>
+  <RimTalkGenKnowledge.Settings.LabelDedupLowSimilarityMerge>Low similarity: merge content</RimTalkGenKnowledge.Settings.LabelDedupLowSimilarityMerge>
+
+  <RimTalkGenKnowledge.Settings.LabelDedupHighSimilarityKeepLongest>High similarity: keep longest</RimTalkGenKnowledge.Settings.LabelDedupHighSimilarityKeepLongest>
+
+  <RimTalkGenKnowledge.Settings.LabelDedupSimilarityThreshold>Label dedup similarity threshold: {0}</RimTalkGenKnowledge.Settings.LabelDedupSimilarityThreshold>
+
+  <RimTalkGenKnowledge.Settings.EnableGlobalLabelDedup>Enable global label dedup</RimTalkGenKnowledge.Settings.EnableGlobalLabelDedup>
+
 <RimTalkGenKnowledge.Settings.SkipList.RealWorld>Skip list: real-world common concepts (1.6/Data/KnowledgeSkipList.txt)</RimTalkGenKnowledge.Settings.SkipList.RealWorld>
   <RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>Skip list: high-redundancy concepts (1.6/Data/KnowledgeSkipList.HighRedundancy.txt)</RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>
   <RimTalkGenKnowledge.Memory.Button.GenerateFromDefs>Generate from Defs</RimTalkGenKnowledge.Memory.Button.GenerateFromDefs>

@@ -68,6 +68,11 @@ namespace GenKnowledge
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys".Translate(), ref Settings.debugIncludeInternalKeys);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal".Translate(), ref Settings.showNumericValues);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.EnableMemoryUiPatch".Translate(), ref Settings.enableMemoryUiPatch);
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.EnableGlobalLabelDedup".Translate(), ref Settings.enableGlobalLabelDedup);
+            listing.Label("RimTalkGenKnowledge.Settings.LabelDedupSimilarityThreshold".Translate(Settings.labelDedupSimilarityThreshold.ToString("0.00")));
+            Settings.labelDedupSimilarityThreshold = Mathf.Clamp01(listing.Slider(Settings.labelDedupSimilarityThreshold, 0f, 1f));
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.LabelDedupHighSimilarityKeepLongest".Translate(), ref Settings.labelDedupHighSimilarityKeepLongest);
+            listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.LabelDedupLowSimilarityMerge".Translate(), ref Settings.labelDedupLowSimilarityMerge);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.SkipList.RealWorld".Translate(), ref Settings.enableRealWorldSkipList);
             listing.CheckboxLabeled("RimTalkGenKnowledge.Settings.SkipList.HighRedundancy".Translate(), ref Settings.enableHighRedundancySkipList);
             listing.Label("RimTalkGenKnowledge.Settings.MinKnowledgeImportance".Translate(Settings.minKnowledgeImportance.ToString("0.00")));

@@ -44,6 +44,10 @@ namespace GenKnowledge
         private readonly float minKnowledgeImportance;
         private readonly bool debugIncludeInternalKeys;
         private readonly bool showNumericValues;
+        private readonly bool enableGlobalLabelDedup;
+        private readonly float labelDedupSimilarityThreshold;
+        private readonly bool labelDedupHighSimilarityKeepLongest;
+        private readonly bool labelDedupLowSimilarityMerge;
         private readonly bool enableRealWorldSkipList;
         private readonly bool enableHighRedundancySkipList;
 
@@ -54,6 +58,10 @@ namespace GenKnowledge
             float minKnowledgeImportance,
             bool debugIncludeInternalKeys,
             bool showNumericValues,
+            bool enableGlobalLabelDedup,
+            float labelDedupSimilarityThreshold,
+            bool labelDedupHighSimilarityKeepLongest,
+            bool labelDedupLowSimilarityMerge,
             bool enableRealWorldSkipList,
             bool enableHighRedundancySkipList)
         {
@@ -63,6 +71,10 @@ namespace GenKnowledge
             this.minKnowledgeImportance = Mathf.Clamp01(minKnowledgeImportance);
             this.debugIncludeInternalKeys = debugIncludeInternalKeys;
             this.showNumericValues = showNumericValues;
+            this.enableGlobalLabelDedup = enableGlobalLabelDedup;
+            this.labelDedupSimilarityThreshold = Mathf.Clamp01(labelDedupSimilarityThreshold);
+            this.labelDedupHighSimilarityKeepLongest = labelDedupHighSimilarityKeepLongest;
+            this.labelDedupLowSimilarityMerge = labelDedupLowSimilarityMerge;
             this.enableRealWorldSkipList = enableRealWorldSkipList;
             this.enableHighRedundancySkipList = enableHighRedundancySkipList;
         }
@@ -138,6 +150,11 @@ namespace GenKnowledge
                 {
                     report.SkippedCount += skippedByList;
                 }
+            }
+
+            if (enableGlobalLabelDedup && validCandidates.Count > 1)
+            {
+                validCandidates = ApplyGlobalLabelDedup(validCandidates);
             }
 
             var validItems = validCandidates
@@ -369,6 +386,190 @@ namespace GenKnowledge
             item.Tag = TextNormalizeUtility.NormalizeMultiline(item.Tag, "；");
             item.Content = TextNormalizeUtility.NormalizeMultiline(item.Content, "；");
             return item;
+        }
+
+        private List<GeneratedKnowledgeItem> ApplyGlobalLabelDedup(List<GeneratedKnowledgeItem> source)
+        {
+            if (source == null || source.Count <= 1)
+            {
+                return source ?? new List<GeneratedKnowledgeItem>();
+            }
+
+            var byLabel = source.GroupBy(GetPrimaryLabel, StringComparer.OrdinalIgnoreCase);
+            var result = new List<GeneratedKnowledgeItem>(source.Count);
+
+            foreach (IGrouping<string, GeneratedKnowledgeItem> group in byLabel)
+            {
+                List<GeneratedKnowledgeItem> items = group.Where(i => i != null).ToList();
+                if (items.Count <= 1)
+                {
+                    result.AddRange(items);
+                    continue;
+                }
+
+                List<GeneratedKnowledgeItem> deduped = new List<GeneratedKnowledgeItem>();
+                foreach (GeneratedKnowledgeItem current in items)
+                {
+                    bool merged = false;
+                    for (int i = 0; i < deduped.Count; i++)
+                    {
+                        GeneratedKnowledgeItem existing = deduped[i];
+                        float similarity = ComputeContentSimilarity(existing.Content, current.Content);
+
+                        if (similarity >= labelDedupSimilarityThreshold)
+                        {
+                            deduped[i] = ResolveHighSimilarity(existing, current);
+                            merged = true;
+                            break;
+                        }
+
+                        if (labelDedupLowSimilarityMerge)
+                        {
+                            deduped[i] = MergeDifferentContent(existing, current);
+                            merged = true;
+                            break;
+                        }
+                    }
+
+                    if (!merged)
+                    {
+                        deduped.Add(CloneItem(current));
+                    }
+                }
+
+                result.AddRange(deduped);
+            }
+
+            return result;
+        }
+
+        private GeneratedKnowledgeItem ResolveHighSimilarity(GeneratedKnowledgeItem a, GeneratedKnowledgeItem b)
+        {
+            if (!labelDedupHighSimilarityKeepLongest)
+            {
+                return MergeDifferentContent(a, b);
+            }
+
+            int lenA = (a?.Content ?? string.Empty).Length;
+            int lenB = (b?.Content ?? string.Empty).Length;
+            return CloneItem(lenA >= lenB ? a : b);
+        }
+
+        private static GeneratedKnowledgeItem MergeDifferentContent(GeneratedKnowledgeItem a, GeneratedKnowledgeItem b)
+        {
+            string contentA = a?.Content ?? string.Empty;
+            string contentB = b?.Content ?? string.Empty;
+            string mergedContent = contentA;
+            if (!string.Equals(contentA, contentB, StringComparison.Ordinal))
+            {
+                mergedContent = string.IsNullOrWhiteSpace(contentA)
+                    ? contentB
+                    : (string.IsNullOrWhiteSpace(contentB) ? contentA : (contentA + "；" + contentB));
+            }
+
+            var merged = new GeneratedKnowledgeItem
+            {
+                LogicalKey = (a?.LogicalKey ?? string.Empty).Length >= (b?.LogicalKey ?? string.Empty).Length ? a?.LogicalKey : b?.LogicalKey,
+                Tag = (a?.Tag ?? string.Empty).Length >= (b?.Tag ?? string.Empty).Length ? a?.Tag : b?.Tag,
+                Content = mergedContent,
+                Importance = Mathf.Clamp01(Mathf.Max(a?.Importance ?? 0f, b?.Importance ?? 0f))
+            };
+
+            return NormalizeItemForStorage(merged);
+        }
+
+        private static GeneratedKnowledgeItem CloneItem(GeneratedKnowledgeItem source)
+        {
+            if (source == null)
+            {
+                return null;
+            }
+
+            return new GeneratedKnowledgeItem
+            {
+                LogicalKey = source.LogicalKey,
+                Tag = source.Tag,
+                Content = source.Content,
+                Importance = source.Importance
+            };
+        }
+
+        private static string GetPrimaryLabel(GeneratedKnowledgeItem item)
+        {
+            string tag = item?.Tag ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(tag))
+            {
+                return string.Empty;
+            }
+
+            string[] parts = tag.Split(new[] { ',', '，', ';', '；', '|', '/' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 0)
+            {
+                return tag.Trim();
+            }
+
+            return parts[0].Trim();
+        }
+
+        private static float ComputeContentSimilarity(string a, string b)
+        {
+            string left = NormalizeForSimilarity(a);
+            string right = NormalizeForSimilarity(b);
+            if (left.Length == 0 || right.Length == 0)
+            {
+                return 0f;
+            }
+
+            if (string.Equals(left, right, StringComparison.Ordinal))
+            {
+                return 1f;
+            }
+
+            HashSet<string> gramsA = BuildBigrams(left);
+            HashSet<string> gramsB = BuildBigrams(right);
+            if (gramsA.Count == 0 || gramsB.Count == 0)
+            {
+                return 0f;
+            }
+
+            int overlap = gramsA.Count(g => gramsB.Contains(g));
+            float dice = (2f * overlap) / (gramsA.Count + gramsB.Count);
+            return Mathf.Clamp01(dice);
+        }
+
+        private static string NormalizeForSimilarity(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return string.Empty;
+            }
+
+            var chars = text
+                .Where(c => !char.IsWhiteSpace(c) && !char.IsPunctuation(c) && !char.IsSymbol(c))
+                .Select(char.ToLowerInvariant)
+                .ToArray();
+            return new string(chars);
+        }
+
+        private static HashSet<string> BuildBigrams(string text)
+        {
+            var set = new HashSet<string>(StringComparer.Ordinal);
+            if (string.IsNullOrEmpty(text))
+            {
+                return set;
+            }
+
+            if (text.Length == 1)
+            {
+                set.Add(text);
+                return set;
+            }
+
+            for (int i = 0; i < text.Length - 1; i++)
+            {
+                set.Add(text.Substring(i, 2));
+            }
+            return set;
         }
 
         private static void AppendError(GenerationReport report, string error, bool reportEachError)

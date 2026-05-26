@@ -5,6 +5,14 @@
   <RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>Debug：在常识内容前附加内部键信息（processorId/logicalKey/defName/modPackageId）</RimTalkGenKnowledge.Settings.DebugIncludeInternalKeys>
   <RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>全局显示数值（关闭时仅保留程度描述）</RimTalkGenKnowledge.Settings.ShowNumericValuesGlobal>
   <RimTalkGenKnowledge.Settings.EnableMemoryUiPatch>启用常识面板UI Patch（Memory侧栏按钮）</RimTalkGenKnowledge.Settings.EnableMemoryUiPatch>
+  <RimTalkGenKnowledge.Settings.LabelDedupLowSimilarityMerge>低相似度：合并内容</RimTalkGenKnowledge.Settings.LabelDedupLowSimilarityMerge>
+
+  <RimTalkGenKnowledge.Settings.LabelDedupHighSimilarityKeepLongest>高相似度：保留较长内容</RimTalkGenKnowledge.Settings.LabelDedupHighSimilarityKeepLongest>
+
+  <RimTalkGenKnowledge.Settings.LabelDedupSimilarityThreshold>Label去重相似度阈值：{0}</RimTalkGenKnowledge.Settings.LabelDedupSimilarityThreshold>
+
+  <RimTalkGenKnowledge.Settings.EnableGlobalLabelDedup>启用全局Label去重</RimTalkGenKnowledge.Settings.EnableGlobalLabelDedup>
+
   <RimTalkGenKnowledge.Settings.SkipList.RealWorld>Skip list：现实常识概念（1.6/Data/KnowledgeSkipList.txt）</RimTalkGenKnowledge.Settings.SkipList.RealWorld>
   <RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>Skip list：高重复概念（1.6/Data/KnowledgeSkipList.HighRedundancy.txt）</RimTalkGenKnowledge.Settings.SkipList.HighRedundancy>
   <RimTalkGenKnowledge.Memory.Button.GenerateFromDefs>根据Defs生成</RimTalkGenKnowledge.Memory.Button.GenerateFromDefs>

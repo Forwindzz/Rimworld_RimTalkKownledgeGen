@@ -32,6 +32,10 @@ namespace GenKnowledge
                 GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.21f,
                 GenKnowledgeMod.Settings?.debugIncludeInternalKeys ?? false,
                 GenKnowledgeMod.Settings?.showNumericValues ?? false,
+                GenKnowledgeMod.Settings?.enableGlobalLabelDedup ?? true,
+                GenKnowledgeMod.Settings?.labelDedupSimilarityThreshold ?? 0.5f,
+                GenKnowledgeMod.Settings?.labelDedupHighSimilarityKeepLongest ?? true,
+                GenKnowledgeMod.Settings?.labelDedupLowSimilarityMerge ?? true,
                 GenKnowledgeMod.Settings?.enableRealWorldSkipList ?? true,
                 GenKnowledgeMod.Settings?.enableHighRedundancySkipList ?? false);
 
@@ -53,6 +57,10 @@ namespace GenKnowledge
                 GenKnowledgeMod.Settings?.minKnowledgeImportance ?? 0.21f,
                 GenKnowledgeMod.Settings?.debugIncludeInternalKeys ?? false,
                 GenKnowledgeMod.Settings?.showNumericValues ?? false,
+                GenKnowledgeMod.Settings?.enableGlobalLabelDedup ?? true,
+                GenKnowledgeMod.Settings?.labelDedupSimilarityThreshold ?? 0.5f,
+                GenKnowledgeMod.Settings?.labelDedupHighSimilarityKeepLongest ?? true,
+                GenKnowledgeMod.Settings?.labelDedupLowSimilarityMerge ?? true,
                 GenKnowledgeMod.Settings?.enableRealWorldSkipList ?? true,
                 GenKnowledgeMod.Settings?.enableHighRedundancySkipList ?? false);
 

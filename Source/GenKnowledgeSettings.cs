@@ -12,6 +12,10 @@ namespace GenKnowledge
         public bool debugIncludeInternalKeys = false;
         public bool showNumericValues = false;
         public bool enableMemoryUiPatch = true;
+        public bool enableGlobalLabelDedup = true;
+        public float labelDedupSimilarityThreshold = 0.5f;
+        public bool labelDedupHighSimilarityKeepLongest = true;
+        public bool labelDedupLowSimilarityMerge = true;
         public bool enableRealWorldSkipList = true;
         public bool enableHighRedundancySkipList = false;
         public float minKnowledgeImportance = 0.21f;
@@ -27,6 +31,10 @@ namespace GenKnowledge
             Scribe_Values.Look(ref debugIncludeInternalKeys, "debugIncludeInternalKeys", false);
             Scribe_Values.Look(ref showNumericValues, "showNumericValues", false);
             Scribe_Values.Look(ref enableMemoryUiPatch, "enableMemoryUiPatch", true);
+            Scribe_Values.Look(ref enableGlobalLabelDedup, "enableGlobalLabelDedup", true);
+            Scribe_Values.Look(ref labelDedupSimilarityThreshold, "labelDedupSimilarityThreshold", 0.5f);
+            Scribe_Values.Look(ref labelDedupHighSimilarityKeepLongest, "labelDedupHighSimilarityKeepLongest", true);
+            Scribe_Values.Look(ref labelDedupLowSimilarityMerge, "labelDedupLowSimilarityMerge", true);
             Scribe_Values.Look(ref enableRealWorldSkipList, "enableRealWorldSkipList", true);
             Scribe_Values.Look(ref enableHighRedundancySkipList, "enableHighRedundancySkipList", false);
             Scribe_Values.Look(ref minKnowledgeImportance, "minKnowledgeImportance", 0.21f);
@@ -41,6 +49,7 @@ namespace GenKnowledge
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 minKnowledgeImportance = Mathf.Clamp01(minKnowledgeImportance);
+                labelDedupSimilarityThreshold = Mathf.Clamp01(labelDedupSimilarityThreshold);
 
                 if (processConfigs == null)
                 {
